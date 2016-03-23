@@ -1,0 +1,151 @@
+<%- include ../layouts/header %>
+<% if (authFlash) { %>
+<%- authFlash %>
+<% } %>
+<%- include ../commons/header %>
+<div id="body-container">
+  <div class="search-wrapper">
+    <div class="col-sm-push-6 col-sm-6">
+      <select class="post-category-selector rm-style-select">
+        <option value="0"<% if (categoryId >> 0 === 0) { %> selected="selected"<% } %>>전체 카테고리</option>
+        <%
+          var categoryCounter = 0;
+          for(; categoryCounter < categories.length; categoryCounter++) {
+            cate = categories[categoryCounter];
+        %>
+        <option value="<%= cate.id %>"<% if (cate.id >> 0 === categoryId >> 0) { %> selected="selected"<% } %>><%= cate.name %></option>
+        <%
+          }
+        %>
+      </select>
+    </div>
+  </div>
+  <% if (!posts.length) { %>
+    <div class="post no-post">
+      등록된 포스트가 없습니다.
+    </div>
+  <% } %>
+  <%
+    var postCounter = 0;
+    for(; postCounter < posts.length; postCounter++) {
+      post = posts[postCounter];
+  %>
+  <div class="post">
+    <% if (post.thumbnail) { %>
+    <a class="pull-left" href="/posts/<%= post.id %>?page=<%= page %>">
+      <img class="post-thumbnail" src="<%- post.thumbnail %>" alt="post thumbnail"/>
+    </a>
+    <% } %>
+    <div class="post-summary">
+      <%
+        var categoryName = '';
+
+        categoryCounter = 0;
+        for (; categoryCounter < categories.length; categoryCounter++) {
+          if (categories[categoryCounter].id === post.category_id) {
+            categoryName = categories[categoryCounter].name;
+          }
+        }
+      %>
+      <a href="/posts/categories/<%= post.category_id %>">
+        <span class="post-category-name sub-color"><%= categoryName %></span>
+      </a>
+      <a href="/posts/<%= post.id %>?page=<%= page %>">
+        <div class="post-title black-color">
+          <%= post.title %>
+        </div>
+      </a>
+      <div class="post-info normal-color">
+        <%
+          var date = post.created_at;
+          var dateStr = '';
+          var monthStrArr = ['JAN', 'FAB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+          dateStr = monthStrArr[date.getMonth()] + ' ' + date.getDate() + '. ' + date.getFullYear();
+        %>
+        <%= dateStr %>
+      </div>
+    </div>
+  </div>
+  <% } %>
+  <% if (false) { %>
+  <div class="search-wrapper">
+    <div class="col-sm-push-3 col-sm-6">
+      <form id="post-search-form" action="/posts/search" method="GET">
+        <input class="rm-style-input" type="text" name="keyword" id="keyword"/>
+        <i id="post-search-submit" class="black-color fa fa-search"></i>
+      </form>
+    </div>
+  </div>
+  <% } %>
+  <div class="new-post-wrapper">
+    <div class="col-sm-12 text-right">
+      <a class="btn btn-primary rm-margin" href="/posts/new">포스트 등록</a>
+    </div>
+  </div>
+  <% if (pages > 1) { %>
+  <ul class="list-layout pagination">
+    <%
+      var hrefStr = '';
+      var className = '';
+      var pageCounter = page - 2;
+
+      if (endPoint.match(/categories/i)) {
+        hrefStr = '/posts/categories/' + categoryId + '/';
+      } else if (endPoint.match(/tags/i)) {
+        hrefStr = '/posts/tags/' + tagSlug + '/';
+      } else {
+        hrefStr = '/posts/';
+      }
+
+      if (pageCounter > 1) {
+    %>
+    <li class="">
+      <a href="<%= hrefStr %>?page=1">FIRST</a>
+    </li>
+    <li class="ellipsis"><a>...</a></li>
+    <%
+      } else if (pageCounter === 1) {
+    %>
+    <li class="">
+      <a href="<%= hrefStr %>?page=1">1</a>
+    </li>
+    <%
+      }
+    %>
+    <%
+      for (; pageCounter < page + 2 && pageCounter < pages; pageCounter++) {
+        if (pageCounter >= 0) {
+          if ((pageCounter + 1) === (page - 1)) {
+            className = 'prev';
+          } else if ((pageCounter + 1) === page) {
+            className = 'active';
+          } else if ((pageCounter + 1) === (page + 1)) {
+            className = 'next';
+          } else {
+            className = '';
+          }
+    %>
+    <li class="<%= className %>">
+      <a href="<%= hrefStr %>?page=<%= (pageCounter + 1) %>"><%= (pageCounter + 1) %></a>
+    </li>
+    <%
+        }
+      }
+
+      className = '';
+      pageCounter = page + 2;
+      if (pageCounter < pages) {
+    %>
+    <li class="ellipsis"><a>...</a></li>
+    <li class="">
+      <a href="<%= hrefStr %>?page=<%= pages %>">LAST</a>
+    </li>
+    <%
+      }
+    %>
+  </ul>
+  <% } %>
+</div>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

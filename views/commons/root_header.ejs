@@ -1,0 +1,38 @@
+<div id="header" class="root-header">
+  <a class="left-menu" href="/">
+    <img class="header-logo" src="/images/logo.png" alt="logo"/>
+  </a>
+  <ul class="list-layout list-menu">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/posts">POST</a></li>
+    <li><a href="/photos">PHOTO</a></li>
+    <li><a href="/portfolio">PORTFOLIO</a></li>
+    <% if (userId) { %>
+    <li><a href="/posts/new">WRITE</a></li>
+    <% } %>
+  </ul>
+  <% if (userId) { %>
+  <div class="right-menu">
+    <a class="logout" href="/logout">LOGOUT</a>
+  </div>
+  <% } else { %>
+  <div class="none">
+    <form action="/login" method="post" enctype="multipart/form-data">
+      <input type="text" name="email" id="" value="jaewon"/>
+      <input type="password" name="password" id="" value="jaewon"/>
+      <input type="submit"/>
+    </form>
+  </div>
+  <div class="right-menu">
+    <a class="join" href="/join">JOIN</a>
+    <a class="login" href="/login">LOGIN</a>
+  </div>
+  <% } %>
+  <div class="hamburger">
+    <div class="hamburger-box">
+      <div class="hamburger-inner"></div>
+    </div>
+  </div>
+</div>
+<%- include ./navigator %>
+

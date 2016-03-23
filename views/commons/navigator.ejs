@@ -1,0 +1,24 @@
+<div id="slide-navigator" class="">
+  <div class="hamburger">
+    <div class="hamburger-box">
+      <div class="hamburger-inner"></div>
+    </div>
+  </div>
+  <ul class="list-layout list-menu">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/posts">POST</a></li>
+    <li><a href="/photos">PHOTO</a></li>
+    <li><a href="/portfolio">PORTFOLIO</a></li>
+    <% if (userId) { %>
+    <li><a href="/posts/new">WRITE</a></li>
+    <% } %>
+  </ul>
+  <div></div>
+  <% if (userId) { %>
+  <a class="logout" href="/logout">LOGOUT</a>
+  <% } else { %>
+  <a class="join" href="/join">JOIN</a>
+  <div></div>
+  <a class="login" href="/login">LOGIN</a>
+  <% } %>
+</div>

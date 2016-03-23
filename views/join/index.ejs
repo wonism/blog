@@ -1,0 +1,72 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<script>
+  <%
+    if (typeof errType === 'object') {
+      errType = errType[0];
+    }
+
+    if (typeof errType === 'string') {
+      var alertMessage = '';
+      switch (errType) {
+        case 'pwLength':
+          alertMessage = '비밀번호는 10 ~ 15자리를 사용해야 합니다.';
+          break;
+        case 'mix':
+          alertMessage = '비밀번호는 숫자와 영문자를 혼용하여야 합니다.';
+          break;
+        case 'pwSpecial':
+          alertMessage = '비밀번호는 키보드 상의 특수문자를 최소 1개 이상 사용해야 합니다.';
+          break;
+        case 'repetition':
+          alertMessage =  '비밀번호는 같은 문자를 4번 이상 사용하실 수 없습니다.';
+          break;
+        case 'includeId':
+          alertMessage =  '비밀번호에 아이디가 포함되었습니다.';
+          break;
+        case 'idSpecial':
+          alertMessage = 'ID에는 특수 문자가 들어갈 수 없습니다.\n(_ 제외)';
+          break;
+        case 'idLength':
+          alertMessage = 'ID는 6~15 글자만 허용합니다.';
+          break;
+        case 'duplicateId':
+          alertMessage = '이미 사용중인 ID 입니다.';
+          break;
+        case 'duplicateEmail':
+          alertMessage = '이미 사용중인 E-mail 입니다.';
+          break;
+        case 'invalidEmail':
+          alertMessage = '올바르지 않은 E-mail 형식입니다.';
+          break;
+      }
+  %>
+  alert('<%= alertMessage %>');
+  <% } %>
+</script>
+<div id="body-container">
+  <form id="join-form" action="/join" method="post" enctype="multipart/form-data">
+    <div class="form-control">
+      <label for="user_id">ID</label><br/>
+      <input class="default-input" type="text" name="user_id" id="user_id" placeholder=""/>
+    </div>
+    <div class="form-control">
+      <label for="user_id">NAME</label><br/>
+      <input class="default-input" type="text" name="name" id="name"/>
+    </div>
+    <div class="form-control">
+      <label for="email">E-MAIL</label><br/>
+      <input class="default-input" type="text" name="email" id="email"/>
+    </div>
+    <div class="form-control">
+      <label for="password">PASSWORD</label><br/>
+      <input class="default-input" type="password" name="password" id="password"/>
+    </div>
+    <div class="form-control">
+      <input id='join-submit' class="btn btn-primary" type="submit" value="가입"></button>
+    </div>
+  </form>
+</div>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

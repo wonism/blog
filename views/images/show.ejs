@@ -1,0 +1,23 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<h1><%= title %></h1>
+<table border="1">
+  <tr>
+    <td>원본</td>
+    <td><img src="<%= image.original %>" alt="<%= image.original %>"/></td>
+  </tr>
+  <tr>
+    <td>썸네일</td>
+    <td><img src="<%= image.thumbnail %>" alt="<%= image.thumbnail %>"/></td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <a href="/images/update/<%= image.id %>">수정</a>
+      <a href="/images/delete/<%= image.id %>">삭제</a>
+      <a href="/images">리스트로 돌아가기</a>
+    </td>
+  </tr>
+</table>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

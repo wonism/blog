@@ -1,0 +1,22 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<div id="body-container">
+<h1><%= title %></h1>
+<table border="1">
+  <input type="hidden" name="id" value="<%= category.id %>"/>
+  <tr>
+    <td>이름</td>
+    <td><%= category.name %></td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <a href="/categories/update/<%= category.id %>">수정</a>
+      <a href="/categories/delete/<%= category.id %>">삭제</a>
+      <a href="/categories/">리스트로 돌아가기</a>
+    </td>
+  </tr>
+</table>
+</div>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

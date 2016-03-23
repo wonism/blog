@@ -1,0 +1,27 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<div style="margin-top: 120px;"></div>
+<a href="/images/new">이미지 등록</a>
+<br>
+<br>
+<table border="1">
+  <tr>
+    <td>id</td>
+    <td>제목</td>
+  </tr>
+<%
+  var i = 0;
+  for (; i < images.length; i++) {
+    var oneItem = images[i];
+%>
+  <tr>
+    <td><%= oneItem.id %></td>
+    <td><a href="/images/<%= oneItem.id %>"><img src="<%= oneItem.thumbnail %>" alt="<%= oneItem.original %>"/></a></td>
+  </tr>
+<%
+  }
+%>
+</table>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

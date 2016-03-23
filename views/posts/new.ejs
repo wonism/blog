@@ -1,0 +1,48 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<div class="post-background-preview">
+  <div class="guide">배경 이미지를 업로드하세요. :)</div>
+  <img class="background-image" src="" alt="background-image" data-targetted-image="background-image"/>
+  <input class="background-image rm-style-file image-upload" id="background-image" type="file" name="background-image" data-processing-type="2"/>
+</div>
+<div id="body-container" class="show-post">
+  <div id="post">
+    <form action="/posts/new" method="post">
+      <input type="hidden" name="user_id" id="user_id" value="1"/>
+      <input type="hidden" name="background_image" id="background_image"/>
+      <input type="hidden" name="thumbnail" id="thumbnail"/>
+      <div class="post-thumbnail-preview space-bottom">
+        <div class="guide">썸네일 이미지를<br/>업로드하세요. :)</div>
+        <img class="thumbnail-image" src="" alt="thumbnail-image" data-targetted-image="thumbnail-image"/>
+        <input class="rm-style-file image-upload" id="thumbnail-image" type="file" name="thumbnail-image" data-processing-type="1"/>
+      </div>
+      <select class="rm-style-select" id="category_id" name="category_id">
+        <%
+          var i = 0;
+          for (; i < categories.length; i++) {
+            var category = categories[i];
+        %>
+        <option value="<%= category.id %>"<% if (i === 0) { %> selected="selected"<% } %>><%= category.name %></option>
+        <% } %>
+      </select>
+      <div class="title">
+        <input type="text" name="title" id="title" value=""/>
+      </div>
+      <div class="html">
+        <textarea name="html" id="html" resizable="false"></textarea>
+      </div>
+      <div class="tags space-top">
+        <span class="tag">TAGS</span>
+        <input class="rm-style-input" type="text" name="tags" id="tags" value=""/>
+      </div>
+      <div class="space-top">
+        <input class="btn btn-primary rm-margin" type="submit" value="저장".>
+        <a class="btn btn-primary rm-margin" href="/posts?page=<%= page %>">리스트로 돌아가기</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

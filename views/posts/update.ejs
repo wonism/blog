@@ -1,0 +1,69 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<div class="post-background-preview">
+  <div class="guide">배경 이미지를 업로드하세요. :)</div>
+  <img class="background-image" src="<%- post.background_image %>" alt="background-image"/>
+  <input class="background-image rm-style-file" id="background-image" type="file" name="background-image" data-processing-type="2"/>
+</div>
+<div id="body-container" class="show-post">
+  <div id="post">
+    <form action="/posts/update/<%= post.id %>" method="post">
+      <input type="hidden" name="id" id="id" value="<%= post.id %>"/>
+      <input type="hidden" name="user_id" id="user_id" value="1"/>
+      <input type="hidden" name="background_image" id="background_image"/>
+      <input type="hidden" name="thumbnail" id="thumbnail"/>
+      <div class="post-thumbnail-preview space-bottom">
+        <div class="guide">썸네일 이미지를<br/>업로드하세요. :)</div>
+        <img class="thumbnail-image" src="<%- post.thumbnail %>" alt="thumbnail-image" data-targetted-image="thumbnail-image"/>
+        <input class="rm-style-file image-upload" id="thumbnail-image" type="file" name="thumbnail-image" data-processing-type="1"/>
+      </div>
+      <select class="rm-style-select" id="category_id" name="category_id">
+        <%
+          var i = 0;
+          for (; i < categories.length; i++) {
+            var oneItem = categories[i];
+        %>
+        <option value="<%= oneItem.id %>"<% if (categories[i].id === category.id) { %> selected="selected"<% } %>><%= oneItem.name %></option>
+        <% } %>
+      </select>
+      <div class="title">
+        <input type="text" name="title" id="title" value="<%= post.title %>"/>
+      </div>
+      <div class="html">
+        <textarea name="html" id="html" resizable="false"><%- post.html %></textarea>
+      </div>
+      <div class="tags space-top">
+        <span class="tag">TAGS</span>
+        <%
+          var tagStr, i;
+
+          tagStr = '';
+          i = 0;
+
+          for (; i < tags.length; i++) {
+            tagStr += tags[i].name + ', ';
+          }
+
+          tagStr = tagStr.replace(/\,\s$/, '')
+        %>
+        <input class="rm-style-input" type="text" name="tags" id="tags" value="<%= tagStr %>"/>
+        <%
+          var i = 0;
+          for (; i < tags.length; i++) {
+        %>
+        <a class="tag" href="/posts/tags/<%= tags[i].name %>"><%= tags[i].name %></a>
+        <%
+          }
+        %>
+      </div>
+      <div class="space-top">
+        <input class="btn btn-primary rm-margin" type="submit" value="저장".>
+        <a class="btn btn-primary rm-margin" href="/posts?page=<%= page %>">리스트로 돌아가기</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

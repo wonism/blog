@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<!--<![endif]-->
+<head>
+  <title><%= title %></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta id="viewport" name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <meta name="description" content="Jaewonism BLOG">
+  <meta name="keywords" content="HTML, CSS, Java Script, Node Js, Ruby On Rails, MySQL">
+  <meta name="author" content="Jaewonism">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
+  <!--[if IE 7]>
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome-ie7.css">
+  <![endif]-->
+  <link rel='stylesheet' href='/css/application.css'/>
+  <link rel='stylesheet' href='/css/grid.css'/>
+  <script src="//code.jquery.com/jquery-1.12.0.min.js" defer="defer"></script>
+  <script src="/js/application.js" defer="defer"></script>
+  <% if (req.baseUrl.replace(/\//, '') !== '') { %>
+  <link rel='stylesheet' href='/css/<%= req.baseUrl.replace(/\//, '') %>.css'/>
+  <script src="/js/<%= req.baseUrl.replace(/\//, '') %>.js" defer="defer"></script>
+  <% if (req.baseUrl.replace(/\//, '') === 'posts' && req.route.path.match(/update|new/)) { %>
+  <script src="/js/instafeed.min.js" defer="defer"></script>
+  <% } else if (req.baseUrl.replace(/\//, '') === 'photos') { %>
+  <script src="/js/instafeed.min.js" defer="defer"></script>
+  <% } %>
+  <% } else { %>
+  <link rel='stylesheet' href='/css/main.css'/>
+  <script src="/js/main.js" defer="defer"></script>
+  <% } %>
+</head>
+<body>
+
+
+

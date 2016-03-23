@@ -1,0 +1,20 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<h1><%= title %></h1>
+<form action="/posts/delete/<%= post.id %>?_method=DELETE" method="post" >
+  <table border="1">
+    <input type="hidden" name="id" value="<%= post.id %>"/>
+    <tr>
+      <td>제목</td>
+      <td><%= post.title %></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button type="submit">삭제</button>
+      </td>
+    </tr>
+  </table>
+</form>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

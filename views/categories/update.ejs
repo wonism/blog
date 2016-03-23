@@ -1,0 +1,22 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<div id="body-container">
+<h1><%= title %></h1>
+<form action="/categories/update/<%= category.id %>" method="post">
+  <table border="1">
+    <input type="hidden" name="id" value="<%= category.id %>"/>
+    <tr>
+      <td>이름</td>
+      <td><input type="text" name="name" id="name" value="<%= category.name %>" required/></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button type="submit">수정</button>
+      </td>
+    </tr>
+  </table>
+</form>
+</div>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

@@ -1,0 +1,29 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<div id="body-container">
+<h1><%= title %></h1>
+<a href="/categories/new">카테고리 등록</a>
+<br>
+<br>
+<table border="1">
+  <tr>
+    <td>id</td>
+    <td>이름</td>
+  </tr>
+<%
+  var i = 0;
+  for (; i < categories.length; i++) {
+    var oneItem = categories[i];
+%>
+  <tr>
+    <td><%= oneItem.id %></td>
+    <td><a href="/categories/<%= oneItem.id %>"><%= oneItem.name %></a></td>
+  </tr>
+<%
+  }
+%>
+</table>
+</div>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

@@ -1,0 +1,23 @@
+#login-form {
+  padding-top: 32px;
+  padding-left: 16px; }
+  #login-form .form-control {
+    position: relative;
+    max-width: 260px; }
+
+.default-input {
+  margin-top: 3px;
+  width: 100%;
+  max-width: 260px;
+  line-height: 1.7em;
+  font-size: 13px; }
+
+.form-control {
+  margin-bottom: 10px; }
+  .form-control label {
+    font-size: 13px;
+    letter-spacing: 2px; }
+  .form-control span {
+    position: absolute;
+    right: 0;
+    color: #E63948; }

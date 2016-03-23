@@ -1,0 +1,3 @@
+var ready = function () {
+
+};

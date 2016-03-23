@@ -1,0 +1,67 @@
+$main-color: #FFB5C6;
+$main-hover-color: #FCDFE5;
+$sub-color: #63714d;
+$sub-hover-color: #e2e9d4;
+$border-color: #e5e5e5;
+
+.post-card {
+  display: block;
+  position: relative;
+  margin-bottom: 16px;
+  border: 1px solid $border-color;
+  .card-thumbnail {
+    display: block;
+    width: 30%;
+    &:hover, &.active {
+      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+      filter: alpha(opacity=70);
+      -o-opacity: .7;
+      -ms-opacity: .7;
+      -moz-opacity: .7;
+      -khtml-opacity: .7;
+      -webkit-opacity: .7;
+      opacity: .7;
+    }
+  }
+  .card-summary {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 70%;
+    height: 100%;
+    background-color: #fff;
+    table {
+      width: 100%;
+      height: 100%;
+      tr, td {
+        width: 100%;
+        height: 100%;
+        vertical-align: middle;
+      }
+    }
+  }
+  .card-category-name {
+    display: inline-block;
+    padding-left: 16px;
+    line-height: 1em;
+    font-size: 1.4em;
+    letter-spacing: 2px;
+  }
+  .card-title {
+    padding-left: 16px;
+    font-size: 3em;
+  }
+  .card-info {
+    padding-left: 16px;
+    font-size: 1.4em;
+    letter-spacing: 2px;
+  }
+  .card-content {
+    padding-top: 1.5em;
+    padding-left: 16px;
+    font-size: 2em;
+  }
+}

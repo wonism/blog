@@ -1,0 +1,24 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<h1><%= title %></h1>
+<form action="/users/delete/<%= user.id %>?_method=DELETE" method="post" >
+  <table border="1">
+    <input type="hidden" name="id" value="<%= user.id %>"/>
+    <tr>
+      <td>이름</td>
+      <td><%= user.name %></td>
+    </tr>
+    <tr>
+      <td>이메일</td>
+      <td><%= user.email %></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button type="submit">삭제</button>
+      </td>
+    </tr>
+  </table>
+</form>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

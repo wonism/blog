@@ -1,0 +1,86 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<% if (authFlash) { %>
+<%- authFlash %>
+<% } %>
+<div class="post-background-preview">
+  <img class="background-image" src="<%- post.background_image %>" alt="background-image"/>
+</div>
+<div id="body-container" class="show-post">
+  <div id="post">
+    <a class="category" href="/posts/categories/<%= post.category_id %>">
+      <span class="sub-color"><%= category.name %></span>
+    </a>
+    <div class="title">
+      <%= post.title %>
+      <span class="created-at">
+        <%
+          var date = post.created_at;
+          var dateStr = '';
+          var monthStrArr = ['JAN', 'FAB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+          dateStr = monthStrArr[date.getMonth()] + ' ' + date.getDate() + '. ' + date.getFullYear();
+        %>
+        <%= dateStr %>
+      </span>
+    </div>
+    <div class="divide-line"></div>
+    <div class="html">
+      <%- post.html %>
+    </div>
+    <div class="tags space-top">
+      <span class="tag">TAGS</span>
+      <%
+        var i = 0;
+        for (; i < tags.length; i++) {
+      %>
+      <a class="tag" href="/posts/tags/<%= tags[i].name %>"><%= tags[i].name %></a>
+      <%
+        }
+      %>
+    </div>
+    <div class="managing-buttons">
+      <% if (userPk >> 0 === post.user_id >> 0) { %>
+      <a class="btn btn-primary rm-margin" href="/posts/update/<%= post.id %>">수정</a>
+      <a class="btn btn-primary rm-margin" href="/posts/delete/<%= post.id %>">삭제</a>
+      <% } %>
+      <a class="btn btn-primary rm-margin" href="/posts?page=<%= page %>">리스트로 돌아가기</a>
+    </div>
+  </div>
+  <div id="comments">
+    <div id="comments-title">Comments&nbsp;<span id="comments-count"><%= comments.length %></span></div>
+    <% if (userPk >> 0 > 0) { %>
+      <form id="comment-area-wrapper" action="/comments/new" method="post" data-remote="true">
+        <input id="post-id" name="post_id" type="hidden" value="<%= post.id %>"/>
+        <textarea id="comment-area" name="comment"></textarea>
+        <button class="rm-style-button btn btn-primary rm-margin" id="comment-submit" type="button" role="button">등록</button>
+      </form>
+    <% } else { %>
+      <a id="comment-area-wrapper" href="/login">
+        <textarea id="comment-area" disabled="disabled">댓글을 작성하려면 로그인을 하셔야 합니다.</textarea>
+        <button class="rm-style-button btn btn-primary rm-margin" id="comment-submit" type="button" role="button" disabled="disabled">등록</button>
+      </a>
+    <% } %>
+    <div id="comments-list">
+      <%
+        var i = 0;
+        for (; i < comments.length; i++) {
+          var comment = comments[i];
+      %>
+      <div class="comment-infos">
+        <%
+          var date = comment.created_at;
+          var dateStr = '';
+          var monthStrArr = ['JAN', 'FAB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+          dateStr = monthStrArr[date.getMonth()] + ' ' + date.getDate() + '. ' + date.getFullYear();
+        %>
+        <div class="comment-user"><%= comment.user.name %></div>
+        <div class="comment-date sub-color"><%= dateStr %></div>
+        <div class="comment-text"><%= comment.comment %></div>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

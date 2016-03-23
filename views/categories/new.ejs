@@ -1,0 +1,21 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<div id="body-container">
+<h1><%= title %></h1>
+<form action="/categories/new" method="post">
+  <table border="1">
+    <tr>
+      <td>이름</td>
+      <td><input type="text" name="name" id="name"/></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button type="submit">등록</button>
+      </td>
+    </tr>
+  </table>
+</form>
+</div>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

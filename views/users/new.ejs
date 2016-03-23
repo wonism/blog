@@ -1,0 +1,27 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<h1><%= title %></h1>
+<% if (false) { %>
+<form action="/users/new" method="post" enctype="multipart/form-data">
+<% } else { %>
+<form action="/users/new" method="post">
+<% } %>
+  <table border="1">
+    <tr>
+      <td>이름</td>
+      <td><input type="text" name="name" id="name"/></td>
+    </tr>
+    <tr>
+      <td>이메일</td>
+      <td><input type="text" name="email" id="email"/></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button type="submit">등록</button>
+      </td>
+    </tr>
+  </table>
+</form>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+

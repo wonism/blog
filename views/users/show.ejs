@@ -1,0 +1,24 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<h1><%= title %></h1>
+<table border="1">
+  <input type="hidden" name="id" value="<%= user.id %>"/>
+  <tr>
+    <td>이름</td>
+    <td><%= user.name %></td>
+  </tr>
+  <tr>
+    <td>이메일</td>
+    <td><%= user.email %></td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <a href="/users/update/<%= user.id %>">수정</a>
+      <a href="/users/delete/<%= user.id %>">삭제</a>
+      <a href="javascript:history.back();">리스트로 돌아가기</a>
+    </td>
+  </tr>
+</table>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+
