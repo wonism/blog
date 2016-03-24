@@ -1,3 +1,5 @@
+process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'production' ) ? 'production' : 'development';
+
 var express = require('express');
 
 var favicon = require('serve-favicon');
@@ -12,6 +14,7 @@ var bodyParser = require('body-parser');
 var formidable = require('formidable');
 var cookieSession = require('cookie-session');
 var sessionOptions = require('./config/session');
+var portNumber = require('./config/port');
 
 /* for Form Method */
 var methodOverride = require('method-override');
@@ -113,6 +116,19 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
+});
+
+// port setup
+if (process.env.NODE_ENV === 'development') {
+  app.set('port', process.env.PORT || portNumber);
+}
+
+//////////////////////////////////////////////////////
+// ------- creates Server -------
+module.exports = app;
+
+var server = app.listen(app.get('port'), function() {
+  console.log('Express server listening on port ' + server.address().port);
 });
 
 module.exports = app;

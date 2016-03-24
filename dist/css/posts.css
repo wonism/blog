@@ -21,7 +21,7 @@
     bottom: 0;
     margin-top: auto;
     margin-bottom: auto;
-    width: 125px;
+    width: 20%;
     height: auto;
     -o-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -38,7 +38,7 @@
       -webkit-opacity: .7;
       opacity: .7; }
   .post .post-summary {
-    padding-left: 192px;
+    padding-left: 30%;
     padding-right: 16px; }
   .post .post-category-name {
     display: inline-block;

@@ -355,6 +355,11 @@ ul.list-menu {
   font-size: 1.4em;
   line-height: 75px; }
 
+.dashed-line {
+  margin-bottom: 16px;
+  padding-top: 16px;
+  border-bottom: 1px dashed #e5e5e5; }
+
 #slide-navigator {
   display: none;
   position: fixed;
@@ -395,6 +400,13 @@ ul.list-menu {
   padding-bottom: 48px;
   max-width: 720px;
   min-height: 100vh; }
+  #body-container.fix-in {
+    top: 0;
+    padding-top: 75px;
+    padding-bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100vh; }
 
 ul.list-layout.pagination {
   position: absolute;
