@@ -170,7 +170,7 @@ var ready = function () {
     });
   }
 
-  if (document.getElementsByClassName('image-upload')) {
+  if (document.getElementsByClassName('image-upload').length) {
     var uploaders = document.getElementsByClassName('image-upload');
 
     var i = 0;
@@ -181,7 +181,7 @@ var ready = function () {
     }
   }
 
-  if (document.getElementsByClassName('post-category-selector')) {
+  if (document.getElementsByClassName('post-category-selector').length) {
     addEvent(document.getElementsByClassName('post-category-selector')[0], 'change', function (e) {
       if (e.target.value >> 0 === 0) {
         window.location.href = '/posts';

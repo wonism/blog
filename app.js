@@ -1,3 +1,4 @@
+// process.env.NODE_ENV = 'production';
 process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'production' ) ? 'production' : 'development';
 
 var express = require('express');
@@ -9,6 +10,7 @@ var logger = require('morgan');
 
 /* for Session */
 var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var formidable = require('formidable');
@@ -65,8 +67,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 app.use(session({
+  // store: new RedisStore(),
   key: sessionOptions.sessionKey,
   secret: sessionOptions.sessionSecret,
+  cookie: {
+    maxAge: 1000 * 60 * 60
+  },
   saveUninitialized: true
 }));
 

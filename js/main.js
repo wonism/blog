@@ -21,6 +21,8 @@ var cardTemplate = '' +
     '</div>';
 
 var ready = function () {
+  window.scrollTo(0, 1);
+
   var topSlider, header, bodyContainer, pagination, nextPage;
   var currentX, currentY;
 
