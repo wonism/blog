@@ -10,6 +10,7 @@ var logger = require('morgan');
 
 /* for Session */
 var session = require('express-session');
+var redis = require('redis');
 var RedisStore = require('connect-redis')(session);
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -65,15 +66,18 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+var client = redis.createClient();
+
 app.use(cookieParser());
 app.use(session({
-  // store: new RedisStore(),
+  store: new RedisStore({ host: 'localhost', port: 6379, client: client }),
   key: sessionOptions.sessionKey,
   secret: sessionOptions.sessionSecret,
   cookie: {
     maxAge: 1000 * 60 * 60
   },
-  saveUninitialized: true
+  saveUninitialized: false,
+  resave: false
 }));
 
 app.use(flash());
