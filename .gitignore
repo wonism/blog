@@ -21,4 +21,4 @@ node_modules
 config/
 
 dump.rdb
-.nohup
+nohup.out
