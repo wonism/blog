@@ -16,7 +16,7 @@ var errType = '';
 
 // Form to Join
 router.get('/', function (req, res, next) {
-  res.render('join/index', { req: req, title: '회원가입', userId: req.session.u5er });
+  res.render('join/index', { req: req, title: '회원가입', userId: req.user ? req.user.user_id : null });
 });
 
 // Join
@@ -36,10 +36,10 @@ router.post('/', function (req, res, next) {
       if (user) {
         if (user.toJSON().user_id === fields.user_id) {
           req.flash('errType', 'duplicateId');
-          res.render('join/index', { req: req, title: '회원가입', userId: req.session.u5er, errType: req.flash('errType')});
+          res.render('join/index', { req: req, title: '회원가입', userId: req.user ? req.user.user_id : null, errType: req.flash('errType')});
         } else if (user.toJSON().email === fields.email) {
           req.flash('errType', 'duplicateEmail');
-          res.render('join/index', { req: req, title: '회원가입', userId: req.session.u5er, errType: req.flash('errType')});
+          res.render('join/index', { req: req, title: '회원가입', userId: req.user ? req.user.user_id : null, errType: req.flash('errType')});
         }
       } else {
         if (isSafe(fields.user_id, fields.email, fields.password)) {
@@ -49,8 +49,9 @@ router.post('/', function (req, res, next) {
               models.User.forge({ user_id: fields.user_id, name: fields.name, email: fields.email, password: fields.password, salt: salt, access_token: 9, level: 9})
               .save()
               .then(function (user) {
-                req.session.userId = user.toJSON().email;
-                res.redirect('/');
+                // req.user.user_id = user.toJSON().user_id;
+                // res.redirect('/');
+                res.redirect('/login');
               })
               .catch(function (err) {
                 console.log(err.message);
@@ -60,7 +61,7 @@ router.post('/', function (req, res, next) {
           });
         } else {
           req.flash('errType', errType);
-          res.render('join/index', { req: req, title: '회원가입', userId: req.session.u5er, errType: req.flash('errType')});
+          res.render('join/index', { req: req, title: '회원가입', userId: req.user ? req.user.user_id : null, errType: req.flash('errType')});
         }
       }
     })

@@ -16,6 +16,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var formidable = require('formidable');
 var cookieSession = require('cookie-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 var sessionOptions = require('./config/session');
 var portNumber = require('./config/port');
 
@@ -79,6 +81,9 @@ app.use(session({
   saveUninitialized: false,
   resave: false
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(flash());
 

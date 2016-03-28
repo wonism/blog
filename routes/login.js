@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var formidable = require('formidable');
-
 var pool = require('../config/dbconfig');
 var orm = require('sequelize');
 
@@ -11,33 +9,35 @@ var collections = require('../db/collections');
 
 var bcrypt = require('bcrypt');
 
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 var refer = '';
 
-// Form to Login
-router.get('/', function (req, res, next) {
-  refer = req.headers.referer;
-  res.render('login/index', { req: req, title: '로그인', userId: req.session.u53r, authFlash: req.flash('auth'), failed: false });
-});
-
-// Login
-router.post('/', function (req, res, next) {
-  var form = new formidable.IncomingForm();
-  var fields = [];
-
-  form.parse(req, function (err, fields, files) {
-    models.User.forge({ user_id: fields.user_id })
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'user_id',
+    passwordField: 'password'
+  },
+  function (user_id, password, done) {
+    models.User.forge({ user_id: user_id })
     .fetch()
     .then(function (user) {
       if (user) {
-        bcrypt.compare(fields.password, user.toJSON().password, function (err, success) {
+        bcrypt.compare(password, user.toJSON().password, function (err, success) {
           if (success) {
-            req.session.u53r = user.toJSON().user_id;
+            return done(null, user);
+            // req.session.u53r = user.toJSON().user_id;
+            /*
             if (refer) {
               res.redirect(refer);
             } else {
               res.redirect('/');
             }
+            */
           } else {
+            return done(null, false, { message: 'ID 혹은 비밀번호가 잘못되었습니다.' });
+            /*
             req.session.destroy(function (err) {
               if (err) {
                 console.log(err.message);
@@ -45,18 +45,85 @@ router.post('/', function (req, res, next) {
               }
             });
             res.render('login/index', { req: req, title: '로그인', userId: null, authFlash: 'ID 혹은 비밀번호가 잘못되었습니다.', failed: true });
+            */
           }
         });
       } else {
-        res.render('login/index', { req: req, title: '로그인', userId: null, authFlash: 'ID 혹은 비밀번호가 잘못되었습니다.', failed: true });
+        return done(null, false, { message: 'ID 혹은 비밀번호가 잘못되었습니다.' });
       }
     })
     .catch(function (err) {
-      console.log(err.message);
-      res.render('500', { req: req, title: '500: Internal Server Error.'});
+      return done(err, null);
     });
+  }
+));
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done ) {
+  models.User.forge({ user_id: user.user_id })
+  .fetch()
+  .then(function (user) {
+    done(null, user.toJSON());
+  })
+  .catch(function (err) {
+    done(err);
   });
 });
+
+// Form to Login
+router.get('/', function (req, res, next) {
+  refer = req.headers.referer;
+  var flash = req.flash('auth');
+  flash = flash.length ? flash : req.flash('error');
+  res.render('login/index', { req: req, title: '로그인', userId: req.user ? req.user.user_id : null, authFlash: flash, failed: false });
+});
+
+router.post(
+    '/',
+    passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true }),
+    function (req, res, next) {
+      res.redirect('/');
+    }
+);
+
+// Login
+/*
+router.post('/', function (req, res, next) {
+  models.User.forge({ user_id: req.body.user_id })
+  .fetch()
+  .then(function (user) {
+    if (user) {
+      bcrypt.compare(req.body.password, user.toJSON().password, function (err, success) {
+        if (success) {
+          req.session.u53r = user.toJSON().user_id;
+          if (refer) {
+            res.redirect(refer);
+          } else {
+            res.redirect('/');
+          }
+        } else {
+          req.session.destroy(function (err) {
+            if (err) {
+              console.log(err.message);
+              res.render('500', { req: req, title: '500: Internal Server Error.'});
+            }
+          });
+          res.render('login/index', { req: req, title: '로그인', userId: null, authFlash: 'ID 혹은 비밀번호가 잘못되었습니다.', failed: true });
+        }
+      });
+    } else {
+      res.render('login/index', { req: req, title: '로그인', userId: null, authFlash: 'ID 혹은 비밀번호가 잘못되었습니다.', failed: true });
+    }
+  })
+  .catch(function (err) {
+    console.log(err.message);
+    res.render('500', { req: req, title: '500: Internal Server Error.'});
+  });
+});
+*/
 
 module.exports = router;
 

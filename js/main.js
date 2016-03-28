@@ -50,15 +50,13 @@ var ready = function () {
     currentX = supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
     currentY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
 
-    if (document.readyState === 'complete') {
-      if (topSlider && header) {
-        if (currentY >= topSlider.clientHeight) {
-          bodyContainer.style.top = header.clientHeight + 16 + 'px';
-          header.style.position = 'fixed';
-        } else {
-          bodyContainer.style.top = '16px';
-          header.style.position = 'relative';
-        }
+    if (currentY && topSlider && header) {
+      if (currentY > topSlider.clientHeight) {
+        bodyContainer.style.top = header.clientHeight + 16 + 'px';
+        header.style.position = 'fixed';
+      } else {
+        bodyContainer.style.top = '16px';
+        header.style.position = 'relative';
       }
     }
 

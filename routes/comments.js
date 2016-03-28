@@ -17,8 +17,8 @@ var pages;
 var pagingSize = 10;
 
 isAuthor = function (req, res, next) {
-  if (req.session.u53r) {
-    models.User.forge({ user_id: req.session.u53r })
+  if (req.user) {
+    models.User.forge({ user_id: req.user.user_id })
     .fetch()
     .then(function (user) {
       if (user) {

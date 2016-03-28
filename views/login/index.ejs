@@ -1,14 +1,14 @@
 <%- include ../layouts/header %>
 <% if (authFlash && authFlash.length) { %>
 <script>
-  alert(<%- authFlash %>);
+  alert('<%- authFlash[authFlash.length - 1] %>');
 </script>
 <div class="flash none"><%- authFlash %><button class="rm-style-button pull-right" type="button" role="close"><i class="fa fa-close"></i></button></div>
 <div class="flash-back opacity-3 none"></div>
 <% } %>
 <%- include ../commons/header %>
 <div id="body-container">
-  <form id="login-form" action="/login" method="post" enctype="multipart/form-data">
+  <form id="login-form" action="/login" method="post">
     <div class="form-control">
       <label for="user_id">ID</label><br/>
       <input class="default-input" type="text" name="user_id" id="user_id" placeholder=""/>

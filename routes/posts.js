@@ -20,8 +20,8 @@ var fetchedCategories;
 var pagingSize = 10;
 
 isAuthor = function (req, res, next) {
-  if (req.session.u53r) {
-    models.User.forge({ user_id: req.session.u53r })
+  if (req.user) {
+    models.User.forge({ user_id: req.user.user_id })
     .fetch()
     .then(function (user) {
       if (req.route.path.match(userCheckingReg)) {
@@ -164,7 +164,7 @@ router.get('/', getCategories, function (req, res, next) {
         {
           req: req,
           title: 'Jaewonism - POST',
-          userId: req.session.u53r,
+          userId: req.user ? req.user.user_id : null,
           authFlash: req.flash('auth'),
           infoFlash: req.flash('info'),
           categories: fetchedCategories,
@@ -193,7 +193,7 @@ router.get('/new', isAuthor, function (req, res, next) {
         {
           req: req,
           title: 'Jaewonism - NEW POST',
-          userId: req.session.u53r,
+          userId: req.user ? req.user.user_id : null,
           categories: categories.toJSON(),
           page: page
         }
@@ -301,7 +301,7 @@ router.get('/:id', isAuthor, function (req, res, next) {
             req: req,
             title: 'Jaewonism - POST',
             author: author.toJSON(),
-            userId: req.session.u53r,
+            userId: req.user ? req.user.user_id : null,
             userPk: userPk || 0,
             authFlash: req.flash('auth'),
             infoFlash: req.flash('info'),
@@ -345,7 +345,7 @@ router.get('/update/:id', isAuthor, function (req, res, next) {
               {
                 req: req,
                 title: 'Jaewonism - MODIFY POST',
-                userId: req.session.u53r,
+                userId: req.user ? req.user.user_id : null,
                 post: post.toJSON(),
                 categories: categories.toJSON(),
                 category: category.toJSON(),
@@ -475,7 +475,7 @@ router.get('/delete/:id', isAuthor, function (req, res, next) {
             {
               req: req,
               title: 'Jaewonism - DELETE POST',
-              userId: req.session.u53r,
+              userId: req.user ? req.user.user_id : null,
               categories: categories.toJSON(),
               post: post.toJSON(),
               page: page
@@ -547,7 +547,7 @@ router.get('/categories/:id', getCategories, function (req, res, next) {
           {
             req: req,
             title: 'Jaewonism - POST',
-            userId: req.session.u53r,
+            userId: req.user ? req.user.user_id : null,
             authFlash: req.flash('auth'),
             infoFlash: req.flash('info'),
             categories: fetchedCategories,
@@ -599,7 +599,7 @@ router.get('/tags/:slug', getCategories, function (req, res, next) {
           {
             req: req,
             title: 'Jaewonism - POST',
-            userId: req.session.u53r,
+            userId: req.user ? req.user.user_id : null,
             authFlash: req.flash('auth'),
             infoFlash: req.flash('info'),
             categories: fetchedCategories,
@@ -648,7 +648,7 @@ router.get('/search/:keyword', getCategories, function (req, res, next) {
         {
           req: req,
           title: 'Jaewonism - POST',
-          userId: req.session.u53r,
+          userId: req.user ? req.user.user_id : null,
           authFlash: req.flash('auth'),
           infoFlash: req.flash('info'),
           categories: fetchedCategories,

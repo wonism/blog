@@ -8,8 +8,8 @@ var models = require('../db/models');
 var collections = require('../db/collections');
 
 isAuthor = function (req, res, next) {
-  if (req.session.u53r) {
-    models.User.forge({ user_id: req.session.u53r })
+  if (req.user) {
+    models.User.forge({ user_id: req.user.user_id })
     .fetch()
     .then(function (user) {
       if ((user.toJSON().level >> 0) === 99) {
@@ -40,7 +40,7 @@ router.get('/', isAuthor, function (req, res, next) {
   .fetch()
   .then(function (categories) {
     console.log(categories);
-    res.render('categories/index', { req: req, title: '카테고리 리스트', userId: req.session.u5er, categories: categories.toJSON() });
+    res.render('categories/index', { req: req, title: '카테고리 리스트', userId: req.user ? req.user.user_id : null, categories: categories.toJSON() });
   })
   .catch(function (err) {
     console.log(err.message);
@@ -50,7 +50,7 @@ router.get('/', isAuthor, function (req, res, next) {
 
 // Form to Create Category
 router.get('/new', isAuthor, function (req, res, next) {
-  res.render('categories/new', { req: req, title: '카테고리 등록', userId: req.session.u5er });
+  res.render('categories/new', { req: req, title: '카테고리 등록', userId: req.user ? req.user.user_id : null });
 });
 
 // Create Category
@@ -74,7 +74,7 @@ router.get('/:id', isAuthor, function (req, res, next) {
     if (!category) {
       res.render('404', { title: '404: Page Not Found.'});
     } else {
-      res.render('categories/show', { req: req, title: '카테고리 조회', userId: req.session.u5er, category: category.toJSON() });
+      res.render('categories/show', { req: req, title: '카테고리 조회', userId: req.user ? req.user.user_id : null, category: category.toJSON() });
     }
   })
   .catch(function (err) {
@@ -91,7 +91,7 @@ router.get('/update/:id', isAuthor, function (req, res, next) {
     if (!category) {
       res.render('404', { title: '404: Page Not Found.'});
     } else {
-      res.render('categories/update', { req: req, title: '카테고리 수정', userId: req.session.u5er, category: category.toJSON() });
+      res.render('categories/update', { req: req, title: '카테고리 수정', userId: req.user ? req.user.user_id : null, category: category.toJSON() });
     }
   })
   .catch(function (err) {
@@ -128,7 +128,7 @@ router.get('/delete/:id', isAuthor, function (req, res, next) {
     if (!category) {
       res.render('404', { title: '404: Page Not Found.'});
     } else {
-      res.render('categories/delete', { req: req, title: '카테고리 삭제', userId: req.session.u5er, category: category.toJSON() });
+      res.render('categories/delete', { req: req, title: '카테고리 삭제', userId: req.user ? req.user.user_id : null, category: category.toJSON() });
     }
   })
   .catch(function (err) {

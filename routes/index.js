@@ -78,7 +78,7 @@ router.get('/', getCategories, function (req, res, next) {
           {
             req: req,
             title: 'Jaewonism',
-            userId: req.session.u53r,
+            userId: req.user ? req.user.user_id : null,
             categories: fetchedCategories,
             posts: posts.toJSON(),
             pages: pages,
@@ -102,7 +102,7 @@ router.get('/', function (req, res, next) {
         console.error('err : ' + err);
       }
 
-      res.render('index', { req: req, title: 'test', userId: req.session.u53r, isRoot: true, rows: rows });
+      res.render('index', { req: req, title: 'test', userId: req.user ? req.user.user_id : null, isRoot: true, rows: rows });
       conn.release();
     });
   });
