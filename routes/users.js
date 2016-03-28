@@ -17,7 +17,7 @@ router.get('/list/:page', function (req, res, next) {
   .query('where', 'is_deleted', 0)
   .fetch()
   .then(function (collection) {
-    res.render('users/index', { req: req, title: '유저 리스트', userId: req.session.u5er, users: collection.toJSON() });
+    res.render('users/index', { req: req, title: '유저 리스트', userId: req.user ? req.user.user_id : null, users: collection.toJSON() });
   })
   .catch(function (err) {
     console.log(err.message);
@@ -27,7 +27,7 @@ router.get('/list/:page', function (req, res, next) {
 
 // Form to Create User
 router.get('/new', function (req, res, next) {
-  res.render('users/new', { req: req, title: '회원 등록', userId: req.session.u5er });
+  res.render('users/new', { req: req, title: '회원 등록', userId: req.user ? req.user.user_id : null });
 });
 
 // Create User
@@ -54,7 +54,7 @@ router.get('/show/:id', function (req, res, next) {
     if (!user) {
       res.render('404', { title: '404: Page Not Found.'});
     } else {
-      res.render('users/show', { req: req, title: '유저 조회', userId: req.session.u5er, user: user.toJSON() });
+      res.render('users/show', { req: req, title: '유저 조회', userId: req.user ? req.user.user_id : null, user: user.toJSON() });
     }
   })
   .catch(function (err) {
@@ -71,7 +71,7 @@ router.get('/update/:id', function (req, res, next) {
     if (!user) {
       res.render('404', { title: '404: Page Not Found.'});
     } else {
-      res.render('users/update', { req: req, title: '유저 수정', userId: req.session.u5er, user: user.toJSON() });
+      res.render('users/update', { req: req, title: '유저 수정', userId: req.user ? req.user.user_id : null, user: user.toJSON() });
     }
   })
   .catch(function (err) {
@@ -111,7 +111,7 @@ router.get('/delete/:id', function (req, res, next) {
     if (!user) {
       res.render('404', { title: '404: Page Not Found.'});
     } else {
-      res.render('users/delete', { req: req, title: '유저 삭제', userId: req.session.u5er, user: user.toJSON() });
+      res.render('users/delete', { req: req, title: '유저 삭제', userId: req.user ? req.user.user_id : null, user: user.toJSON() });
     }
   })
   .catch(function (err) {

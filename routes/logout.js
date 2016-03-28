@@ -11,12 +11,8 @@ var collections = require('../db/collections');
 
 // Form to Login
 router.get('/', function (req, res, next) {
-  req.session.destroy(function (err) {
-    if (err) {
-      console.log(err);
-    }
-    res.redirect('/');
-  });
+  req.logout();
+  res.redirect('/');
 });
 
 module.exports = router;

@@ -15,8 +15,8 @@ var collections = require('../db/collections');
 var im = require('imagemagick');
 
 isAuthor = function (req, res, next) {
-  if (req.session.u53r) {
-    models.User.forge({ user_id: req.session.u53r })
+  if (req.user) {
+    models.User.forge({ user_id: req.user.user_id })
     .fetch()
     .then(function (user) {
       if ((user.toJSON().level >> 0) === 99) {
@@ -42,7 +42,7 @@ router.get('/', isAuthor, function (req, res, next) {
   collections.Images.forge()
   .fetch()
   .then(function (collection) {
-    res.render('images/index', { req: req, title: '이미지 리스트', userId: req.session.u5er, images: collection.toJSON() });
+    res.render('images/index', { req: req, title: '이미지 리스트', userId: req.user ? req.user.user_id : null, images: collection.toJSON() });
   })
   .catch(function (err) {
     console.log(err.message);
@@ -52,7 +52,7 @@ router.get('/', isAuthor, function (req, res, next) {
 
 // Form to Create Image
 router.get('/new', isAuthor, function (req, res, next) {
-  res.render('images/new', { req: req, title: '이미지 등록', userId: req.session.u5er });
+  res.render('images/new', { req: req, title: '이미지 등록', userId: req.user ? req.user.user_id : null });
 });
 
 // Create Image
@@ -226,7 +226,7 @@ router.get('/:id', isAuthor, function (req, res, next) {
     if (!image) {
       res.render('404', { title: '404: Page Not Found.'});
     } else {
-      res.render('images/show', { req: req, title: '이미지 조회', userId: req.session.u5er, image: image.toJSON() });
+      res.render('images/show', { req: req, title: '이미지 조회', userId: req.user ? req.user.user_id : null, image: image.toJSON() });
     }
   })
   .catch(function (err) {
@@ -243,7 +243,7 @@ router.get('/delete/:id', isAuthor, function (req, res, next) {
     if (!image) {
       res.render('404', { title: '404: Page Not Found.'});
     } else {
-      res.render('images/delete', { req: req, title: '이미지 삭제', userId: req.session.u5er, image: image.toJSON() });
+      res.render('images/delete', { req: req, title: '이미지 삭제', userId: req.user ? req.user.user_id : null, image: image.toJSON() });
     }
   })
   .catch(function (err) {
