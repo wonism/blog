@@ -1,0 +1,98 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<script src="/js/easy-map.js"></script>
+<div id="body-container" class="clearfix fix-in">
+  <div class="work-summary">
+    <a href="https://github.com/wonism/easy-map.js"><div class="work-title">Easy Map JS</div></a>
+    <div class="work-says">
+      This is a open source project to represent map in your web page easily.<br>
+      It supports only Google Maps API now.
+      But, I'm developing this to supports Naver Maps API and Daum Maps API.<br>
+      <b>Browser Support</b> : Internet Explorer 9+, Firefox, Chrome, Safari etc...<br>
+      <b>Dependencies Library</b> : None (Native Java Script Library)
+    </div>
+    <div class="dashed-line"></div>
+    <div class="work-period">2016. 03. ~ </div>
+    <div class="work-page space-top"><a href="https://github.com/wonism/easy-map.js">View on Github →</a></div>
+  </div>
+  <div class="work-results">
+    <div class="map-wrapper">
+      <div id="google-map" class="map" data-map-type="google"></div>
+    </div>
+  </div>
+</div>
+<script>
+  var makeMap;
+
+  if (document.addEventListener) {
+    document.addEventListener('DOMContentLoaded', function () {
+      document.removeEventListener('DOMContentLoaded', arguments.callee, false);
+      makeMap();
+    }, false);
+  } else if (document.attachEvent) {
+    document.attachEvent('onreadystatechange', function () {
+      if (document.readyState === 'complete') {
+        document.detachEvent('onreadystatechange', arguments.callee);
+        makeMap();
+      }
+    });
+  }
+
+  makeMap = function () {
+    easyMap.init(
+        'google-map',
+        'AIzaSyBL4Ugej1KvkfIrU2qOhoAkE85rKEcTApo',
+        {
+          lat: 37.5666103,
+          lng: 126.9783882,
+          marker: { icon: '//assets-cdn.github.com/images/modules/contact/heartocat.png', size: '48x48', verticalAlign: 'top' },
+          info: { markup: '<div class="info-window">Hello, I\'m Center!</div>', maxWidth: 50 }
+        },
+        [
+          {
+            lat: 37.5658528,
+            lng: 126.9779845,
+            name: 'Star Wars 1 : The Phantom Menace',
+            marker: { icon: '//assets-cdn.github.com/images/modules/contact/heartocat.png', size: '36x36', verticalAlign: 'middle' },
+            info: { markup: '<div class="info-window">I am \"Star Wars 1 : The Phantom Menace\"!<br>distance is {{distance m}}m</div>', maxWidth: 50 }
+          },
+          {
+            lat: 37.5658528,
+            lng: 126.9779845,
+            name: 'Avengers 2 : Age of Ultron',
+            marker: { icon: '//assets-cdn.github.com/images/modules/contact/heartocat.png', size: '36x36', verticalAlign: 'middle' },
+            info: { markup: '<div class="info-window">I am \"Avengers 2 : Age of Ultron\"!<br>distance is {{distance m}}m</div>', maxWidth: 50 }
+          },
+          {
+            lat: 37.5658049,
+            lng: 126.9751461,
+            name: '3 Idiots',
+            marker: { icon: '//assets-cdn.github.com/images/modules/contact/heartocat.png', size: '36x36', verticalAlign: 'middle' },
+            info: { markup: '<div class="info-window">I am \"3 Idiots\"!<br>distance is {{distance km}}km</div>', maxWidth: 50 }
+          },
+          {
+            lat: 37.5658528,
+            lng: 126.9779845,
+            name: 'I am number 4',
+            marker: { icon: '//assets-cdn.github.com/images/modules/contact/heartocat.png', size: '36x36', verticalAlign: 'middle' },
+            info: { markup: '<div class="info-window">I am \"I am number 4\"!<br>distance is {{distance m}}m</div>', maxWidth: 50 }
+          },
+          {
+            lat: 37.5658528,
+            lng: 126.9779845,
+            name: 'The 5 element',
+            marker: { icon: '//assets-cdn.github.com/images/modules/contact/heartocat.png', size: '36x36', verticalAlign: 'middle' },
+            info: { markup: '<div class="info-window">I am \"The 5 element\"!<br>distance is {{distance m}}m</div>', maxWidth: 50 }
+          }
+        ],
+        true,
+        function (callback, ids, strs) {
+          var userInput = prompt('Nested Markers! Select one.\n' + strs, '');
+
+          return callback((userInput >> 0) - 1);
+        }
+    );
+  };
+</script>
+<%- include ../layouts/footer %>
+

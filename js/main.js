@@ -164,5 +164,10 @@ var ready = function () {
       }
     }
   };
+
+  if (!currentY) {
+    bodyContainer.style.top = '16px';
+    header.style.position = 'relative';
+  }
 };
 
