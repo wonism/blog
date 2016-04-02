@@ -176,7 +176,7 @@ var ready = function () {
     var i = 0;
     for (; i < uploaders.length; i++) {
       addEvent(uploaders[i], 'change', function (e) {
-        imageUpload(e.target);
+        imageUpload(this);
       });
     }
   }

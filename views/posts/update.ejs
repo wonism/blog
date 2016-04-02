@@ -1,9 +1,14 @@
 <%- include ../layouts/header %>
 <%- include ../commons/header %>
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/summernote.css" rel="stylesheet">
+<script src="/js/jquery-1.12.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/summernote.min.js"></script>
 <div class="post-background-preview">
   <div class="guide">배경 이미지를 업로드하세요. :)</div>
-  <img class="background-image" src="<%- post.background_image %>" alt="background-image"/>
-  <input class="background-image rm-style-file" id="background-image" type="file" name="background-image" data-processing-type="2"/>
+  <img class="background-image" src="<%- post.background_image %>" alt="background-image" data-targetted-image="background-image"/>
+  <input class="background-image rm-style-file image-upload" id="background-image" type="file" name="background-image" data-processing-type="2"/>
 </div>
 <div id="body-container" class="show-post">
   <div id="post">
@@ -30,7 +35,8 @@
         <input type="text" name="title" id="title" value="<%= post.title %>"/>
       </div>
       <div class="html">
-        <textarea name="html" id="html" resizable="false"><%- post.html %></textarea>
+        <div id="html-editor"></div>
+        <!--textarea name="html" id="html" resizable="false"><%- post.html %></textarea-->
       </div>
       <div class="tags space-top">
         <span class="tag">TAGS</span>
@@ -63,6 +69,21 @@
     </form>
   </div>
 </div>
+
+<script>
+  $('#html-editor').summernote({
+    height: 300,
+    maxHeight: 300,
+    focus: false
+  });
+  $('#html-editor').summernote('code', '<%- post.html %>');
+  $('.note-codable').attr('id', 'html').attr('name', 'html');
+  $('body').on('click', 'input[type="submit"]', function (e) {
+    e.preventDefault();
+    $('#html').val($('#html-editor').summernote('code'));
+    $('form').submit();
+  });
+</script>
 
 <%- include ../commons/footer %>
 <%- include ../layouts/footer %>

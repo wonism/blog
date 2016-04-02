@@ -585,7 +585,7 @@ ul.list-layout.pagination {
   color: $main-color;
   background-color: #fff;
   border-color: $main-hover-color;
-  &:hover, &:active {
+  &:focus, &:hover, &:active {
     background-color: $main-hover-color;
   }
 }
@@ -594,7 +594,7 @@ ul.list-layout.pagination {
   color: #fff;
   background-color: $main-color;
   border-color: $main-hover-color;
-  &:hover, &:active {
+  &:focus, &:hover, &:active {
     background-color: $main-hover-color;
   }
 }

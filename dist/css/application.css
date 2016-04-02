@@ -481,14 +481,14 @@ ul.list-layout.pagination {
   color: #FFB5C6;
   background-color: #fff;
   border-color: #FCDFE5; }
-  .btn.btn-primary:hover, .btn.btn-primary:active {
+  .btn.btn-primary:focus, .btn.btn-primary:hover, .btn.btn-primary:active {
     background-color: #FCDFE5; }
 
 .btn.btn-primary-reverse {
   color: #fff;
   background-color: #FFB5C6;
   border-color: #FCDFE5; }
-  .btn.btn-primary-reverse:hover, .btn.btn-primary-reverse:active {
+  .btn.btn-primary-reverse:focus, .btn.btn-primary-reverse:hover, .btn.btn-primary-reverse:active {
     background-color: #FCDFE5; }
 
 .btn.btn-radius {

@@ -138,6 +138,9 @@ h1 {
       .work-image {
         padding: 16px;
         width: 100%;
+        &.right {
+          margin: 0;
+        }
       }
       .work-description {
         position: relative;

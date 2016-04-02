@@ -97,6 +97,8 @@ h1 {
   .works .work .work-image {
     padding: 16px;
     width: 100%; }
+    .works .work .work-image.right {
+      margin: 0; }
   .works .work .work-description {
     position: relative;
     padding: 16px;

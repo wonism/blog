@@ -1,5 +1,10 @@
 <%- include ../layouts/header %>
 <%- include ../commons/header %>
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/summernote.css" rel="stylesheet">
+<script src="/js/jquery-1.12.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/summernote.min.js"></script>
 <div class="post-background-preview">
   <div class="guide">배경 이미지를 업로드하세요. :)</div>
   <img class="background-image" src="" alt="background-image" data-targetted-image="background-image"/>
@@ -29,7 +34,8 @@
         <input type="text" name="title" id="title" value=""/>
       </div>
       <div class="html">
-        <textarea name="html" id="html" resizable="false"></textarea>
+        <div id="html-editor"></div>
+        <!--textarea name="html" id="html" resizable="false"></textarea-->
       </div>
       <div class="tags space-top">
         <span class="tag">TAGS</span>
@@ -42,6 +48,20 @@
     </form>
   </div>
 </div>
+
+<script>
+  $('#html-editor').summernote({
+    height: 300,
+    maxHeight: 300,
+    focus: false
+  });
+  $('.note-codable').attr('id', 'html').attr('name', 'html');
+  $('body').on('click', 'input[type="submit"]', function (e) {
+    e.preventDefault();
+    $('#html').val($('#html-editor').summernote('code'));
+    $('form').submit();
+  });
+</script>
 
 <%- include ../commons/footer %>
 <%- include ../layouts/footer %>
