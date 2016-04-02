@@ -299,7 +299,7 @@ router.get('/:id', isAuthor, function (req, res, next) {
       res.render('posts/show',
           {
             req: req,
-            title: 'Jaewonism - POST',
+            title: 'Jaewonism - POST : ' + post.toJSON().title,
             author: author.toJSON(),
             userId: req.user ? req.user.user_id : null,
             userPk: userPk || 0,

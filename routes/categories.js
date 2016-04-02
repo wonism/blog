@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var url = require('url');
+
 var pool = require('../config/dbconfig');
 var orm = require('sequelize');
 
