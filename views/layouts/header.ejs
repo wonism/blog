@@ -30,7 +30,6 @@
   <link rel='stylesheet' href='/css/<%= req.baseUrl.replace(/\//, '') %>.css'/>
   <script src="/js/<%= req.baseUrl.replace(/\//, '') %>.js" defer="defer"></script>
   <% if (req.baseUrl.replace(/\//, '') === 'posts' && req.route.path.match(/update|new/)) { %>
-  <script src="/js/instafeed.min.js" defer="defer"></script>
   <% } else if (req.baseUrl.replace(/\//, '') === 'photos') { %>
   <script src="/js/instafeed.min.js" defer="defer"></script>
   <% } %>

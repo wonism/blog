@@ -21,7 +21,7 @@ var pagingSize = 10;
 
 isAuthor = function (req, res, next) {
   if (req.user) {
-    models.User.forge({ user_id: req.user ? req.user.user_id : null })
+    models.User.forge({ user_id: req.user.user_id })
     .fetch()
     .then(function (user) {
       if (req.route.path.match(userCheckingReg)) {
