@@ -68,7 +68,8 @@
     letter-spacing: 2px; }
 
 .post-background-preview {
-  position: relative; }
+  position: relative;
+  top: 75px; }
   .post-background-preview .guide {
     position: absolute;
     top: 0;
