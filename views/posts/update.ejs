@@ -76,7 +76,7 @@
     maxHeight: 300,
     focus: false
   });
-  $('#html-editor').summernote('code', '<%- post.html %>');
+  $('#html-editor').summernote('code', '<%- post.html.replace(/\n|\t|\r/g, '').replace(/\'/g, '&quot;' %>');
   $('.note-codable').attr('id', 'html').attr('name', 'html');
   $('body').on('click', 'input[type="submit"]', function (e) {
     e.preventDefault();
