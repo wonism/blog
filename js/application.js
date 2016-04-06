@@ -112,28 +112,27 @@ var common = function () {
   var navigator = document.getElementById('slide-navigator');
 
   addEvent(headerHamburger, 'click', function(e) {
-    var thisClass = this.getAttribute('class');
-    if (!thisClass.match(/\sactive/)) {
-      this.setAttribute('class', thisClass + ' active');
-      navigator.setAttribute('class', navigator.getAttribute('class') + ' active');
+    var thisClassList = this.classList;
+    if (!thisClassList.contains('active')) {
+      this.classList.add('active');
+      navigator.classList.add('active');
       setTimeout(function() {
-        navigator.setAttribute('class', navigator.getAttribute('class') + ' visible');
+        navigator.classList.add('visible');
       }, 1);
-      navigatorHamburger.setAttribute('class', navigatorHamburger.getAttribute('class') + ' active');
+      navigatorHamburger.classList.add('active');
     }
   });
 
   addEvent(navigatorHamburger, 'click', function(e) {
-    var thisClass = this.getAttribute('class');
-    if (thisClass.match(/\sactive/)) {
-      this.setAttribute('class', thisClass.replace(/\sactive/, ''));
-      navigator.setAttribute('class', navigator.getAttribute('class').replace(/\svisible/, ''));
+    var thisClassList = this.classList;
+    if (thisClassList.contains('active')) {
+      this.classList.remove('active');
+      navigator.classList.remove('visible');
       setTimeout(function() {
-        navigator.setAttribute('class', navigator.getAttribute('class').replace(/\sactive/, ''));
+        navigator.classList.remove('active');
       }, 500);
-      headerHamburger.setAttribute('class', headerHamburger.getAttribute('class').replace(/\sactive/, ''));
+      headerHamburger.classList.remove('active');
     }
   });
-
 };
 
