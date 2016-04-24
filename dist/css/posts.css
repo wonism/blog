@@ -69,7 +69,7 @@
 
 .post-background-preview {
   position: relative;
-  top: 75px; }
+  margin-top: 75px; }
   .post-background-preview .guide {
     position: absolute;
     top: 0;
