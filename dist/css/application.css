@@ -311,7 +311,10 @@ a {
   background-color: #fff;
   border-bottom: 1px solid #e5e5e5;
   text-align: center;
-  z-index: 99; }
+  z-index: 99;
+  -ms-transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
   #header.root-header {
     position: relative; }
   #header .header-logo {
