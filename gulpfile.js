@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var sass = require('gulp-sass');
+var cleanCSS = require('gulp-clean-css');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
@@ -14,6 +15,8 @@ gulp.task('lint', function() {
 gulp.task('sass', function() {
   return gulp.src('css/*.scss')
     .pipe(sass())
+    .pipe(cleanCSS({ compatibility: 'ie8' }))
+    .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('dist/css'));
 });
 
