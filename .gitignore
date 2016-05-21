@@ -20,11 +20,11 @@ node_modules
 # configure
 config/
 
-css/
-js/
+#css/
+#js/
 public/upload/
 
-gulpfile.js
+#gulpfile.js
 
 dump.rdb
 nohup.out
