@@ -11,7 +11,7 @@
   %>
   <div class="post-card">
     <% if (post.thumbnail) { %>
-    <a href="/posts/<%= post.id %>">
+    <a class="post-link-image" href="/posts/<%= post.id %>">
       <img class="card-thumbnail" src="<%- post.thumbnail %>" alt="post thumbnail"/>
     </a>
     <% } %>
@@ -27,10 +27,10 @@
             }
           }
         %>
-        <a href="/posts/categories/<%= post.category_id %>">
+        <a class="post-category-link" href="/posts/categories/<%= post.category_id %>">
           <span class="card-category-name main-color"><%= categoryName %></span>
         </a>
-        <a href="/posts/<%= post.id %>">
+        <a class="post-link-title" href="/posts/<%= post.id %>">
           <div class="card-title normal-color">
             <%= post.title %>
           </div>

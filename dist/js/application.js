@@ -1,1 +1,390 @@
-var ua=window.navigator.userAgent.toLowerCase(),isIe=!!ua.match(/msie/),isMobile=!!ua.match(/iphone|ipad|ipod|android|blackberry|iemobile/),isIos=!!ua.match(/iphone|ipad|ipod/),isAnd=!!ua.match(/android/),ieVersion=ua.match(/trident/)?11:ua.match(/msie/)?ua.split(/msie/)[1].split(/\;/)[0]:0;document.addEventListener?document.addEventListener("DOMContentLoaded",function(){document.removeEventListener("DOMContentLoaded",arguments.callee,!1),ready(),common()},!1):document.attachEvent&&document.attachEvent("onreadystatechange",function(){"complete"===document.readyState&&(document.detachEvent("onreadystatechange",arguments.callee),common())}),document.querySelectorAll||(document.querySelectorAll=function(e){var t,n,i;for(t=document.createElement("style"),n=[],i=void 0,document.documentElement.firstChild.appendChild(t),document._qsa=[],t.styleSheet.cssText=e+"{ x-qsa: expression(document._qsa && document._qsa.push(this)) }",window.scrollBy(0,0),t.parentNode.removeChild(t);document._qsa.length;)i=document._qsa.shift(),i.style.removeAttribute("x-qsa"),n.push(i);return document._qsa=null,n}),document.querySelector||(document.querySelector=function(e){var t=document.querySelectorAll(e);return t.length?t[0]:null}),"document"in self&&("classList"in document.createElement("_")?!function(){"use strict";var e=document.createElement("_");if(e.classList.add("c1","c2"),!e.classList.contains("c2")){var t=function(e){var t=DOMTokenList.prototype[e];DOMTokenList.prototype[e]=function(e){var n,i=arguments.length;for(n=0;i>n;n++)e=arguments[n],t.call(this,e)}};t("add"),t("remove")}if(e.classList.toggle("c3",!1),e.classList.contains("c3")){var n=DOMTokenList.prototype.toggle;DOMTokenList.prototype.toggle=function(e,t){return 1 in arguments&&!this.contains(e)==!t?t:n.call(this,e)}}e=null}():!function(e){"use strict";if("Element"in e){var t="classList",n="prototype",i=e.Element[n],o=Object,s=String[n].trim||function(){return this.replace(/^\s+|\s+$/g,"")},a=Array[n].indexOf||function(e){for(var t=0,n=this.length;n>t;t++)if(t in this&&this[t]===e)return t;return-1},r=function(e,t){this.name=e,this.code=DOMException[e],this.message=t},c=function(e,t){if(""===t)throw new r("SYNTAX_ERR","An invalid or illegal string was specified");if(/\s/.test(t))throw new r("INVALID_CHARACTER_ERR","String contains an invalid character");return a.call(e,t)},l=function(e){for(var t=s.call(e.getAttribute("class")||""),n=t?t.split(/\s+/):[],i=0,o=n.length;o>i;i++)this.push(n[i]);this._updateClassName=function(){e.setAttribute("class",this.toString())}},u=l[n]=[],d=function(){return new l(this)};if(r[n]=Error[n],u.item=function(e){return this[e]||null},u.contains=function(e){return e+="",-1!==c(this,e)},u.add=function(){var e,t=arguments,n=0,i=t.length,o=!1;do e=t[n]+"",-1===c(this,e)&&(this.push(e),o=!0);while(++n<i);o&&this._updateClassName()},u.remove=function(){var e,t,n=arguments,i=0,o=n.length,s=!1;do for(e=n[i]+"",t=c(this,e);-1!==t;)this.splice(t,1),s=!0,t=c(this,e);while(++i<o);s&&this._updateClassName()},u.toggle=function(e,t){e+="";var n=this.contains(e),i=n?t!==!0&&"remove":t!==!1&&"add";return i&&this[i](e),t===!0||t===!1?t:!n},u.toString=function(){return this.join(" ")},o.defineProperty){var m={get:d,enumerable:!0,configurable:!0};try{o.defineProperty(i,t,m)}catch(h){-2146823252===h.number&&(m.enumerable=!1,o.defineProperty(i,t,m))}}else o[n].__defineGetter__&&i.__defineGetter__(t,d)}}(self));var supportPageOffset=void 0!==window.pageXOffset,isCSS1Compat="CSS1Compat"===(document.compatMode||""),userBrowser=window.navigator.userAgent,isOlderIE=!!userBrowser.match(/MSIE [4-8]/),isMobile=!!userBrowser.toLowerCase().match(/android | webos | iphone | ipad | ipod | blackberry | windows phone/),w=document.documentElement.clientWidth,h=document.documentElement.clientHeight,x=supportPageOffset?window.pageXOffset:isCSS1Compat?document.documentElement.scrollLeft:document.body.scrollLeft,y=supportPageOffset?window.pageYOffset:isCSS1Compat?document.documentElement.scrollTop:document.body.scrollTop,currentX=x,currentY=y,addEvent=function(e,t,n){var i,o,s,a;for(a=function(e){var t=e||window.event;return t.target||(t.target=t.srcElement),t.preventDefault||(t.preventDefault=function(){t.returnValue=!1,t.defaultPrevented=!0}),n.call(this,t)},t=t.split(" "),o=0,s=t.length;s>o;o++)i=t[o],e.addEventListener?e.addEventListener(i,n,!1):e.attachEvent("on"+i,a)},common=function(){var e=document.querySelectorAll("#header .hamburger")[0],t=document.querySelectorAll("#slide-navigator .hamburger")[0],n=document.getElementById("slide-navigator");addEvent(e,"click",function(e){var i=this.classList;i.contains("active")||(this.classList.add("active"),n.classList.add("active"),setTimeout(function(){n.classList.add("visible")},1),t.classList.add("active"))}),addEvent(t,"click",function(t){var i=this.classList;i.contains("active")&&(this.classList.remove("active"),n.classList.remove("visible"),setTimeout(function(){n.classList.remove("active")},500),e.classList.remove("active"))})};
+var ua = window.navigator.userAgent.toLowerCase();
+var isIe = ua.match(/msie/) ? true : false;
+var isMobile = ua.match(/iphone|ipad|ipod|android|blackberry|iemobile/) ? true : false;
+var isIos = ua.match(/iphone|ipad|ipod/) ? true : false;
+var isAnd = ua.match(/android/) ? true : false;
+var ieVersion = ua.match(/trident/) ? 11 : ua.match(/msie/) ? ua.split(/msie/)[1].split(/\;/)[0] : 0;
+
+if (document.addEventListener) {
+  document.addEventListener('DOMContentLoaded', function () {
+    document.removeEventListener('DOMContentLoaded', arguments.callee, false);
+    ready();
+    common();
+  }, false);
+} else if (document.attachEvent) {
+  document.attachEvent('onreadystatechange', function () {
+    if (document.readyState === 'complete') {
+      document.detachEvent('onreadystatechange', arguments.callee);
+      common();
+    }
+  });
+}
+
+// Query Selector Polyfill
+if (!document.querySelectorAll) {
+  document.querySelectorAll = function (selectors) {
+    var style, elements, element;
+
+    style = document.createElement('style');
+    elements = [];
+    element = undefined;
+
+    document.documentElement.firstChild.appendChild(style);
+    document._qsa = [];
+
+    style.styleSheet.cssText = selectors + '{ x-qsa: expression(document._qsa && document._qsa.push(this)) }';
+    window.scrollBy(0, 0);
+    style.parentNode.removeChild(style);
+
+    while (document._qsa.length) {
+      element = document._qsa.shift();
+      element.style.removeAttribute('x-qsa');
+      elements.push(element);
+    }
+
+    document._qsa = null;
+    return elements;
+  };
+}
+
+if (!document.querySelector) {
+  document.querySelector = function (selectors) {
+    var elements = document.querySelectorAll(selectors);
+    return (elements.length) ? elements[0] : null;
+  };
+}
+
+// ClassList Polyfill
+if ("document" in self) {
+  // Full polyfill for browsers with no classList support
+  if (!("classList" in document.createElement("_"))) {
+    (function (view) {
+      "use strict";
+
+      if (!('Element' in view)) return;
+      var
+          classListProp = "classList"
+        , protoProp = "prototype"
+        , elemCtrProto = view.Element[protoProp]
+        , objCtr = Object
+        , strTrim = String[protoProp].trim || function () {
+          return this.replace(/^\s+|\s+$/g, "");
+        }
+        , arrIndexOf = Array[protoProp].indexOf || function (item) {
+          var
+              i = 0
+            , len = this.length
+          ;
+          for (; i < len; i++) {
+            if (i in this && this[i] === item) {
+              return i;
+            }
+          }
+          return -1;
+        }
+        // Vendors: please allow content code to instantiate DOMExceptions
+        , DOMEx = function (type, message) {
+          this.name = type;
+          this.code = DOMException[type];
+          this.message = message;
+        }
+        , checkTokenAndGetIndex = function (classList, token) {
+          if (token === "") {
+            throw new DOMEx(
+                "SYNTAX_ERR"
+              , "An invalid or illegal string was specified"
+            );
+          }
+          if (/\s/.test(token)) {
+            throw new DOMEx(
+                "INVALID_CHARACTER_ERR"
+              , "String contains an invalid character"
+            );
+          }
+          return arrIndexOf.call(classList, token);
+        }
+        , ClassList = function (elem) {
+          var
+              trimmedClasses = strTrim.call(elem.getAttribute("class") || "")
+            , classes = trimmedClasses ? trimmedClasses.split(/\s+/) : []
+            , i = 0
+            , len = classes.length
+          ;
+          for (; i < len; i++) {
+            this.push(classes[i]);
+          }
+          this._updateClassName = function () {
+            elem.setAttribute("class", this.toString());
+          };
+        }
+        , classListProto = ClassList[protoProp] = []
+        , classListGetter = function () {
+          return new ClassList(this);
+        }
+      ;
+      // Most DOMException implementations don't allow calling DOMException's toString()
+      // on non-DOMExceptions. Error's toString() is sufficient here.
+      DOMEx[protoProp] = Error[protoProp];
+
+      classListProto.item = function (i) {
+        return this[i] || null;
+      };
+
+      classListProto.contains = function (token) {
+        token += "";
+        return checkTokenAndGetIndex(this, token) !== -1;
+      };
+
+      classListProto.add = function () {
+        var
+            tokens = arguments
+          , i = 0
+          , l = tokens.length
+          , token
+          , updated = false
+        ;
+        do {
+          token = tokens[i] + "";
+          if (checkTokenAndGetIndex(this, token) === -1) {
+            this.push(token);
+            updated = true;
+          }
+        }
+        while (++i < l);
+
+        if (updated) {
+          this._updateClassName();
+        }
+      };
+
+      classListProto.remove = function () {
+        var
+            tokens = arguments
+          , i = 0
+          , l = tokens.length
+          , token
+          , updated = false
+          , index
+        ;
+        do {
+          token = tokens[i] + "";
+          index = checkTokenAndGetIndex(this, token);
+          while (index !== -1) {
+            this.splice(index, 1);
+            updated = true;
+            index = checkTokenAndGetIndex(this, token);
+          }
+        }
+        while (++i < l);
+
+        if (updated) {
+          this._updateClassName();
+        }
+      };
+
+      classListProto.toggle = function (token, force) {
+        token += "";
+
+        var
+            result = this.contains(token)
+          , method = result ?
+            force !== true && "remove"
+          :
+            force !== false && "add"
+        ;
+
+        if (method) {
+          this[method](token);
+        }
+
+        if (force === true || force === false) {
+          return force;
+        } else {
+          return !result;
+        }
+      };
+
+      classListProto.toString = function () {
+        return this.join(" ");
+      };
+
+      if (objCtr.defineProperty) {
+        var classListPropDesc = {
+            get: classListGetter
+          , enumerable: true
+          , configurable: true
+        };
+        try {
+          objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+        } catch (ex) { // IE 8 doesn't support enumerable:true
+          if (ex.number === -0x7FF5EC54) {
+            classListPropDesc.enumerable = false;
+            objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+          }
+        }
+      } else if (objCtr[protoProp].__defineGetter__) {
+        elemCtrProto.__defineGetter__(classListProp, classListGetter);
+      }
+    }(self));
+  } else {
+    // There is full or partial native classList support, so just check if we need
+    // to normalize the add/remove and toggle APIs.
+
+    (function () {
+      "use strict";
+
+      var testElement = document.createElement("_");
+
+      testElement.classList.add("c1", "c2");
+
+      // Polyfill for IE 10/11 and Firefox <26, where classList.add and
+      // classList.remove exist but support only one argument at a time.
+      if (!testElement.classList.contains("c2")) {
+        var createMethod = function(method) {
+          var original = DOMTokenList.prototype[method];
+
+          DOMTokenList.prototype[method] = function(token) {
+            var i, len = arguments.length;
+
+            for (i = 0; i < len; i++) {
+              token = arguments[i];
+              original.call(this, token);
+            }
+          };
+        };
+        createMethod('add');
+        createMethod('remove');
+      }
+
+      testElement.classList.toggle("c3", false);
+
+      // Polyfill for IE 10 and Firefox <24, where classList.toggle does not
+      // support the second argument.
+      if (testElement.classList.contains("c3")) {
+        var _toggle = DOMTokenList.prototype.toggle;
+
+        DOMTokenList.prototype.toggle = function(token, force) {
+          if (1 in arguments && !this.contains(token) === !force) {
+            return force;
+          } else {
+            return _toggle.call(this, token);
+          }
+        };
+      }
+      testElement = null;
+    }());
+  }
+}
+
+var supportPageOffset = window.pageXOffset !== undefined;
+var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
+
+var userBrowser = window.navigator.userAgent;
+var isOlderIE = userBrowser.match(/MSIE [4-8]/) ? true : false;
+var isMobile = userBrowser.toLowerCase().match(/android | webos | iphone | ipad | ipod | blackberry | windows phone/) ? true : false;
+
+var w = document.documentElement.clientWidth;
+var h = document.documentElement.clientHeight;
+
+var x = supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
+var y = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
+
+var currentX = x;
+var currentY = y;
+
+var addEvent = function (element, events, callback) {
+  var event, eventCounter, eventLength;
+  var moderator;
+
+  moderator = function (event) {
+    var e = event || window.event;
+
+    if (!e.target) {
+      e.target = e.srcElement;
+    }
+
+    if (!e.preventDefault) {
+      e.preventDefault = function () {
+        e.returnValue = false;
+        e.defaultPrevented = true;
+      };
+    }
+
+    return callback.call(this, e);
+  };
+
+  events = events.split(' ');
+  eventCounter = 0;
+  eventLength = events.length;
+
+  for (; eventCounter < eventLength; eventCounter++) {
+    event = events[eventCounter];
+
+    if (element.addEventListener) {
+      element.addEventListener(event, callback, false);
+    } else {
+      element.attachEvent('on' + event, moderator);
+    }
+  }
+};
+
+var jj = function (selector) {
+  if (selector.match(/\s/g)) {
+    return document.querySelectorAll(selector);
+  } else if (selector.match(/^\#/)) {
+    return document.getElementById(selector.replace(/^\#/, ''));
+  } else if (selector.match(/^\./)) {
+    return document.getElementsByClassName(selector.replace(/^\./, ''));
+  } else {
+    return document.getElementsByTagName(selector);
+  }
+};
+
+var common = function () {
+  var headerHamburger = jj('#header .hamburger')[0],
+      navigatorHamburger = jj('#slide-navigator .hamburger')[0],
+      navigator = jj('#slide-navigator'),
+      headerMenus = jj('#header ul li'),
+      footerMenus = jj('#footer .list-sns a');
+
+  addEvent(headerHamburger, 'click', function(e) {
+    var thisClassList = this.classList;
+    if (!thisClassList.contains('active')) {
+      this.classList.add('active');
+      navigator.classList.add('active');
+      setTimeout(function() {
+        navigator.classList.add('visible');
+      }, 1);
+      navigatorHamburger.classList.add('active');
+      ga('send', 'event', '상단 네비게이션 바', 'Button Press', '햄버거 버튼 클릭(메뉴 열기)');
+    }
+  });
+
+  addEvent(navigatorHamburger, 'click', function(e) {
+    var thisClassList = this.classList;
+    if (thisClassList.contains('active')) {
+      this.classList.remove('active');
+      navigator.classList.remove('visible');
+      setTimeout(function() {
+        navigator.classList.remove('active');
+      }, 500);
+      headerHamburger.classList.remove('active');
+      ga('send', 'event', '상단 네비게이션 바', 'Button Press', '햄버거 버튼 클릭(메뉴 듣기)');
+    }
+  });
+
+  var hmenuCounter = 0, hmenuLength = headerMenus.length;
+  for (; hmenuCounter < hmenuLength; hmenuCounter++) {
+    addEvent(headerMenus[hmenuCounter], 'click', function () {
+      ga('send', 'event', '상단 네비게이션 바', 'Button Press', this.getElementsByTagName('a')[0].textContent + ' 클릭');
+    });
+  }
+
+  var fmenuCounter = 0, fmenuLength = footerMenus.length;
+  for (; fmenuCounter < fmenuLength; fmenuCounter++) {
+    addEvent(footerMenus[fmenuCounter], 'click', function () {
+      ga('send', 'event', '하단 바', 'Button Press', this.getAttribute('href'));
+    });
+  }
+};
+

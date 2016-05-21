@@ -328,10 +328,24 @@ var addEvent = function (element, events, callback) {
   }
 };
 
+var jj = function (selector) {
+  if (selector.match(/\s/g)) {
+    return document.querySelectorAll(selector);
+  } else if (selector.match(/^\#/)) {
+    return document.getElementById(selector.replace(/^\#/, ''));
+  } else if (selector.match(/^\./)) {
+    return document.getElementsByClassName(selector.replace(/^\./, ''));
+  } else {
+    return document.getElementsByTagName(selector);
+  }
+};
+
 var common = function () {
-  var headerHamburger = document.querySelectorAll('#header .hamburger')[0];
-  var navigatorHamburger = document.querySelectorAll('#slide-navigator .hamburger')[0];
-  var navigator = document.getElementById('slide-navigator');
+  var headerHamburger = jj('#header .hamburger')[0],
+      navigatorHamburger = jj('#slide-navigator .hamburger')[0],
+      navigator = jj('#slide-navigator'),
+      headerMenus = jj('#header ul li'),
+      footerMenus = jj('#footer .list-sns a');
 
   addEvent(headerHamburger, 'click', function(e) {
     var thisClassList = this.classList;
@@ -342,6 +356,7 @@ var common = function () {
         navigator.classList.add('visible');
       }, 1);
       navigatorHamburger.classList.add('active');
+      ga('send', 'event', '상단 네비게이션 바', 'Button Press', '햄버거 버튼 클릭(메뉴 열기)');
     }
   });
 
@@ -354,7 +369,22 @@ var common = function () {
         navigator.classList.remove('active');
       }, 500);
       headerHamburger.classList.remove('active');
+      ga('send', 'event', '상단 네비게이션 바', 'Button Press', '햄버거 버튼 클릭(메뉴 듣기)');
     }
   });
+
+  var hmenuCounter = 0, hmenuLength = headerMenus.length;
+  for (; hmenuCounter < hmenuLength; hmenuCounter++) {
+    addEvent(headerMenus[hmenuCounter], 'click', function () {
+      ga('send', 'event', '상단 네비게이션 바', 'Button Press', this.getElementsByTagName('a')[0].textContent + ' 클릭');
+    });
+  }
+
+  var fmenuCounter = 0, fmenuLength = footerMenus.length;
+  for (; fmenuCounter < fmenuLength; fmenuCounter++) {
+    addEvent(footerMenus[fmenuCounter], 'click', function () {
+      ga('send', 'event', '하단 바', 'Button Press', this.getAttribute('href'));
+    });
+  }
 };
 

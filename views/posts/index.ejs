@@ -47,10 +47,10 @@
           }
         }
       %>
-      <a href="/posts/categories/<%= post.category_id %>">
+      <a class="post-category-link" href="/posts/categories/<%= post.category_id %>">
         <span class="post-category-name sub-color"><%= categoryName %></span>
       </a>
-      <a href="/posts/<%= post.id %>?page=<%= page %>">
+      <a class="post-title-link" href="/posts/<%= post.id %>?page=<%= page %>">
         <div class="post-title black-color">
           <%= post.title %>
         </div>

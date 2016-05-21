@@ -164,6 +164,12 @@ var imageUpload = function (element) {
 };
 
 var ready = function () {
+  var postTags = jj('.tags a.tag'),
+      posts = jj('.post a'),
+      postImages = jj('.post a.pull-left'),
+      postTexts = jj('.post-title-link'),
+      postCategories = jj('.post-category-link');
+
   if (document.getElementById('comment-submit')) {
     addEvent(document.getElementById('comment-submit'), 'click', function () {
       commentSerialize();
@@ -183,6 +189,9 @@ var ready = function () {
 
   if (document.getElementsByClassName('post-category-selector').length) {
     addEvent(document.getElementsByClassName('post-category-selector')[0], 'change', function (e) {
+      ga('send', 'event', '포스트 리스트', 'Button Press', '카테고리 변경 - ' +
+          this.options[this.selectedIndex].text);
+
       if (e.target.value >> 0 === 0) {
         window.location.href = '/posts';
       } else {
@@ -194,6 +203,39 @@ var ready = function () {
   if (document.getElementById('post-search-submit')) {
     addEvent(document.getElementById('post-search-submit'), 'click', function (e) {
       document.getElementById('post-search-form').submit();
+    });
+  }
+
+  var tagCounter = 0, tagLength = postTags.length;
+  for (; tagCounter < tagLength; tagCounter++) {
+    addEvent(postTags[tagCounter], 'click', function () {
+      ga('send', 'event', '포스트 상세', 'Button Press', '포스트 태그 클릭' + ' - ' + this.textContent.trim());
+    });
+  }
+
+  var postImageCounter = 0, postImageLength = postImages.length;
+  for (; postImageCounter < postImageLength; postImageCounter++) {
+    addEvent(postImages[postImageCounter], 'click', function () {
+      ga('send', 'event', '포스트 리스트', 'Button Press', '포스트 클릭 - [' +
+          this.parentNode.getElementsByClassName('post-category-name')[0].textContent.trim() + '] ' +
+          this.parentNode.getElementsByClassName('post-title')[0].textContent.trim());
+    });
+  }
+
+  var postTextCounter = 0, postTextLength = postTexts.length;
+  for (; postTextCounter < postTextLength; postTextCounter++) {
+    addEvent(postTexts[postTextCounter], 'click', function () {
+      ga('send', 'event', '포스트 리스트', 'Button Press', '포스트 클릭 - [' +
+          this.parentNode.getElementsByClassName('post-category-name')[0].textContent.trim() + '] ' +
+          this.getElementsByTagName('div')[0].textContent.trim());
+    });
+  }
+
+  var postCategoryCounter = 0, postCategoryLength = postCategories.length;
+  for (; postCategoryCounter < postCategoryLength; postCategoryCounter++) {
+    addEvent(postCategories[postCategoryCounter], 'click', function () {
+      ga('send', 'event', '포스트 리스트', 'Button Press', '포스트 카테고리 클릭 - ' +
+          this.getElementsByTagName('span')[0].textContent.trim());
     });
   }
 };

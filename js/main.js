@@ -1,14 +1,14 @@
 var cardTemplate = '' +
     '<div class="post-card">' +
-    '<a href="/posts/{{id}}">' +
+    '<a class="post-link-image" href="/posts/{{id}}">' +
     '<img class="card-thumbnail" src="{{thumbnail}}" alt="post thumbnail"/>' +
     '</a>' +
     '<div class="card-summary">' +
     '<table><tbody><tr><td>' +
-    '<a href="/posts/categories/{{category_id}}">' +
+    '<a class="post-category-link" href="/posts/categories/{{category_id}}">' +
     '<span class="card-category-name main-color">{{category_id}}</span>' +
     '</a>' +
-    '<a href="/posts/{{id}}">' +
+    '<a class="post-link-title" href="/posts/{{id}}">' +
     '<div class="card-title normal-color">' +
     '{{title}}' +
     '</div>' +
@@ -25,9 +25,9 @@ var ready = function () {
   var topSlider, header, bodyContainer, pagination, nextPage;
   var currentX, currentY;
 
-  topSlider = document.getElementsByClassName('top-slider')[0];
-  header = document.getElementsByClassName('root-header')[0];
-  bodyContainer = document.getElementById('body-container');
+  topSlider = jj('.top-slider')[0];
+  header = jj('.root-header')[0];
+  bodyContainer = jj('#body-container');
 
   currentX = supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
   currentY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
@@ -42,10 +42,38 @@ var ready = function () {
     }
   }
 
+  addEvent(document.body, 'click', function (e) {
+    if (e.target.className) {
+      if (e.target.className.match(/^post\-link\-image$/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 클릭 - [' +
+            e.target.parentNode.getElementsByClassName('card-category-name')[0].textContent.trim() + '] ' +
+            e.target.parentNode.getElementsByClassName('card-title')[0].textContent.trim());
+      } else if (e.target.className.match(/^card\-thumbnail$/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 클릭 - [' +
+            e.target.parentNode.parentNode.getElementsByClassName('card-category-name')[0].textContent.trim() + '] ' +
+            e.target.parentNode.parentNode.getElementsByClassName('card-title')[0].textContent.trim());
+      } else if (e.target.className.match(/^post\-link\-title$/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 클릭 - [' +
+            e.target.parentNode.getElementsByClassName('card-category-name')[0].textContent.trim() + '] ' +
+            e.target.getElementsByClassName('card-title')[0].textContent.trim());
+      } else if (e.target.className.match(/^card\-title$|^card\-title\s/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 클릭 - [' +
+            e.target.parentNode.parentNode.getElementsByClassName('card-category-name')[0].textContent.trim() + '] ' +
+            e.target.textContent.trim());
+      } else if (e.target.className.match(/^post\-category\-link/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 카테고리 클릭 - ' +
+            e.target.getElementsByClassName('card-category-name')[0].textContent.trim());
+      } else if (e.target.className.match(/^card\-category\-name/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 카테고리 클릭 - ' +
+            e.target.textContent.trim());
+      }
+    }
+  });
+
   window.onscroll = function (event) {
     var e = event || window.event;
-    var pagination = document.getElementsByClassName('pagination')[0];
-    var nextPage = document.querySelectorAll('.pagination .next a')[0];
+    var pagination = jj('.pagination')[0];
+    var nextPage = jj('.pagination .next a')[0];
 
     currentX = supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
     currentY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;

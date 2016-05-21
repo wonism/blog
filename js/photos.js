@@ -9,7 +9,7 @@ var ready = function () {
     resolution: 'standard_resolution',
     accessToken: '1591191525.212f7be.ef028729cb9c4722bb04fc76b6515088',
     clientId: '212f7be0b6d643318eda9413aecb1cf3',
-    template: '<a class="insta-card" href="{{link}}"><img src="{{image}}" /></a>',
+    template: '<a class="insta-card" href="{{link}}"><img class="insta-card-image" src="{{image}}" /></a>',
     before: function () {
     },
     success: function (res) {
@@ -50,5 +50,15 @@ var ready = function () {
   }
 
   feed.run();
+
+  addEvent(document.body, 'click', function (e) {
+    if (e.target.className && e.target.className.match(/^insta\-card\-image$/)) {
+      ga('send', 'event', '사진 리스트', 'Button Press', '인스타 카드 클릭 - ' +
+          e.target.parentNode.getAttribute('href'));
+    } else if (e.target.className && e.target.className.match(/^insta\-card$/)) {
+      ga('send', 'event', '사진 리스트', 'Button Press', '인스타 카드 클릭 - ' +
+          e.target.getAttribute('href'));
+    }
+  });
 };
 

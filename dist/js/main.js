@@ -1,1 +1,201 @@
-var cardTemplate='<div class="post-card"><a href="/posts/{{id}}"><img class="card-thumbnail" src="{{thumbnail}}" alt="post thumbnail"/></a><div class="card-summary"><table><tbody><tr><td><a href="/posts/categories/{{category_id}}"><span class="card-category-name main-color">{{category_id}}</span></a><a href="/posts/{{id}}"><div class="card-title normal-color">{{title}}</div></a><div class="card-info normal-color">{{created_at}}</div></td></tr></tbody></table></div></div>',ready=function(){var e,t,a,o,s;e=document.getElementsByClassName("top-slider")[0],t=document.getElementsByClassName("root-header")[0],a=document.getElementById("body-container"),o=supportPageOffset?window.pageXOffset:isCSS1Compat?document.documentElement.scrollLeft:document.body.scrollLeft,s=supportPageOffset?window.pageYOffset:isCSS1Compat?document.documentElement.scrollTop:document.body.scrollTop,e&&t&&(s>=e.clientHeight?(a.style.top=t.clientHeight+16+"px",t.style.position="fixed"):(a.style.top="16px",t.style.position="relative")),window.onscroll=function(n){var r=(n||window.event,document.getElementsByClassName("pagination")[0]),l=document.querySelectorAll(".pagination .next a")[0];if(o=supportPageOffset?window.pageXOffset:isCSS1Compat?document.documentElement.scrollLeft:document.body.scrollLeft,s=supportPageOffset?window.pageYOffset:isCSS1Compat?document.documentElement.scrollTop:document.body.scrollTop,s&&e&&t&&(s>e.clientHeight?(a.style.top=t.clientHeight+16+"px",t.style.position="fixed"):(a.style.top="16px",t.style.position="relative")),l&&s+document.body.clientHeight>document.body.scrollHeight-50){var d,c,p,m,u,f,g,y;l.parentNode.setAttribute("class",""),d=l.getAttribute("href"),f={},g={},y={},d&&(c=new XMLHttpRequest,c.open("GET",d),c.onreadystatechange=function(){var e,t;if(e=4,t=200,4==c.readyState&&200==c.status){p=JSON.parse(c.responseText),m=p.pages,u=p.page,y=p.posts,f=p.categories;for(var o=0;o<f.length;o++){var s=f[o].id;g[s]=f[o].name}if(y){var n,l,d;for(n=[],postCounter=0;postCounter<y.length;postCounter++){for(var h=cardTemplate,v=y[postCounter],b="";h.match(/(?:\{{2})(\w{1,50})+(?:\}{2})/);)if(b=h.match(/(?:\{{2})(\w{1,50})+(?:\}{2})/)[1],"created_at"===b){var C=v[b],w="",A=["JAN","FAB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];w=""+A[(C.match(/(?:\d{4}-)(\d{2})(?:-\d{2})+/)[1]>>0)-1]+" "+C.match(/(?:\d{4}-\d{2}-)(\d{2})/)[1]+". "+C.match(/(\d{4})(?:-\d{2}-\d{2})/)[1],h=h.replace(/(?:\{{2})(\w{1,50})+(?:\}{2})/,w)}else h=h.replace(/(?:\{{2})(\w{1,50})+(?:\}{2})/,v[b]);for(;h.match(/(?:<span[^>]*>)(\d{1,4})+(?:\<\/span\>)/);)b=h.match(/(?:<span[^>]*>)(\d{1,4})+(?:\<\/span\>)/)[1],h=h.replace(/(?:<span[^>]*>)(\d{1,4})+(?:\<\/span\>)/,'<span class="card-category-name main-color"> '+g[b]+" </span>");n.push(h)}for(a.insertAdjacentHTML("beforeend",n.join("")),a.removeChild(r),l=document.createElement("ul"),l.setAttribute("class","list-layout pagination none"),d=[],i=u;i<m;i++){var E=document.createElement("li"),S=document.createElement("a");i===u?E.setAttribute("class","active"):i===u+1&&E.setAttribute("class","next"),S.setAttribute("href","/?page="+i),E.appendChild(S),l.appendChild(E)}a.insertAdjacentHTML("beforeend",l.outerHTML)}}},c.send())}},s||(a.style.top="16px",t.style.position="relative")};
+var cardTemplate = '' +
+    '<div class="post-card">' +
+    '<a class="post-link-image" href="/posts/{{id}}">' +
+    '<img class="card-thumbnail" src="{{thumbnail}}" alt="post thumbnail"/>' +
+    '</a>' +
+    '<div class="card-summary">' +
+    '<table><tbody><tr><td>' +
+    '<a class="post-category-link" href="/posts/categories/{{category_id}}">' +
+    '<span class="card-category-name main-color">{{category_id}}</span>' +
+    '</a>' +
+    '<a class="post-link-title" href="/posts/{{id}}">' +
+    '<div class="card-title normal-color">' +
+    '{{title}}' +
+    '</div>' +
+    '</a>' +
+    '<div class="card-info normal-color">' +
+    '{{created_at}}' +
+    '</div>' +
+    '</td></tr></tbody></table>' +
+    '</div>' +
+    '</div>';
+
+var ready = function () {
+
+  var topSlider, header, bodyContainer, pagination, nextPage;
+  var currentX, currentY;
+
+  topSlider = jj('.top-slider')[0];
+  header = jj('.root-header')[0];
+  bodyContainer = jj('#body-container');
+
+  currentX = supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
+  currentY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
+
+  if (topSlider && header) {
+    if (currentY >= topSlider.clientHeight) {
+      bodyContainer.style.top = header.clientHeight + 16 + 'px';
+      header.style.position = 'fixed';
+    } else {
+      bodyContainer.style.top = '16px';
+      header.style.position = 'relative';
+    }
+  }
+
+  addEvent(document.body, 'click', function (e) {
+    if (e.target.className) {
+      if (e.target.className.match(/^post\-link\-image$/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 클릭 - [' +
+            e.target.parentNode.getElementsByClassName('card-category-name')[0].textContent.trim() + '] ' +
+            e.target.parentNode.getElementsByClassName('card-title')[0].textContent.trim());
+      } else if (e.target.className.match(/^card\-thumbnail$/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 클릭 - [' +
+            e.target.parentNode.parentNode.getElementsByClassName('card-category-name')[0].textContent.trim() + '] ' +
+            e.target.parentNode.parentNode.getElementsByClassName('card-title')[0].textContent.trim());
+      } else if (e.target.className.match(/^post\-link\-title$/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 클릭 - [' +
+            e.target.parentNode.getElementsByClassName('card-category-name')[0].textContent.trim() + '] ' +
+            e.target.getElementsByClassName('card-title')[0].textContent.trim());
+      } else if (e.target.className.match(/^card\-title$|^card\-title\s/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 클릭 - [' +
+            e.target.parentNode.parentNode.getElementsByClassName('card-category-name')[0].textContent.trim() + '] ' +
+            e.target.textContent.trim());
+      } else if (e.target.className.match(/^post\-category\-link/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 카테고리 클릭 - ' +
+            e.target.getElementsByClassName('card-category-name')[0].textContent.trim());
+      } else if (e.target.className.match(/^card\-category\-name/)) {
+        ga('send', 'event', '메인', 'Button Press', '포스트 카테고리 클릭 - ' +
+            e.target.textContent.trim());
+      }
+    }
+  });
+
+  window.onscroll = function (event) {
+    var e = event || window.event;
+    var pagination = jj('.pagination')[0];
+    var nextPage = jj('.pagination .next a')[0];
+
+    currentX = supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
+    currentY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
+
+    if (currentY && topSlider && header) {
+      if (currentY > topSlider.clientHeight) {
+        bodyContainer.style.top = header.clientHeight + 16 + 'px';
+        header.style.position = 'fixed';
+      } else {
+        bodyContainer.style.top = '16px';
+        header.style.position = 'relative';
+      }
+    }
+
+    if (nextPage) {
+      if (currentY + document.body.clientHeight > document.body.scrollHeight - 50) {
+        var nextUrl, xhr, result;
+        var pages, page, categories, categoryIdName, posts;
+
+        nextPage.parentNode.setAttribute('class', '');
+        nextUrl = nextPage.getAttribute('href');
+
+        categories = {};
+        categoryIdName = {};
+        posts = {};
+
+        if (nextUrl) {
+          xhr = new XMLHttpRequest();
+          xhr.open("GET", nextUrl);
+          xhr.onreadystatechange = function () {
+            var DONE, OK;
+
+            DONE = 4;
+            OK = 200;
+
+            if (xhr.readyState != 4 || xhr.status != 200) {
+              return;
+            }
+
+            result = JSON.parse(xhr.responseText);
+
+            pages = result.pages;
+            page = result.page;
+
+            posts = result.posts;
+            categories = result.categories;
+
+            var categoryCounter = 0;
+            for (; categoryCounter < categories.length; categoryCounter++) {
+              var idStr = categories[categoryCounter].id;
+              categoryIdName[idStr] = categories[categoryCounter].name;
+            }
+
+            if (posts) {
+              var templateArr;
+              var ul, liArr, pageNumber;
+
+              templateArr = [];
+
+              postCounter = 0;
+              for (; postCounter < posts.length; postCounter++) {
+                var template = cardTemplate;
+                var post = posts[postCounter];
+                var key = '';
+
+                while (template.match(/(?:\{{2})(\w{1,50})+(?:\}{2})/)) {
+                  key = template.match(/(?:\{{2})(\w{1,50})+(?:\}{2})/)[1];
+                  if (key === 'created_at') {
+                    var date = post[key];
+                    var dateStr = '';
+                    var monthStrArr = ['JAN', 'FAB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+                    dateStr = '' +
+                        monthStrArr[(date.match(/(?:\d{4}-)(\d{2})(?:-\d{2})+/)[1] >> 0) - 1] + ' ' +
+                        date.match(/(?:\d{4}-\d{2}-)(\d{2})/)[1] + '. ' +
+                        date.match(/(\d{4})(?:-\d{2}-\d{2})/)[1];
+                    template = template.replace(/(?:\{{2})(\w{1,50})+(?:\}{2})/, dateStr);
+                  } else {
+                    template = template.replace(/(?:\{{2})(\w{1,50})+(?:\}{2})/, post[key]);
+                  }
+                }
+
+                while (template.match(/(?:<span[^>]*>)(\d{1,4})+(?:\<\/span\>)/)) {
+                  key = template.match(/(?:<span[^>]*>)(\d{1,4})+(?:\<\/span\>)/)[1];
+                  template = template.replace(/(?:<span[^>]*>)(\d{1,4})+(?:\<\/span\>)/, '<span class="card-category-name main-color"> ' + categoryIdName[key] + ' </span>');
+                }
+                templateArr.push(template);
+              }
+
+              bodyContainer.insertAdjacentHTML('beforeend', templateArr.join(''));
+              bodyContainer.removeChild(pagination);
+
+              ul = document.createElement('ul');
+              ul.setAttribute('class', 'list-layout pagination none');
+
+              liArr = [];
+
+              i = page;
+              for (; i < pages; i++) {
+                var li = document.createElement('li');
+                var a = document.createElement('a');
+                if (i === page) {
+                  li.setAttribute('class', 'active');
+                } else if (i === page + 1) {
+                  li.setAttribute('class', 'next');
+                }
+                a.setAttribute('href', '/?page=' + i);
+                li.appendChild(a);
+                ul.appendChild(li);
+              }
+
+              bodyContainer.insertAdjacentHTML('beforeend', ul.outerHTML);
+            }
+          };
+          xhr.send();
+        }
+      }
+    }
+  };
+
+  if (!currentY) {
+    bodyContainer.style.top = '16px';
+    header.style.position = 'relative';
+  }
+};
+
