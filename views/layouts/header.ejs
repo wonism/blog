@@ -10,15 +10,24 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta id="viewport" name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Jaewonism BLOG">
-  <meta name="keywords" content="HTML, CSS, Java Script, Node Js, Ruby On Rails, MySQL">
+  <meta name="description" content="<%= description %>">
+  <meta name="keywords" content="<%= keyword %>">
   <meta name="author" content="Jaewonism">
-  <meta property="og:title" content="<%= title %>" />
-  <meta property="og:type" content="Blog" />
-  <% if (req) { %>
-  <meta property="og:url" content="<%= 'http://' + req.headers.host + req.baseUrl + req.url %>" />
-  <meta property="og:image" content="<%= 'http://' + req.headers.host + '/images/logo.png' %>">
-  <% } %>
+
+  <meta property="og:title" content="<%= title %>">
+  <meta property="og:site_name" content="Jaewonism's blog">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="<%= url %>">
+  <meta property="og:image" content="<%= image %>">
+  <meta property="og:description" content="<%= description %>">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:title" content="<%= title %>">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@j1ism">
+  <meta name="twitter:image:src" content="<%= image %>">
+  <meta name="twitter:description" content="<%= description %>">
+  <meta name="msapplication-TileImage" content="<%= image %>">
+
   <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
   <!--[if IE 7]>
     <link rel="stylesheet" type="text/css" href="/css/font-awesome-ie7.css">

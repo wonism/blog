@@ -42,7 +42,18 @@ router.get('/', isAuthor, function (req, res, next) {
   collections.Images.forge()
   .fetch()
   .then(function (collection) {
-    res.render('images/index', { req: req, title: '이미지 리스트', userId: req.user ? req.user.user_id : null, images: collection.toJSON() });
+    res.render('images/index',
+        {
+          req: req,
+          title: '이미지 리스트',
+          url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+          image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+          description: 'Jaewonism\'s blog'.substring(0, 255),
+          keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+          userId: req.user ? req.user.user_id : null,
+          images: collection.toJSON()
+        }
+    );
   })
   .catch(function (err) {
     console.log(err.message);
@@ -52,7 +63,17 @@ router.get('/', isAuthor, function (req, res, next) {
 
 // Form to Create Image
 router.get('/new', isAuthor, function (req, res, next) {
-  res.render('images/new', { req: req, title: '이미지 등록', userId: req.user ? req.user.user_id : null });
+  res.render('images/new',
+      {
+        req: req,
+        title: '이미지 등록',
+        url: 'http://' + req.headers.host + req.baseUrl + req.url,
+        image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+        description: 'Jaewonism\'s blog'.substring(0, 255),
+        keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+        userId: req.user ? req.user.user_id : null
+      }
+  );
 });
 
 // Create Image
@@ -226,7 +247,18 @@ router.get('/:id', isAuthor, function (req, res, next) {
     if (!image) {
       res.render('404', { title: '404: Page Not Found.'});
     } else {
-      res.render('images/show', { req: req, title: '이미지 조회', userId: req.user ? req.user.user_id : null, image: image.toJSON() });
+      res.render('images/show',
+          {
+            req: req,
+            title: '이미지 조회',
+            url: 'http://' + req.headers.host + req.baseUrl + req.url,
+            image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+            description: 'Jaewonism\'s blog'.substring(0, 255),
+            keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+            userId: req.user ? req.user.user_id : null,
+            image: image.toJSON()
+          }
+      );
     }
   })
   .catch(function (err) {
@@ -243,7 +275,18 @@ router.get('/delete/:id', isAuthor, function (req, res, next) {
     if (!image) {
       res.render('404', { title: '404: Page Not Found.'});
     } else {
-      res.render('images/delete', { req: req, title: '이미지 삭제', userId: req.user ? req.user.user_id : null, image: image.toJSON() });
+      res.render('images/delete',
+          {
+            req: req,
+            title: '이미지 삭제',
+            url: 'http://' + req.headers.host + req.baseUrl + req.url,
+            image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+            description: 'Jaewonism\'s blog'.substring(0, 255),
+            keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+            userId: req.user ? req.user.user_id : null,
+            image: image.toJSON()
+          }
+      );
     }
   })
   .catch(function (err) {

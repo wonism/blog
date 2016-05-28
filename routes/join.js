@@ -16,7 +16,17 @@ var errType = '';
 
 // Form to Join
 router.get('/', function (req, res, next) {
-  res.render('join/index', { req: req, title: '회원가입', userId: req.user ? req.user.user_id : null });
+  res.render('join/index',
+      {
+        req: req,
+        title: '회원가입',
+        url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+        image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+        description: 'Jaewonism\'s blog'.substring(0, 255),
+        keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+        userId: req.user ? req.user.user_id : null
+      }
+  );
 });
 
 // Join
@@ -36,10 +46,32 @@ router.post('/', function (req, res, next) {
       if (user) {
         if (user.toJSON().user_id === fields.user_id) {
           req.flash('errType', 'duplicateId');
-          res.render('join/index', { req: req, title: '회원가입', userId: req.user ? req.user.user_id : null, errType: req.flash('errType')});
+          res.render('join/index',
+              {
+                req: req,
+                title: '회원가입',
+                url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+                image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+                description: 'Jaewonism\'s blog'.substring(0, 255),
+                keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+                userId: req.user ? req.user.user_id : null,
+                errType: req.flash('errType')
+              }
+          );
         } else if (user.toJSON().email === fields.email) {
           req.flash('errType', 'duplicateEmail');
-          res.render('join/index', { req: req, title: '회원가입', userId: req.user ? req.user.user_id : null, errType: req.flash('errType')});
+          res.render('join/index',
+              {
+                req: req,
+                title: '회원가입',
+                url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+                image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+                description: 'Jaewonism\'s blog'.substring(0, 255),
+                keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+                userId: req.user ? req.user.user_id : null,
+                errType: req.flash('errType')
+              }
+          );
         }
       } else {
         if (isSafe(fields.user_id, fields.email, fields.password)) {
@@ -61,7 +93,18 @@ router.post('/', function (req, res, next) {
           });
         } else {
           req.flash('errType', errType);
-          res.render('join/index', { req: req, title: '회원가입', userId: req.user ? req.user.user_id : null, errType: req.flash('errType')});
+          res.render('join/index',
+              {
+                req: req,
+                title: '회원가입',
+                url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+                image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+                description: 'Jaewonism\'s blog'.substring(0, 255),
+                keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+                userId: req.user ? req.user.user_id : null,
+                errType: req.flash('errType')
+              }
+          );
         }
       }
     })

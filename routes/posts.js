@@ -158,12 +158,34 @@ router.get('/', getCategories, function (req, res, next) {
   })
   .fetch()
   .then(function (posts) {
-    var page = url.parse(req.url, true).query.page >> 0 || 1;
+    var page = url.parse(req.url, true).query.page >> 0 || 1, description = '', keyword = '';
+
+    var i = 0;
+    for (; i < posts.toJSON().length; i++) {
+      description += posts.toJSON()[i].title;
+
+      if (i !== posts.toJSON().length - 1) {
+        description += ', ';
+      }
+    }
+
+    i = 0;
+    for (; i < fetchedCategories.length; i++) {
+      keyword += fetchedCategories[i].name;
+
+      if (i !== fetchedCategories.length - 1) {
+        keyword += ', ';
+      }
+    }
 
     res.render('posts/index',
         {
           req: req,
           title: 'Jaewonism - POST',
+          url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+          image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+          description: description.substring(0, 255),
+          keyword: keyword,
           userId: req.user ? req.user.user_id : null,
           authFlash: req.flash('auth'),
           infoFlash: req.flash('info'),
@@ -189,10 +211,15 @@ router.get('/new', isAuthor, function (req, res, next) {
   .fetch()
   .then(function (categories) {
     var page = url.parse(req.url, true).query.page >> 0 || 1;
+
     res.render('posts/new',
         {
           req: req,
           title: 'Jaewonism - NEW POST',
+          url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+          image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+          description: 'Jaewonism\'s blog'.substring(0, 255),
+          keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
           userId: req.user ? req.user.user_id : null,
           categories: categories.toJSON(),
           page: page
@@ -235,11 +262,15 @@ router.post('/new', isAuthor, function (req, res, next) {
       user_id: userPk,
       category_id: req.body.category_id,
       title: postTitle,
+      url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+      image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+      description: 'Jaewonism\'s blog'.substring(0, 255),
+      keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
       thumbnail: req.body.thumbnail,
       background_image: req.body.background_image,
       slug: newSlug,
       html: req.body.html,
-      text: req.body.html.replace(/<[^>]*>/, '')
+      text: req.body.html.replace(/<[^>]*>/g, '')
     })
     .save()
     .then(function (post) {
@@ -288,18 +319,32 @@ router.get('/:id', isAuthor, function (req, res, next) {
     if (!post) {
       res.render('404', { title: '404: Page Not Found.'});
     } else {
-      var author, category, tags, page, comments;
+      var author, category, tags, page, comments, description, keyword = '';
 
       author = post.related('author');
       category = post.related('category');
       tags = post.related('tags');
       page = url.parse(req.url, true).query.page >> 0 || 1;
       comments = post.related('comments');
+      description = post.toJSON().text;
+
+      var i = 0;
+      for (; i < tags.toJSON().length; i++) {
+        keyword += tags.toJSON()[i].name;
+
+        if (i !== tags.toJSON().length - 1) {
+          keyword += ', ';
+        }
+      }
 
       res.render('posts/show',
           {
             req: req,
             title: 'Jaewonism - POST : ' + post.toJSON().title,
+            url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+            image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+            description: description.substring(0, 255),
+            keyword: keyword,
             author: author.toJSON(),
             userId: req.user ? req.user.user_id : null,
             userPk: userPk || 0,
@@ -345,6 +390,10 @@ router.get('/update/:id', isAuthor, function (req, res, next) {
               {
                 req: req,
                 title: 'Jaewonism - MODIFY POST',
+                url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+                image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+                description: 'Jaewonism\'s blog'.substring(0, 255),
+                keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
                 userId: req.user ? req.user.user_id : null,
                 post: post.toJSON(),
                 categories: categories.toJSON(),
@@ -403,11 +452,15 @@ router.post('/update/:id', isAuthor, function (req, res, next) {
         post.save({
           category_id: req.body.category_id || post.get('category_id'),
           title: req.body.title || post.get('title'),
+          url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+          image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+          description: 'Jaewonism\'s blog'.substring(0, 255),
+          keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
           slug: newSlug,
           thumbnail: req.body.thumbnail || post.get('thumbnail'),
           background_image: req.body.background_image || post.get('background_image'),
           html: req.body.html || post.get('html'),
-          text: req.body.html.replace(/<[^>]*>/, '') || post.get('html').replace(/<[^>]*>/, '')
+          text: req.body.html.replace(/<[^>]*>/g, '') || post.get('html').replace(/<[^>]*>/g, '')
         })
         .then(function (post) {
           saveTags(tags)
@@ -475,6 +528,10 @@ router.get('/delete/:id', isAuthor, function (req, res, next) {
             {
               req: req,
               title: 'Jaewonism - DELETE POST',
+              url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+              image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+              description: 'Jaewonism\'s blog'.substring(0, 255),
+              keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
               userId: req.user ? req.user.user_id : null,
               categories: categories.toJSON(),
               post: post.toJSON(),
@@ -538,15 +595,37 @@ router.get('/categories/:id', getCategories, function (req, res, next) {
   )
   .then(function (category) {
     if (category) {
-      var posts, page;
+      var posts, page, description = '', keyword = '';
 
       posts = category.related('posts');
       page = url.parse(req.url, true).query.page >> 0 || 1;
+
+      var i = 0;
+      for (; i < posts.toJSON().length; i++) {
+        description += posts.toJSON()[i].title;
+
+        if (i !== posts.toJSON().length - 1) {
+          description += ', ';
+        }
+      }
+
+      i = 0;
+      for (; i < fetchedCategories.length; i++) {
+        keyword += fetchedCategories[i].name;
+
+        if (i !== fetchedCategories.length - 1) {
+          keyword += ', ';
+        }
+      }
 
       res.render('posts/index',
           {
             req: req,
             title: 'Jaewonism - POST',
+            url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+            image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+            description: description.substring(0, 255),
+            keyword: keyword,
             userId: req.user ? req.user.user_id : null,
             authFlash: req.flash('auth'),
             infoFlash: req.flash('info'),
@@ -590,15 +669,37 @@ router.get('/tags/:slug', getCategories, function (req, res, next) {
   )
   .then(function (tag) {
     if (tag) {
-      var posts, page;
+      var posts, page, description = '', keyword = '';
 
       posts = tag.related('posts');
       page = url.parse(req.url, true).query.page >> 0 || 1;
+
+      var i = 0;
+      for (; i < posts.toJSON().length; i++) {
+        description += posts.toJSON()[i].title;
+
+        if (i !== posts.toJSON().length - 1) {
+          description += ', ';
+        }
+      }
+
+      i = 0;
+      for (; i < fetchedCategories.length; i++) {
+        keyword += fetchedCategories[i].name;
+
+        if (i !== fetchedCategories.length - 1) {
+          keyword += ', ';
+        }
+      }
 
       res.render('posts/index',
           {
             req: req,
             title: 'Jaewonism - POST',
+            url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+            image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+            description: description.substring(0, 255),
+            keyword: keyword,
             userId: req.user ? req.user.user_id : null,
             authFlash: req.flash('auth'),
             infoFlash: req.flash('info'),
@@ -642,12 +743,34 @@ router.get('/search/:keyword', getCategories, function (req, res, next) {
   })
   .fetch()
   .then(function (posts) {
-    var page = url.parse(req.url, true).query.page >> 0 || 1;
+    var page = url.parse(req.url, true).query.page >> 0 || 1, description = '', keyword = '';
+
+    var i = 0;
+    for (; i < posts.toJSON().length; i++) {
+      description += posts.toJSON()[i].title;
+
+      if (i !== posts.toJSON().length - 1) {
+        description += ', ';
+      }
+    }
+
+    i = 0;
+    for (; i < fetchedCategories.length; i++) {
+      keyword += fetchedCategories[i].name;
+
+      if (i !== fetchedCategories.length - 1) {
+        keyword += ', ';
+      }
+    }
 
     res.render('posts/index',
         {
           req: req,
           title: 'Jaewonism - POST',
+          url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+          image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+          description: description.substring(0, 255),
+          keyword: keyword,
           userId: req.user ? req.user.user_id : null,
           authFlash: req.flash('auth'),
           infoFlash: req.flash('info'),

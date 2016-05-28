@@ -78,6 +78,10 @@ router.get('/', getCategories, function (req, res, next) {
           {
             req: req,
             title: 'Jaewonism',
+            url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+            image: req.protocol + '://' + req.headers.host + '/images/logo.png',
+            description: 'Jaewonism\'s blog'.substring(0, 255),
+            keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
             userId: req.user ? req.user.user_id : null,
             categories: fetchedCategories,
             posts: posts.toJSON(),
