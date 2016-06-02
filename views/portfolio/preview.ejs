@@ -1,0 +1,66 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<script src="/js/image-preview.js"></script>
+<div id="body-container" class="clearfix fix-in">
+  <div class="work-summary">
+    <a href="https://github.com/wonism/image-preview.js" target="_blank"><div class="work-title">Image Preview JS</div></a>
+    <div class="work-says">
+      This is a open source project to validate (size, file type, file size etc...) image and preview images easily.<br>
+      <b>Browser Support</b> : Internet Explorer 10+, Firefox, Chrome, Safari etc...<br>
+      <b>Dependencies Library</b> : None (Native Java Script Library)
+    </div>
+    <div class="dashed-line"></div>
+    <div class="work-period">2016. 04. ~ </div>
+    <div class="work-page space-top"><a href="https://github.com/wonism/image-preview.js" target="_blank">View on Github →</a></div>
+  </div>
+  <div class="work-results">
+    <h2>You can upload several image files.</h2>
+    <h3>
+      Validation
+    </h3>
+    <h4>file types : png, gif</h4>
+    <h4>width restriction : 500px</h4>
+    <h4>height restriction : none</h4>
+    <h4>file size : 5mb</h4>
+    <input id="file" name="file" type="file" multiple="multiple" />
+  </div>
+</div>
+<script>
+  var afterSuccess = function (rightFiles) {
+    for (var i = 0; i < rightFiles.length; i++) {
+      rightFiles[i].image.setAttribute('class', 'image-preview');
+    }
+    alert('Succeed !');
+  };
+
+  var afterFailed = function (rightFiles, wrongFiles) {
+    var alertMessage = '';
+
+    for (var i = 0; i < wrongFiles.length; i++) {
+      alertMessage += 'Your file(' + wrongFiles[i].fileName +
+          ') is wrong.\nfile type : ' + wrongFiles[i].fileType +
+          '\nfile size : ' + wrongFiles[i].fileVolume +
+          '\nwidth x height : ' + wrongFiles[i].width + ' x ' + wrongFiles[i].height +
+          '\nratio : ' + wrongFiles[i].ratio + '\n\n';
+      wrongFiles[i].image.remove();
+    }
+
+    for (var i = 0; i < rightFiles.length; i++) {
+      rightFiles[i].image.remove();
+    }
+
+    alert(alertMessage);
+  };
+
+  document.getElementById('file').onchange = function () {
+    var image = document.getElementsByClassName('work-results')[0].getElementsByTagName('img');
+
+    for (var i = 0; i < image.length; i++) {
+      image[i].remove;
+    }
+
+    imagePreview.init(this, 0, 0, 0, 'png gif', '5mb', true, afterSuccess, afterFailed);
+  };
+</script>
+<%- include ../layouts/footer %>
+
