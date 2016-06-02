@@ -1,12 +1,31 @@
-<!DOCTYPE html>
 <html>
 <head>
-  <title><%= title %></title>
-  <link rel='stylesheet' href='/stylesheets/style.css'/>
-  <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+  <title>500 - Internal Server Error</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <style>
+    body { margin: 0; padding: 0; background: #fff; text-align: center; }
+    #container { display: block; position: relative; margin: auto; padding-right: 30px; padding-left: 30px;  max-width: 768px; font-size: 14px; }
+    #error-image { margin-top: 20%; margin-bottom: 6.25%; max-width: 60%; }
+    #error-desc { margin-bottom: 3%; color: #FFB5C6; font-size: 1.4em; line-height: 1; }
+    #we-are-fixing { margin-bottom: 5%; font-size: 1em; color: #777; font-weight: 200; }
+    #back-button { display: inline-block; width: 160px; background: #FFB5C6; color: #fff; font-size: 1em; line-height: 2.3em; }
+    #container:after { display: block; content: ""; clear: both; }
+    a, a:visited, a:hover, a:active { color: #FFB5C6; }
+  </style>
 </head>
 <body>
-<h1><%= title %></h1>
-</body>
-</html>
+  <div id="container">
+    <img id="error-image" src="/images/chop.gif">
+    <div id="error-desc">Internal Server Error</div>
+    <div id="we-are-fixing">
+      Sorry, Something Went Wrong. The Server Retruned a 500 Internal Server Error.<br />
+      Try Again a Little Later or Mail Me.<br />
+      <a href="mailto:yocee57@gmail.com">yocee57@gmail.com</a>
+    </div>
+    <a onclick="window.history.go(-1)">
+      <div id="back-button">Go Previous Page</div>
+    </a>
+  </div>
+</body></html>
 
