@@ -18,11 +18,11 @@ node_modules
 *.gz
 
 # configure
-config/
+/config/
 
-css/
-js/
-public/upload/
+/css/
+/js/
+/public/upload/
 
 gulpfile.js
 
