@@ -12,7 +12,7 @@ var knex = require('knex')({
   }
 });
 
-var Schema = require('./schema-11');
+var Schema = require('./schema-12');
 var sequence = require('when/sequence');
 var _ = require('lodash');
 
