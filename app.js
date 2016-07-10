@@ -102,6 +102,12 @@ app.use('/images', images);
 app.use('/join', join);
 // app.use('/api/users', usersAPI);
 
+/***** robots.txt *****/
+app.get('/robots.txt', function (req, res) {
+  res.type('text/plain');
+  res.send('User-agent: *\nDisallow: /photos');
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

@@ -1,0 +1,10 @@
+.insta-card {
+  display: inline-block;
+  float: left;
+  padding: 8px;
+  width: 25%;
+  img {
+    width: 100%;
+    height: auto;
+  }
+}

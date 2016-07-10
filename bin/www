@@ -4,16 +4,18 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+// var app = require('../app');
+var app = require('../build/main');
 var debug = require('debug')('blog:server');
 var http = require('http');
-var port = require('../config/port');
+var config = require('../config/config.json');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || port);
+// var port = normalizePort(process.env.PORT || config.portNumber);
+var port = normalizePort(config.port);
 app.set('port', port);
 
 /**
