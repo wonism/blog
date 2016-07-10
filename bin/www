@@ -33,6 +33,9 @@ var options = {
 var port = normalizePort(config.port);
 app.set('port', port);
 
+var httpsPort = normalizePort(config.httpsPort);
+app.set('httpsPort', port);
+
 /**
  * Create HTTP & HTTPS server.
  */

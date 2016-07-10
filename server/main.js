@@ -163,7 +163,7 @@ const server = app.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + server.address().port);
 });
 
-const httpsServer = app.listen(config.httpsPort, function () {
+const httpsServer = app.listen(app.get('httpsPort'), function () {
   console.log('https server listening on port ' + httpsServer.address().port);
 });
 
