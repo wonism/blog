@@ -30,9 +30,11 @@ gulp.task('hint', () => {
 gulp.task('js', () => {
   return gulp.src(paths.js)
     .pipe(rename({ suffix: '.min' }))
+    /*
     .pipe(babel({
       presets: ['es2015']
     }))
+    */
     .pipe(uglify())
     .pipe(gulp.dest(paths.dist + 'js'));
 });
