@@ -14,6 +14,8 @@ import passportGoogle from 'passport-google-oauth';
 import passportKakao from 'passport-kakao';
 import passportNaver from 'passport-naver';
 
+import config from '../../config/config.json';
+
 const router = express.Router();
 
 let LocalStrategy = passportLocal.Strategy;
@@ -24,6 +26,14 @@ let KakaoStrategy = passportKakao.Strategy;
 let NaverStrategy = passportNaver.Strategy;
 
 let refer = '/';
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect('/login');
+  }
+}
 
 // Form to Login
 router.get('/', (req, res, next) => {
@@ -45,7 +55,56 @@ router.get('/', (req, res, next) => {
   );
 });
 
-router.post('/', passport.authenticate('local', { successRedirect: refer, failureRedirect: '/login', failureFlash: true }));
+router.post('/', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), (req, res, next) => {
+  if (refer) {
+    return res.redirect(refer);
+  } else {
+    return res.redirect('/');
+  }
+});
+
+router.get('/oauth/facebook', passport.authenticate('facebook', {
+  scope: ['public_profile', 'email']
+}));
+
+router.get('/oauth/facebook/callback', passport.authenticate('facebook', {
+  successRedirect: '/',
+  failureRedirect: '/login/failed'
+}));
+
+router.get('/oauth/twitter', passport.authenticate('twitter'));
+
+router.get('/oauth/twitter/callback', passport.authenticate('twitter', {
+  successRedirect: '/',
+  failureRedirect: '/login/failed'
+}));
+
+router.get('/oauth/google', passport.authenticate('google', {
+  scope: ['openid', 'email']
+}));
+
+router.get('/oauth/google/callback', passport.authenticate('google', {
+  successRedirect: '/',
+  failureRedirect: '/login/failed'
+}));
+
+router.get('/oauth/kakao', passport.authenticate('kakao'));
+
+router.get('/oauth/kakao/callback', passport.authenticate('kakao', {
+  successRedirect: '/',
+  failureRedirect: '/login/failed'
+}));
+
+router.get('/oauth/naver', passport.authenticate('naver'));
+
+router.get('/oauth/naver/callback', passport.authenticate('naver', {
+  successRedirect: '/',
+  failureRedirect: '/login/failed'
+}));
+
+router.get('/failed', ensureAuthenticated, (req, res) => {
+  res.send('failed');
+});
 
 passport.use(new LocalStrategy(
   {
@@ -70,6 +129,206 @@ passport.use(new LocalStrategy(
     })
     .catch((err) => {
       return done(err, null);
+    });
+  }
+));
+
+passport.use(new FacebookStrategy({
+    clientID: config.oauth.facebook.id,
+    clientSecret: config.oauth.facebook.secret,
+    callbackURL: config.oauth.facebook.callbackurl,
+    profileFields: ['id', 'displayName', 'photos', 'email']
+  },
+  function (accessToken, refreshToken, profile, done) {
+    process.nextTick(() => {
+      models.User.forge({ email: profile._json.email })
+      .fetch()
+      .then((user) => {
+        if (user) {
+          return done(null, user);
+        } else {
+          let user_id = profile._json.id + '@facebook.com';
+          let email = profile._json.email || profile._json.id + '@facebook.com';
+          let name = profile._json.name;
+          let image = profile._json.picture.data.url;
+          bcrypt.genSalt(8, (err, salt) => {
+            let password = salt;
+            bcrypt.hash(password, salt, (err, hash) => {
+              password = hash;
+              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'facebook', image: image })
+              .save()
+              .then((user) => {
+                return done(null, user);
+              })
+              .catch((err) => {
+                return done(err, null);
+              });
+            });
+          });
+        }
+      })
+      .catch((err) => {
+        return done(err, null);
+      });
+    });
+  }
+));
+
+passport.use(new TwitterStrategy({
+    consumerKey: config.oauth.twitter.consumerkey,
+    consumerSecret: config.oauth.twitter.consumersecret,
+    callbackURL: config.oauth.twitter.callbackurl
+  },
+  function (accessToken, refreshToken, profile, done) {
+    process.nextTick(() => {
+      models.User.forge({ email: profile._json.id_str + '@twitter.com' })
+      .fetch()
+      .then((user) => {
+        if (user) {
+          return done(null, user);
+        } else {
+          let user_id = profile._json.id_str + '@twitter.com';
+          let email = profile._json.id_str + '@twitter.com';
+          let name = profile._json.name;
+          let image = profile._json.profile_image_url.replace(/$https?/, '').replace(/normal.jpg$/, '400x400.jpg');
+          bcrypt.genSalt(8, (err, salt) => {
+            let password = salt;
+            bcrypt.hash(password, salt, (err, hash) => {
+              password = hash;
+              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'twitter', image: image })
+              .save()
+              .then((user) => {
+                return done(null, user);
+              })
+              .catch((err) => {
+                return done(err, null);
+              });
+            });
+          });
+        }
+      })
+      .catch((err) => {
+        return done(err, null);
+      });
+    });
+  }
+));
+
+passport.use(new GoogleStrategy({
+    clientID: config.oauth.google.clientid,
+    clientSecret: config.oauth.google.clientsecret,
+    callbackURL: config.oauth.google.callbackurl
+  },
+  function (accessToken, refreshToken, profile, done) {
+    process.nextTick(() => {
+      models.User.forge({ email: (profile._json.emails.length ? profile._json.emails[0].value : profile._json.id + '@googleplus.com') })
+      .fetch()
+      .then((user) => {
+        if (user) {
+          return done(null, user);
+        } else {
+          let user_id = profile._json.id + '@googleplus.com';
+          let email = (profile._json.emails.length ? profile._json.emails[0].value : profile._json.id + '@googleplus.com');
+          let name = profile._json.displayName;
+          let image = (profile._json.image.isDefault ? '' : profile._json.image.url.replace(/$https?/, '').replace(/\?sz=\d{1,}$/, ''));
+          bcrypt.genSalt(8, (err, salt) => {
+            let password = salt;
+            bcrypt.hash(password, salt, (err, hash) => {
+              password = hash;
+              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'google', image: image })
+              .save()
+              .then((user) => {
+                return done(null, user);
+              })
+              .catch((err) => {
+                return done(err, null);
+              });
+            });
+          });
+        }
+      })
+      .catch((err) => {
+        return done(err, null);
+      });
+    });
+  }
+));
+
+passport.use(new KakaoStrategy({
+    clientID: config.oauth.kakao.restapikey,
+    callbackURL: config.oauth.kakao.callbackurl
+  },
+  function (accessToken, refreshToken, profile, done) {
+    process.nextTick(() => {
+      models.User.forge({ email: profile._json.id + '@kakao.com' })
+      .fetch()
+      .then((user) => {
+        if (user) {
+          return done(null, user);
+        } else {
+          let user_id = profile._json.id + '@kakao.com';
+          let email = profile._json.id + '@kakao.com';
+          let name = profile._json.properties.nickname;
+          let image = profile._json.properties.profile_image;
+          bcrypt.genSalt(8, (err, salt) => {
+            let password = salt;
+            bcrypt.hash(password, salt, (err, hash) => {
+              password = hash;
+              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'kakao', image: image })
+              .save()
+              .then((user) => {
+                return done(null, user);
+              })
+              .catch((err) => {
+                return done(err, null);
+              });
+            });
+          });
+        }
+      })
+      .catch((err) => {
+        return done(err, null);
+      });
+    });
+  }
+));
+
+passport.use(new NaverStrategy({
+    clientID: config.oauth.naver.clientid,
+    clientSecret: config.oauth.naver.clientsecret,
+    callbackURL: config.oauth.naver.callbackurl
+  },
+  function (accessToken, refreshToken, profile, done) {
+    process.nextTick(() => {
+      models.User.forge({ email: profile._json.id + '@naver.com' })
+      .fetch()
+      .then((user) => {
+        if (user) {
+          return done(null, user);
+        } else {
+          let user_id = profile._json.id + '@naver.com';
+          let email = profile._json.id + '@naver.com';
+          let name = profile._json.properties.nickname;
+          let image = profile._json.properties.profile_image;
+          bcrypt.genSalt(8, (err, salt) => {
+            let password = salt;
+            bcrypt.hash(password, salt, (err, hash) => {
+              password = hash;
+              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'naver', image: image })
+              .save()
+              .then((user) => {
+                return done(null, user);
+              })
+              .catch((err) => {
+                return done(err, null);
+              });
+            });
+          });
+        }
+      })
+      .catch((err) => {
+        return done(err, null);
+      });
     });
   }
 ));

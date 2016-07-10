@@ -48,6 +48,10 @@ var _passportNaver = require('passport-naver');
 
 var _passportNaver2 = _interopRequireDefault(_passportNaver);
 
+var _config = require('../../config/config.json');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
@@ -60,6 +64,14 @@ var KakaoStrategy = _passportKakao2.default.Strategy;
 var NaverStrategy = _passportNaver2.default.Strategy;
 
 var refer = '/';
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect('/login');
+  }
+}
 
 // Form to Login
 router.get('/', function (req, res, next) {
@@ -79,7 +91,56 @@ router.get('/', function (req, res, next) {
   });
 });
 
-router.post('/', _passport2.default.authenticate('local', { successRedirect: refer, failureRedirect: '/login', failureFlash: true }));
+router.post('/', _passport2.default.authenticate('local', { failureRedirect: '/login', failureFlash: true }), function (req, res, next) {
+  if (refer) {
+    return res.redirect(refer);
+  } else {
+    return res.redirect('/');
+  }
+});
+
+router.get('/oauth/facebook', _passport2.default.authenticate('facebook', {
+  scope: ['public_profile', 'email']
+}));
+
+router.get('/oauth/facebook/callback', _passport2.default.authenticate('facebook', {
+  successRedirect: '/',
+  failureRedirect: '/login/failed'
+}));
+
+router.get('/oauth/twitter', _passport2.default.authenticate('twitter'));
+
+router.get('/oauth/twitter/callback', _passport2.default.authenticate('twitter', {
+  successRedirect: '/',
+  failureRedirect: '/login/failed'
+}));
+
+router.get('/oauth/google', _passport2.default.authenticate('google', {
+  scope: ['openid', 'email']
+}));
+
+router.get('/oauth/google/callback', _passport2.default.authenticate('google', {
+  successRedirect: '/',
+  failureRedirect: '/login/failed'
+}));
+
+router.get('/oauth/kakao', _passport2.default.authenticate('kakao'));
+
+router.get('/oauth/kakao/callback', _passport2.default.authenticate('kakao', {
+  successRedirect: '/',
+  failureRedirect: '/login/failed'
+}));
+
+router.get('/oauth/naver', _passport2.default.authenticate('naver'));
+
+router.get('/oauth/naver/callback', _passport2.default.authenticate('naver', {
+  successRedirect: '/',
+  failureRedirect: '/login/failed'
+}));
+
+router.get('/failed', ensureAuthenticated, function (req, res) {
+  res.send('failed');
+});
 
 _passport2.default.use(new LocalStrategy({
   usernameField: 'user_id',
@@ -99,6 +160,176 @@ _passport2.default.use(new LocalStrategy({
     }
   }).catch(function (err) {
     return done(err, null);
+  });
+}));
+
+_passport2.default.use(new FacebookStrategy({
+  clientID: _config2.default.oauth.facebook.id,
+  clientSecret: _config2.default.oauth.facebook.secret,
+  callbackURL: _config2.default.oauth.facebook.callbackurl,
+  profileFields: ['id', 'displayName', 'photos', 'email']
+}, function (accessToken, refreshToken, profile, done) {
+  process.nextTick(function () {
+    _models2.default.User.forge({ email: profile._json.email }).fetch().then(function (user) {
+      if (user) {
+        return done(null, user);
+      } else {
+        (function () {
+          var user_id = profile._json.id + '@facebook.com';
+          var email = profile._json.email || profile._json.id + '@facebook.com';
+          var name = profile._json.name;
+          var image = profile._json.picture.data.url;
+          _bcrypt2.default.genSalt(8, function (err, salt) {
+            var password = salt;
+            _bcrypt2.default.hash(password, salt, function (err, hash) {
+              password = hash;
+              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'facebook', image: image }).save().then(function (user) {
+                return done(null, user);
+              }).catch(function (err) {
+                return done(err, null);
+              });
+            });
+          });
+        })();
+      }
+    }).catch(function (err) {
+      return done(err, null);
+    });
+  });
+}));
+
+_passport2.default.use(new TwitterStrategy({
+  consumerKey: _config2.default.oauth.twitter.consumerkey,
+  consumerSecret: _config2.default.oauth.twitter.consumersecret,
+  callbackURL: _config2.default.oauth.twitter.callbackurl
+}, function (accessToken, refreshToken, profile, done) {
+  process.nextTick(function () {
+    _models2.default.User.forge({ email: profile._json.id_str + '@twitter.com' }).fetch().then(function (user) {
+      if (user) {
+        return done(null, user);
+      } else {
+        (function () {
+          var user_id = profile._json.id_str + '@twitter.com';
+          var email = profile._json.id_str + '@twitter.com';
+          var name = profile._json.name;
+          var image = profile._json.profile_image_url.replace(/$https?/, '').replace(/normal.jpg$/, '400x400.jpg');
+          _bcrypt2.default.genSalt(8, function (err, salt) {
+            var password = salt;
+            _bcrypt2.default.hash(password, salt, function (err, hash) {
+              password = hash;
+              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'twitter', image: image }).save().then(function (user) {
+                return done(null, user);
+              }).catch(function (err) {
+                return done(err, null);
+              });
+            });
+          });
+        })();
+      }
+    }).catch(function (err) {
+      return done(err, null);
+    });
+  });
+}));
+
+_passport2.default.use(new GoogleStrategy({
+  clientID: _config2.default.oauth.google.clientid,
+  clientSecret: _config2.default.oauth.google.clientsecret,
+  callbackURL: _config2.default.oauth.google.callbackurl
+}, function (accessToken, refreshToken, profile, done) {
+  process.nextTick(function () {
+    _models2.default.User.forge({ email: profile._json.emails.length ? profile._json.emails[0].value : profile._json.id + '@googleplus.com' }).fetch().then(function (user) {
+      if (user) {
+        return done(null, user);
+      } else {
+        (function () {
+          var user_id = profile._json.id + '@googleplus.com';
+          var email = profile._json.emails.length ? profile._json.emails[0].value : profile._json.id + '@googleplus.com';
+          var name = profile._json.displayName;
+          var image = profile._json.image.isDefault ? '' : profile._json.image.url.replace(/$https?/, '').replace(/\?sz=\d{1,}$/, '');
+          _bcrypt2.default.genSalt(8, function (err, salt) {
+            var password = salt;
+            _bcrypt2.default.hash(password, salt, function (err, hash) {
+              password = hash;
+              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'google', image: image }).save().then(function (user) {
+                return done(null, user);
+              }).catch(function (err) {
+                return done(err, null);
+              });
+            });
+          });
+        })();
+      }
+    }).catch(function (err) {
+      return done(err, null);
+    });
+  });
+}));
+
+_passport2.default.use(new KakaoStrategy({
+  clientID: _config2.default.oauth.kakao.restapikey,
+  callbackURL: _config2.default.oauth.kakao.callbackurl
+}, function (accessToken, refreshToken, profile, done) {
+  process.nextTick(function () {
+    _models2.default.User.forge({ email: profile._json.id + '@kakao.com' }).fetch().then(function (user) {
+      if (user) {
+        return done(null, user);
+      } else {
+        (function () {
+          var user_id = profile._json.id + '@kakao.com';
+          var email = profile._json.id + '@kakao.com';
+          var name = profile._json.properties.nickname;
+          var image = profile._json.properties.profile_image;
+          _bcrypt2.default.genSalt(8, function (err, salt) {
+            var password = salt;
+            _bcrypt2.default.hash(password, salt, function (err, hash) {
+              password = hash;
+              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'kakao', image: image }).save().then(function (user) {
+                return done(null, user);
+              }).catch(function (err) {
+                return done(err, null);
+              });
+            });
+          });
+        })();
+      }
+    }).catch(function (err) {
+      return done(err, null);
+    });
+  });
+}));
+
+_passport2.default.use(new NaverStrategy({
+  clientID: _config2.default.oauth.naver.clientid,
+  clientSecret: _config2.default.oauth.naver.clientsecret,
+  callbackURL: _config2.default.oauth.naver.callbackurl
+}, function (accessToken, refreshToken, profile, done) {
+  process.nextTick(function () {
+    _models2.default.User.forge({ email: profile._json.id + '@naver.com' }).fetch().then(function (user) {
+      if (user) {
+        return done(null, user);
+      } else {
+        (function () {
+          var user_id = profile._json.id + '@naver.com';
+          var email = profile._json.id + '@naver.com';
+          var name = profile._json.properties.nickname;
+          var image = profile._json.properties.profile_image;
+          _bcrypt2.default.genSalt(8, function (err, salt) {
+            var password = salt;
+            _bcrypt2.default.hash(password, salt, function (err, hash) {
+              password = hash;
+              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'naver', image: image }).save().then(function (user) {
+                return done(null, user);
+              }).catch(function (err) {
+                return done(err, null);
+              });
+            });
+          });
+        })();
+      }
+    }).catch(function (err) {
+      return done(err, null);
+    });
   });
 }));
 
