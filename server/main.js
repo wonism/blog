@@ -4,11 +4,16 @@ process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim()
 /* Express JS */
 import express from 'express';
 
+/* Express JS */
+import https from 'https';
+
 /* Basic Modules */
 import favicon from 'serve-favicon';
 
 import path from 'path';
 import logger from 'morgan';
+
+import fs from 'fs';
 
 /* Configuration */
 import config from '../config/config.json';
@@ -54,6 +59,11 @@ import portfolio from './routes/portfolio';
 import images from './routes/images';
 import join from './routes/join';
 import usersAPI from './routes/api/users';
+
+const options = {
+  key: fs.readFileSync(path.join(__dirname, '../config/privkey1.pem')),
+  cert: fs.readFileSync(path.join(__dirname, '../config/cert1.pem'))
+};
 
 const app = express();
 
@@ -151,6 +161,10 @@ if (process.env.NODE_ENV !== 'development') {
 
 const server = app.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + server.address().port);
+});
+
+const httpsServer = app.listen('443', function () {
+  console.log('https server listening on port ' + httpsServer.address().port);
 });
 
 module.exports = app;

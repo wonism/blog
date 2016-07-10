@@ -4,6 +4,10 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
+var _https = require('https');
+
+var _https2 = _interopRequireDefault(_https);
+
 var _serveFavicon = require('serve-favicon');
 
 var _serveFavicon2 = _interopRequireDefault(_serveFavicon);
@@ -15,6 +19,10 @@ var _path2 = _interopRequireDefault(_path);
 var _morgan = require('morgan');
 
 var _morgan2 = _interopRequireDefault(_morgan);
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
 
 var _config = require('../config/config.json');
 
@@ -132,6 +140,9 @@ process.env.NODE_ENV = process.env.NODE_ENV && process.env.NODE_ENV.trim().toLow
 /* Express JS */
 
 
+/* Express JS */
+
+
 /* Basic Modules */
 
 
@@ -159,6 +170,11 @@ var upload = (0, _multer2.default)({ dest: '../public/images' });
 
 /* Routes */
 
+
+var options = {
+  key: _fs2.default.readFileSync(_path2.default.join(__dirname, '../config/privkey1.pem')),
+  cert: _fs2.default.readFileSync(_path2.default.join(__dirname, '../config/cert1.pem'))
+};
 
 var app = (0, _express2.default)();
 
@@ -256,6 +272,10 @@ if (process.env.NODE_ENV !== 'development') {
 
 var server = app.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + server.address().port);
+});
+
+var httpsServer = app.listen('443', function () {
+  console.log('https server listening on port ' + httpsServer.address().port);
 });
 
 module.exports = app;
