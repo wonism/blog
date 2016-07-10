@@ -274,7 +274,7 @@ var server = app.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + server.address().port);
 });
 
-var httpsServer = app.listen('443', function () {
+var httpsServer = app.listen(_config2.default.httpsPort, function () {
   console.log('https server listening on port ' + httpsServer.address().port);
 });
 
