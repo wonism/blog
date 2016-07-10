@@ -12,6 +12,15 @@ var https = require('https');
 var config = require('../config/config.json');
 
 /**
+ * Set Https Options
+ */
+
+var options = {
+  key: fs.readFileSync(path.join(__dirname, '../config/privkey1.pem')),
+  cert: fs.readFileSync(path.join(__dirname, '../config/cert1.pem'))
+};
+
+/**
  * Get port from environment and store in Express.
  */
 
@@ -24,7 +33,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-var httpsServer = https.createServer(app);
+var httpsServer = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
