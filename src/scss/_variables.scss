@@ -1,0 +1,26 @@
+$body-color: #fafafa;
+$header-height: 75px;
+$main-color: #FFB5C6;
+$main-hover-color: #FCDFE5;
+$sub-color: #63714d;
+$sub-hover-color: #e2e9d4;
+$black-color: #000;
+$black-hover-color: #777;
+$border-color: #e5e5e5;
+$gray-color: #aaa;
+$container-width: 720px;
+$footer-color: #f6f6f6;
+
+@mixin transform-translate3d($x, $y, $z) {
+  -ms-transform: translate3d($x, $y, $z);
+  -webkit-transform: translate3d($x, $y, $z);
+  transform: translate3d($x, $y, $z);
+}
+
+@mixin border-radius($rad) {
+  -ms-border-radius: $rad;
+  -moz-border-radius: $rad;
+  -webkit-border-radius: $rad;
+  border-radius: $rad;
+}
+

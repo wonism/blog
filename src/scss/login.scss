@@ -1,9 +1,52 @@
+@import 'variables';
+
 #login-form {
   padding-top: 32px;
   padding-left: 16px;
   .form-control {
     position: relative;
     max-width: 260px;
+  }
+}
+
+div.login-form {
+  padding-left: 16px;
+}
+
+.oauth-login {
+  display: block;
+  margin-bottom: .6em;
+  width: 100%;
+  max-width: 260px;
+  height: 2.4em;
+  line-height: 2.4em;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  @include border-radius(3px);
+  clear: both;
+  &.facebook {
+    background-color: #3B5998;
+  }
+  &.twitter {
+    background-color: #1da1f2;
+  }
+  &.google {
+    background-color: #D73D32;
+  }
+  &.kakao {
+    color: #3C1E1E;
+    background-color: #FFEB00;
+    &:hover {
+      color: #3C1E1E;
+    }
+  }
+  &.naver {
+    background-color: #23B300;
+  }
+  &:hover {
+    color: #fff;
   }
 }
 

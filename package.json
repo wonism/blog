@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "es6server": "nodemon ./build/main.js localhost 3333",
     "buildes6": "babel -w server --out-dir build",
     "start": "nodemon ./bin/www"
   },
