@@ -64,6 +64,10 @@ var _passportLocal = require('passport-local');
 
 var _passportLocal2 = _interopRequireDefault(_passportLocal);
 
+var _mailer = require('./mailer');
+
+var _mailer2 = _interopRequireDefault(_mailer);
+
 var _methodOverride = require('method-override');
 
 var _methodOverride2 = _interopRequireDefault(_methodOverride);
@@ -155,6 +159,9 @@ process.env.NODE_ENV = process.env.NODE_ENV && process.env.NODE_ENV.trim().toLow
 var RedisStore = (0, _connectRedis2.default)(_expressSession2.default);
 var LocalStrategy = _passportLocal2.default.Strategy;
 
+/* Node Mailer */
+
+
 /* Override Form Method */
 
 
@@ -244,20 +251,68 @@ if (app.get('env') === 'development') {
   // development error handler
   // will print stacktrace
   app.use(function (err, req, res, next) {
+    var url = req.url;
+    var method = req.method;
+    var userAgent = req.headers['user-agent'];
+    var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    var queryString = JSON.stringify(req.query);
+    var currentTime = new Date();
+
+    var mailOptions = {
+      from: 'jaewon < yocee57@gmail.com >',
+      to: 'yocee57@gmail.com', // ',' 로 받는 사람 구분
+      subject: '[Test-server Error] ' + currentTime,
+      html: '===============================<br />ERROR<br />===============================<br />' + err.message.replace(/\n/g, '<br />') + '<br /><br />===============================<br />ENVIRONMENT<br />===============================<br />' + '* URL : ' + url + '<br />' + '* METHOD : ' + method + '<br />' + '* USER AGENT : ' + userAgent + '<br />' + '* USER IP : ' + userIP + '<br />' + '* QUERY STRING : ' + queryString
+    };
+
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
       error: err
+    });
+
+    return _mailer2.default.sendMail(mailOptions, function (err, res) {
+      if (err) {
+        console.log('failed... => ' + err);
+      } else {
+        console.log('succeed... => ' + res);
+      }
+
+      _mailer2.default.close();
     });
   });
 } else {
   // production error handler
   // no stacktraces leaked to user
   app.use(function (err, req, res, next) {
+    var url = req.url;
+    var method = req.method;
+    var userAgent = req.headers['user-agent'];
+    var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    var queryString = JSON.stringify(req.query);
+    var currentTime = new Date();
+
+    var mailOptions = {
+      from: 'jaewon < yocee57@gmail.com >',
+      to: 'yocee57@gmail.com', // ',' 로 받는 사람 구분
+      subject: '[Server Error] ' + currentTime,
+      html: '===============================<br />ERROR<br />===============================<br />' + err.message.replace(/\n/g, '<br />') + '<br /><br />===============================<br />ENVIRONMENT<br />===============================<br />' + '* URL : ' + url + '<br />' + '* METHOD : ' + method + '<br />' + '* USER AGENT : ' + userAgent + '<br />' + '* USER IP : ' + userIP + '<br />' + '* QUERY STRING : ' + queryString
+    };
+
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
       error: {}
+    });
+
+    return _mailer2.default.sendMail(mailOptions, function (err, res) {
+      if (err) {
+        console.log('failed... => ' + err);
+      } else {
+        console.log('succeed... => ' + res);
+      }
+
+      _mailer2.default.close();
     });
   });
 }

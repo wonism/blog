@@ -32,6 +32,9 @@ import passportLocal from 'passport-local';
 let RedisStore = connectRedis(session);
 let LocalStrategy = passportLocal.Strategy;
 
+/* Node Mailer */
+import mailer from './mailer';
+
 /* Override Form Method */
 import methodOverride from 'method-override';
 
@@ -133,20 +136,82 @@ if (app.get('env') === 'development') {
   // development error handler
   // will print stacktrace
   app.use((err, req, res, next) => {
+    let url = req.url;
+    let method = req.method;
+    let userAgent = req.headers['user-agent'];
+    let userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    let queryString = JSON.stringify(req.query);
+    let currentTime = new Date();
+
+    let mailOptions = {
+      from: 'jaewon < yocee57@gmail.com >',
+      to: 'yocee57@gmail.com', // ',' 로 받는 사람 구분
+      subject: '[Test-server Error] ' + currentTime,
+      html: '===============================<br />ERROR<br />===============================<br />' +
+          err.message.replace(/\n/g, '<br />') +
+          '<br /><br />===============================<br />ENVIRONMENT<br />===============================<br />' +
+          '* URL : ' + url + '<br />' +
+          '* METHOD : ' + method + '<br />' +
+          '* USER AGENT : ' + userAgent + '<br />' +
+          '* USER IP : ' + userIP + '<br />' +
+          '* QUERY STRING : ' + queryString
+    };
+
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
       error: err
+    });
+
+    return mailer.sendMail(mailOptions, function (err, res) {
+      if (err) {
+        console.log('failed... => ' + err);
+      } else {
+        console.log('succeed... => ' + res);
+      }
+
+      mailer.close();
     });
   });
 } else {
   // production error handler
   // no stacktraces leaked to user
   app.use((err, req, res, next) => {
+    let url = req.url;
+    let method = req.method;
+    let userAgent = req.headers['user-agent'];
+    let userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    let queryString = JSON.stringify(req.query);
+    let currentTime = new Date();
+
+    let mailOptions = {
+      from: 'jaewon < yocee57@gmail.com >',
+      to: 'yocee57@gmail.com', // ',' 로 받는 사람 구분
+      subject: '[Server Error] ' + currentTime,
+      html: '===============================<br />ERROR<br />===============================<br />' +
+          err.message.replace(/\n/g, '<br />') +
+          '<br /><br />===============================<br />ENVIRONMENT<br />===============================<br />' +
+          '* URL : ' + url + '<br />' +
+          '* METHOD : ' + method + '<br />' +
+          '* USER AGENT : ' + userAgent + '<br />' +
+          '* USER IP : ' + userIP + '<br />' +
+          '* QUERY STRING : ' + queryString
+    };
+
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
       error: {}
+    });
+
+    return mailer.sendMail(mailOptions, function (err, res) {
+      if (err) {
+        console.log('failed... => ' + err);
+      } else {
+        console.log('succeed... => ' + res);
+      }
+
+      mailer.close();
     });
   });
 }
