@@ -6,6 +6,8 @@ import _ from 'lodash';
 import models from '../../db/models';
 import collections from '../../db/collections';
 
+import config from '../../config/config.json';
+
 const router = express.Router();
 
 let userPk, fetchedCategories;
@@ -177,8 +179,9 @@ router.get('/', getCategories, (req, res, next) => {
 
     res.render('posts/index',
         {
-          req: req,
           title: 'Jaewonism - POST',
+          asset: 'posts',
+          mode: config.mode,
           url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
           image: req.protocol + '://' + req.headers.host + '/images/logo.png',
           description: description.substring(0, 255),
@@ -211,8 +214,9 @@ router.get('/new', isAuthor, (req, res, next) => {
 
     res.render('posts/new',
         {
-          req: req,
           title: 'Jaewonism - NEW POST',
+          asset: 'posts',
+          mode: config.mode,
           url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
           image: req.protocol + '://' + req.headers.host + '/images/logo.png',
           description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -332,8 +336,9 @@ router.get('/:id', isAuthor, (req, res, next) => {
 
       res.render('posts/show',
           {
-            req: req,
             title: 'Jaewonism - POST : ' + post.toJSON().title,
+            asset: 'posts',
+            mode: config.mode,
             url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: description.substring(0, 255),
@@ -381,8 +386,9 @@ router.get('/update/:id', isAuthor, (req, res, next) => {
 
           res.render('posts/update',
               {
-                req: req,
                 title: 'Jaewonism - MODIFY POST',
+                asset: 'posts',
+                mode: config.mode,
                 url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
                 image: req.protocol + '://' + req.headers.host + '/images/logo.png',
                 description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -515,8 +521,9 @@ router.get('/delete/:id', isAuthor, (req, res, next) => {
 
         res.render('posts/delete',
             {
-              req: req,
               title: 'Jaewonism - DELETE POST',
+              asset: 'posts',
+              mode: config.mode,
               url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
               image: req.protocol + '://' + req.headers.host + '/images/logo.png',
               description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -609,8 +616,9 @@ router.get('/categories/:id', getCategories, (req, res, next) => {
 
       res.render('posts/index',
           {
-            req: req,
             title: 'Jaewonism - POST',
+            asset: 'posts',
+            mode: config.mode,
             url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: description.substring(0, 255),
@@ -683,8 +691,9 @@ router.get('/tags/:slug', getCategories, (req, res, next) => {
 
       res.render('posts/index',
           {
-            req: req,
             title: 'Jaewonism - POST',
+            asset: 'posts',
+            mode: config.mode,
             url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: description.substring(0, 255),
@@ -754,8 +763,9 @@ router.get('/search/:keyword', getCategories, (req, res, next) => {
 
     res.render('posts/index',
         {
-          req: req,
           title: 'Jaewonism - POST',
+          asset: 'posts',
+          mode: config.mode,
           url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
           image: req.protocol + '://' + req.headers.host + '/images/logo.png',
           description: description.substring(0, 255),

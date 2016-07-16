@@ -2,13 +2,16 @@ import express from 'express';
 
 import url from 'url';
 
+import config from '../../config/config.json';
+
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
   res.render('photos/index',
       {
-        req: req,
         title: 'Jaewonism',
+        asset: 'photos',
+        mode: config.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s photo'.substring(0, 255),

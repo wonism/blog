@@ -8,6 +8,8 @@ import im from 'imagemagick';
 import models from '../../db/models';
 import collections from '../../db/collections';
 
+import config from '../../config/config.json';
+
 const router = express.Router();
 
 let isAuthor;
@@ -43,8 +45,9 @@ router.get('/', isAuthor, (req, res, next) => {
   .then((collection) => {
     res.render('images/index',
         {
-          req: req,
           title: '이미지 리스트',
+          asset: 'images',
+          mode: config.mode,
           url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
           image: req.protocol + '://' + req.headers.host + '/images/logo.png',
           description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -64,8 +67,9 @@ router.get('/', isAuthor, (req, res, next) => {
 router.get('/new', isAuthor, (req, res, next) => {
   res.render('images/new',
       {
-        req: req,
         title: '이미지 등록',
+        asset: 'images',
+        mode: config.mode,
         url: 'http://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -248,8 +252,9 @@ router.get('/:id', isAuthor, (req, res, next) => {
     } else {
       res.render('images/show',
           {
-            req: req,
             title: '이미지 조회',
+            asset: 'images',
+            mode: config.mode,
             url: 'http://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -276,8 +281,9 @@ router.get('/delete/:id', isAuthor, (req, res, next) => {
     } else {
       res.render('images/delete',
           {
-            req: req,
             title: '이미지 삭제',
+            asset: 'images',
+            mode: config.mode,
             url: 'http://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: 'Jaewonism\'s blog'.substring(0, 255),

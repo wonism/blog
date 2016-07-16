@@ -5,6 +5,8 @@ import url from 'url';
 import models from '../../db/models';
 import collections from '../../db/collections';
 
+import config from '../../config/config.json';
+
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
@@ -19,8 +21,9 @@ router.get('/list/:page', (req, res, next) => {
   .then((collection) => {
     res.render('users/index',
         {
-          req: req,
           title: '유저 리스트',
+          asset: 'users',
+          mode: config.mode,
           url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
           image: req.protocol + '://' + req.headers.host + '/images/logo.png',
           description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -40,8 +43,9 @@ router.get('/list/:page', (req, res, next) => {
 router.get('/new', (req, res, next) => {
   res.render('users/new',
       {
-        req: req,
         title: '회원 등록',
+        asset: 'users',
+        mode: config.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -77,8 +81,9 @@ router.get('/show/:id', (req, res, next) => {
     } else {
       res.render('users/show',
           {
-            req: req,
             title: '유저 조회',
+            asset: 'users',
+            mode: config.mode,
             url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -105,8 +110,9 @@ router.get('/update/:id', (req, res, next) => {
     } else {
       res.render('users/update',
           {
-            req: req,
             title: '유저 수정',
+            asset: 'users',
+            mode: config.mode,
             url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -156,8 +162,9 @@ router.get('/delete/:id', (req, res, next) => {
     } else {
       res.render('users/delete',
           {
-            req: req,
             title: '유저 삭제',
+            asset: 'users',
+            mode: config.mode,
             url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: 'Jaewonism\'s blog'.substring(0, 255),

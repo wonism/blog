@@ -16,6 +16,10 @@ var _collections = require('../../db/collections');
 
 var _collections2 = _interopRequireDefault(_collections);
 
+var _config = require('../../config/config.json');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
@@ -28,8 +32,9 @@ router.get('/', function (req, res, next) {
 router.get('/list/:page', function (req, res, next) {
   _collections2.default.Users.forge().query('where', 'is_deleted', 0).fetch().then(function (collection) {
     res.render('users/index', {
-      req: req,
       title: '유저 리스트',
+      asset: 'users',
+      mode: _config2.default.mode,
       url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
       image: req.protocol + '://' + req.headers.host + '/images/logo.png',
       description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -46,8 +51,9 @@ router.get('/list/:page', function (req, res, next) {
 // Form to Create User
 router.get('/new', function (req, res, next) {
   res.render('users/new', {
-    req: req,
     title: '회원 등록',
+    asset: 'users',
+    mode: _config2.default.mode,
     url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
     image: req.protocol + '://' + req.headers.host + '/images/logo.png',
     description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -76,8 +82,9 @@ router.get('/show/:id', function (req, res, next) {
       res.render('404', { title: '404: Page Not Found.' });
     } else {
       res.render('users/show', {
-        req: req,
         title: '유저 조회',
+        asset: 'users',
+        mode: _config2.default.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -99,8 +106,9 @@ router.get('/update/:id', function (req, res, next) {
       res.render('404', { title: '404: Page Not Found.' });
     } else {
       res.render('users/update', {
-        req: req,
         title: '유저 수정',
+        asset: 'users',
+        mode: _config2.default.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -140,8 +148,9 @@ router.get('/delete/:id', function (req, res, next) {
       res.render('404', { title: '404: Page Not Found.' });
     } else {
       res.render('users/delete', {
-        req: req,
         title: '유저 삭제',
+        asset: 'users',
+        mode: _config2.default.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),

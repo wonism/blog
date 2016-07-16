@@ -14,6 +14,7 @@ const paths = {
   img: 'src/img/',
   js: 'src/js/**/*.js',
   sass: 'src/scss/**/*.scss',
+  sassDevelop: 'src/css',
   dist: 'dist/'
 };
 
@@ -43,6 +44,7 @@ gulp.task('js', () => {
 gulp.task('sass', () => {
   return gulp.src(paths.sass)
     .pipe(sass())
+    .pipe(gulp.dest(paths.sassDevelop))
     .pipe(cleanCSS({ compatibility: 'ie8' }))
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest(paths.dist + 'css'));

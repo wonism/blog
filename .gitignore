@@ -17,6 +17,9 @@ node_modules
 *.log
 *.gz
 
+# bower
+bower_components
+
 # configure
 /config/
 

@@ -1,0 +1,23 @@
+.insta-card {
+  display: inline-block;
+  float: left;
+  margin-top: -16px;
+  padding: 16px;
+  width: 25%;
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .insta-card {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .insta-card {
+    width: 100%;
+  }
+}

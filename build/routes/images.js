@@ -28,6 +28,10 @@ var _collections = require('../../db/collections');
 
 var _collections2 = _interopRequireDefault(_collections);
 
+var _config = require('../../config/config.json');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -61,8 +65,9 @@ isAuthor = function isAuthor(req, res, next) {
 router.get('/', isAuthor, function (req, res, next) {
   _collections2.default.Images.forge().fetch().then(function (collection) {
     res.render('images/index', {
-      req: req,
       title: '이미지 리스트',
+      asset: 'images',
+      mode: _config2.default.mode,
       url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
       image: req.protocol + '://' + req.headers.host + '/images/logo.png',
       description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -79,8 +84,9 @@ router.get('/', isAuthor, function (req, res, next) {
 // Form to Create Image
 router.get('/new', isAuthor, function (req, res, next) {
   res.render('images/new', {
-    req: req,
     title: '이미지 등록',
+    asset: 'images',
+    mode: _config2.default.mode,
     url: 'http://' + req.headers.host + req.baseUrl + req.url,
     image: req.protocol + '://' + req.headers.host + '/images/logo.png',
     description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -261,8 +267,9 @@ router.get('/:id', isAuthor, function (req, res, next) {
       res.render('404', { title: '404: Page Not Found.' });
     } else {
       res.render('images/show', _defineProperty({
-        req: req,
         title: '이미지 조회',
+        asset: 'images',
+        mode: _config2.default.mode,
         url: 'http://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -283,8 +290,9 @@ router.get('/delete/:id', isAuthor, function (req, res, next) {
       res.render('404', { title: '404: Page Not Found.' });
     } else {
       res.render('images/delete', _defineProperty({
-        req: req,
         title: '이미지 삭제',
+        asset: 'images',
+        mode: _config2.default.mode,
         url: 'http://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),

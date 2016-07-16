@@ -45,8 +45,9 @@ var checkValidation = function (target, data) {
         }
       }
     } else {
+      var errMsg, errElement;
       if (result.checkTarget === 'id') {
-        var errMsg = '';
+        errMsg = '';
 
         switch (result.errType) {
           case 'idLength':
@@ -64,7 +65,7 @@ var checkValidation = function (target, data) {
           document.getElementById('id-validation-err').innerHTML = errMsg;
           document.getElementById('user_id').focus();
         } else {
-          var errElement = document.createElement('span');
+          errElement = document.createElement('span');
           errElement.setAttribute('id', 'id-validation-err');
           errElement.setAttribute('class', 'validation-err');
           errElement.innerHTML = errMsg;
@@ -73,7 +74,7 @@ var checkValidation = function (target, data) {
           document.getElementById('user_id').focus();
         }
       } else if (result.checkTarget === 'password') {
-        var errMsg = '';
+        errMsg = '';
 
         switch (result.errType) {
           case 'pwLength':
@@ -97,7 +98,7 @@ var checkValidation = function (target, data) {
           document.getElementById('pw-validation-err').innerHTML = errMsg;
           document.getElementById('password').focus();
         } else {
-          var errElement = document.createElement('span');
+          errElement = document.createElement('span');
           errElement.setAttribute('id', 'pw-validation-err');
           errElement.setAttribute('class', 'validation-err');
           errElement.innerHTML = errMsg;
@@ -106,7 +107,7 @@ var checkValidation = function (target, data) {
           document.getElementById('password').focus();
         }
       } else if (result.checkTarget === 'email') {
-        var errMsg = '';
+        errMsg = '';
 
         switch (result.errType) {
           case 'invalidEmail':
@@ -121,7 +122,7 @@ var checkValidation = function (target, data) {
           document.getElementById('em-validation-err').innerHTML = errMsg;
           document.getElementById('email').focus();
         } else {
-          var errElement = document.createElement('span');
+          errElement = document.createElement('span');
           errElement.setAttribute('id', 'em-validation-err');
           errElement.setAttribute('class', 'validation-err');
           errElement.innerHTML = errMsg;

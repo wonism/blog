@@ -124,6 +124,10 @@ var _portfolio = require('./routes/portfolio');
 
 var _portfolio2 = _interopRequireDefault(_portfolio);
 
+var _resume = require('./routes/resume');
+
+var _resume2 = _interopRequireDefault(_resume);
+
 var _images = require('./routes/images');
 
 var _images2 = _interopRequireDefault(_images);
@@ -192,7 +196,11 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 app.use((0, _serveFavicon2.default)(_path2.default.join(__dirname, '../public', 'favicon.ico')));
 app.use(_express2.default.static(_path2.default.join(__dirname, '../public')));
-app.use(_express2.default.static(_path2.default.join(__dirname, '../dist')));
+if (process.env.NODE_ENV === 'development') {
+  app.use(_express2.default.static(_path2.default.join(__dirname, '../src')));
+} else {
+  app.use(_express2.default.static(_path2.default.join(__dirname, '../dist')));
+}
 
 app.use((0, _morgan2.default)('dev'));
 
@@ -229,6 +237,7 @@ app.use('/posts', _posts2.default);
 app.use('/comments', _comments2.default);
 app.use('/photos', _photos2.default);
 app.use('/portfolio', _portfolio2.default);
+app.use('/resume', _resume2.default);
 app.use('/images', _images2.default);
 app.use('/join', _join2.default);
 // app.use('/api/users', usersAPI);
@@ -251,34 +260,12 @@ if (app.get('env') === 'development') {
   // development error handler
   // will print stacktrace
   app.use(function (err, req, res, next) {
-    var url = req.url;
-    var method = req.method;
-    var userAgent = req.headers['user-agent'];
-    var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    var queryString = JSON.stringify(req.query);
-    var currentTime = new Date();
-
-    var mailOptions = {
-      from: 'jaewon < yocee57@gmail.com >',
-      to: 'yocee57@gmail.com', // ',' 로 받는 사람 구분
-      subject: '[Test-server Error] ' + currentTime,
-      html: '===============================<br />ERROR<br />===============================<br />' + err.message.replace(/\n/g, '<br />') + '<br /><br />===============================<br />ENVIRONMENT<br />===============================<br />' + '* URL : ' + url + '<br />' + '* METHOD : ' + method + '<br />' + '* USER AGENT : ' + userAgent + '<br />' + '* USER IP : ' + userIP + '<br />' + '* QUERY STRING : ' + queryString
-    };
+    console.log(err.message);
 
     res.status(err.status || 500);
-    res.render('error', {
+    return res.render('error', {
       message: err.message,
       error: err
-    });
-
-    return _mailer2.default.sendMail(mailOptions, function (err, res) {
-      if (err) {
-        console.log('failed... => ' + err);
-      } else {
-        console.log('succeed... => ' + res);
-      }
-
-      _mailer2.default.close();
     });
   });
 } else {

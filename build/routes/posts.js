@@ -20,6 +20,10 @@ var _collections = require('../../db/collections');
 
 var _collections2 = _interopRequireDefault(_collections);
 
+var _config = require('../../config/config.json');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
@@ -171,8 +175,9 @@ router.get('/', getCategories, function (req, res, next) {
     }
 
     res.render('posts/index', {
-      req: req,
       title: 'Jaewonism - POST',
+      asset: 'posts',
+      mode: _config2.default.mode,
       url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
       image: req.protocol + '://' + req.headers.host + '/images/logo.png',
       description: description.substring(0, 255),
@@ -199,8 +204,9 @@ router.get('/new', isAuthor, function (req, res, next) {
     var page = _url2.default.parse(req.url, true).query.page >> 0 || 1;
 
     res.render('posts/new', {
-      req: req,
       title: 'Jaewonism - NEW POST',
+      asset: 'posts',
+      mode: _config2.default.mode,
       url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
       image: req.protocol + '://' + req.headers.host + '/images/logo.png',
       description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -313,8 +319,9 @@ router.get('/:id', isAuthor, function (req, res, next) {
       }
 
       res.render('posts/show', {
-        req: req,
         title: 'Jaewonism - POST : ' + post.toJSON().title,
+        asset: 'posts',
+        mode: _config2.default.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: description.substring(0, 255),
@@ -357,8 +364,9 @@ router.get('/update/:id', isAuthor, function (req, res, next) {
             tags = post.related('tags');
 
             res.render('posts/update', {
-              req: req,
               title: 'Jaewonism - MODIFY POST',
+              asset: 'posts',
+              mode: _config2.default.mode,
               url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
               image: req.protocol + '://' + req.headers.host + '/images/logo.png',
               description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -474,8 +482,9 @@ router.get('/delete/:id', isAuthor, function (req, res, next) {
         page = _url2.default.parse(req.url, true).query.page >> 0 || 1;
 
         res.render('posts/delete', {
-          req: req,
           title: 'Jaewonism - DELETE POST',
+          asset: 'posts',
+          mode: _config2.default.mode,
           url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
           image: req.protocol + '://' + req.headers.host + '/images/logo.png',
           description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -556,8 +565,9 @@ router.get('/categories/:id', getCategories, function (req, res, next) {
       }
 
       res.render('posts/index', {
-        req: req,
         title: 'Jaewonism - POST',
+        asset: 'posts',
+        mode: _config2.default.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: description.substring(0, 255),
@@ -624,8 +634,9 @@ router.get('/tags/:slug', getCategories, function (req, res, next) {
       }
 
       res.render('posts/index', {
-        req: req,
         title: 'Jaewonism - POST',
+        asset: 'posts',
+        mode: _config2.default.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: description.substring(0, 255),
@@ -690,8 +701,9 @@ router.get('/search/:keyword', getCategories, function (req, res, next) {
     }
 
     res.render('posts/index', {
-      req: req,
       title: 'Jaewonism - POST',
+      asset: 'posts',
+      mode: _config2.default.mode,
       url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
       image: req.protocol + '://' + req.headers.host + '/images/logo.png',
       description: description.substring(0, 255),

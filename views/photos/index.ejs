@@ -4,5 +4,10 @@
 <div id="get-insta-feed"></div>
 </div>
 <%- include ../commons/footer %>
+<% if (mode === 'development') { %>
+<script src="/js/instafeed.js" defer="defer"></script>
+<% } else { %>
+<script src="/js/instafeed.min.js" defer="defer"></script>
+<% } %>
 <%- include ../layouts/footer %>
 

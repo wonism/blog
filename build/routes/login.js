@@ -79,8 +79,9 @@ router.get('/', function (req, res, next) {
   var flash = req.flash('auth');
   flash = flash.length ? flash : req.flash('error');
   res.render('login/index', {
-    req: req,
     title: '로그인',
+    asset: 'login',
+    mode: _config2.default.mode,
     url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
     image: req.protocol + '://' + req.headers.host + '/images/logo.png',
     description: 'Jaewonism\'s blog'.substring(0, 255),
