@@ -8,14 +8,19 @@ var _url = require('url');
 
 var _url2 = _interopRequireDefault(_url);
 
+var _config = require('../../config/config.json');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
 
 router.get('/', function (req, res, next) {
   res.render('photos/index', {
-    req: req,
     title: 'Jaewonism',
+    asset: 'photos',
+    mode: _config2.default.mode,
     url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
     image: req.protocol + '://' + req.headers.host + '/images/logo.png',
     description: 'Jaewonism\'s photo'.substring(0, 255),

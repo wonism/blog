@@ -5,6 +5,8 @@ import url from 'url';
 import models from '../../db/models';
 import collections from '../../db/collections';
 
+import config from '../../config/config.json';
+
 const router = express.Router();
 
 let pages;
@@ -62,16 +64,17 @@ router.get('/', getCategories, (req, res, next) => {
 
     if (typeof page === 'number' && page > 1) {
       res.json({
-                 categories: fetchedCategories,
-                 posts: posts.toJSON(),
-                 pages: pages,
-                 page: page
+        categories: fetchedCategories,
+        posts: posts.toJSON(),
+        pages: pages,
+        page: page
       });
     } else {
       res.render('index',
           {
-            req: req,
             title: 'Jaewonism',
+            asset: 'main',
+            mode: config.mode,
             url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -112,7 +115,7 @@ router.get('/', (req, res, next) => {
         console.error('err : ' + err);
       }
 
-      res.render('index', { req: req, title: 'test', userId: req.user ? req.user.user_id : null, isRoot: true, rows: rows });
+      res.send(rows);
       conn.release();
     });
   });

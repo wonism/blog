@@ -7,6 +7,8 @@ import bcrypt from 'bcrypt';
 import models from '../../db/models';
 import collections from '../../db/collections';
 
+import config from '../../config/config.json';
+
 const router = express.Router();
 
 let isSafe;
@@ -16,8 +18,9 @@ let errType = '';
 router.get('/', (req, res, next) => {
   res.render('join/index',
       {
-        req: req,
         title: '회원가입',
+        asset: 'join',
+        mode: config.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -46,8 +49,9 @@ router.post('/', (req, res, next) => {
           req.flash('errType', 'duplicateId');
           res.render('join/index',
               {
-                req: req,
                 title: '회원가입',
+                asset: 'join',
+                mode: config.mode,
                 url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
                 image: req.protocol + '://' + req.headers.host + '/images/logo.png',
                 description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -60,8 +64,9 @@ router.post('/', (req, res, next) => {
           req.flash('errType', 'duplicateEmail');
           res.render('join/index',
               {
-                req: req,
                 title: '회원가입',
+                asset: 'join',
+                mode: config.mode,
                 url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
                 image: req.protocol + '://' + req.headers.host + '/images/logo.png',
                 description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -85,7 +90,7 @@ router.post('/', (req, res, next) => {
               })
               .catch((err) => {
                 console.log(err.message);
-                res.render('500', { req: req, title: '500: Internal Server Error.'});
+                res.render('500', { title: '500: Internal Server Error.'});
               });
             });
           });
@@ -93,8 +98,9 @@ router.post('/', (req, res, next) => {
           req.flash('errType', errType);
           res.render('join/index',
               {
-                req: req,
                 title: '회원가입',
+                asset: 'join',
+                mode: config.mode,
                 url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
                 image: req.protocol + '://' + req.headers.host + '/images/logo.png',
                 description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -108,7 +114,7 @@ router.post('/', (req, res, next) => {
     })
     .catch((err) => {
       console.log(err.message);
-      res.render('500', { req: req, title: '500: Internal Server Error.'});
+      res.render('500', { title: '500: Internal Server Error.'});
     });
   });
 });

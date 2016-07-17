@@ -1,0 +1,27 @@
+@import 'variables';
+
+.post-card {
+  font-size: 16px;
+}
+
+.post-image-link:hover {
+  @include transparent(5);
+}
+
+.post-image {
+  width: 100%;
+}
+
+.post-information {
+  margin-top: 16px;
+  margin-bottom: 24px;
+}
+
+.post-title {
+  font-size: 32px;
+}
+
+.post-content {
+  margin-bottom: 4px;
+}
+

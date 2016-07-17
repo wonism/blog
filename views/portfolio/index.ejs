@@ -77,7 +77,62 @@
       </div>
     </div>
   </div>
+
+  <div class="none">
+    <canvas id="my-ability" width="300" height="300">My ability</canvas>
+    <fieldset id="abilities">
+      <p>Front-end</p>
+      <input class="skill fe" id="skill-html" type="checkbox" checked="checked" data-score="90" />
+      <label class="checkbox" for="skill-html" data-score="90"><span class="button"></span>HTML</label>
+      <input class="skill fe" id="skill-css" type="checkbox" checked="checked" data-score="80" />
+      <label class="checkbox" for="skill-css" data-score="80"><span class="button"></span>CSS</label>
+      <input class="skill fe" id="skill-js" type="checkbox" checked="checked" data-score="80" />
+      <label class="checkbox" for="skill-js" data-score="80"><span class="button"></span>Java Script</label>
+      <input class="skill fe" id="skill-jquery" type="checkbox" checked="checked" data-score="90" />
+      <label class="checkbox" for="skill-jquery" data-score="90"><span class="button"></span>jQuery</label>
+      <input class="skill fe" id="skill-react" type="checkbox" checked="checked" data-score="50" />
+      <label class="checkbox" for="skill-reactjs" data-score="50"><span class="button"></span>React JS</label>
+      <input class="skill fe" id="skill-gulp" type="checkbox" checked="checked" data-score="75" />
+      <label class="checkbox" for="skill-gulp" data-score="75"><span class="button"></span>Gulp</label>
+      <input class="skill fe" id="skill-sass" type="checkbox" checked="checked" data-score="80" />
+      <label class="checkbox" for="skill-sass" data-score="80"><span class="button"></span>SASS</label>
+      <p>Back-end</p>
+      <input class="skill be" id="skill-nodejs" type="checkbox" checked="checked" data-score="75" />
+      <label class="checkbox" for="skill-nodejs" data-score="75"><span class="button"></span>Node JS</label>
+      <input class="skill be" id="skill-ruby" type="checkbox" checked="checked" data-score="60" />
+      <label class="checkbox" for="skill-ruby" data-score="60"><span class="button"></span>Ruby On Rails</label>
+      <input class="skill be" id="skill-spring" type="checkbox" checked="checked" data-score="50" />
+      <label class="checkbox" for="skill-spring" data-score="50"><span class="button"></span>Spring</label>
+      <input class="skill be" id="skill-webrtc" type="checkbox" checked="checked" data-score="30" />
+      <label class="checkbox" for="skill-webrtc" data-score="30"><span class="button"></span>WebRTC</label>
+      <input class="skill be" id="skill-mysql" type="checkbox" checked="checked" data-score="50" />
+      <label class="checkbox" for="skill-mysql" data-score="60"><span class="button"></span>MySQL</label>
+      <input class="skill be" id="skill-nginx" type="checkbox" checked="checked" data-score="30" />
+      <label class="checkbox" for="skill-nginx" data-score="30"><span class="button"></span>Nginx</label>
+      <input class="skill be" id="skill-aws" type="checkbox" checked="checked" data-score="40" />
+      <label class="checkbox" for="skill-aws" data-score="40"><span class="button"></span>AWS</label>
+      <input class="skill be" id="skill-linux" type="checkbox" checked="checked" data-score="40" />
+      <label class="checkbox" for="skill-aws" data-score="50"><span class="button"></span>Linux</label>
+      <p>Design</p>
+      <input class="skill de" id="skill-photoshop" type="checkbox" checked="checked" data-score="50" />
+      <label class="checkbox" for="skill-photoshop" data-score="50"><span class="button"></span>PhotoShop</label>
+      <p>Experience</p>
+      <input class="skill ex" id="skill-experience" type="checkbox" checked="checked" data-score="50" />
+      <label class="checkbox" for="skill-experience" data-score="50"><span class="button"></span>Experience</label>
+      <p>Communication</p>
+      <input class="skill cm" id="skill-communication" type="checkbox" checked="checked" data-score="70" />
+      <label class="checkbox" for="skill-communication" data-score="70"><span class="button"></span>Physical</label>
+      <p>Physical</p>
+      <input class="skill ph" id="skill-physical" type="checkbox" checked="checked" data-score="70" />
+      <label class="checkbox" for="skill-physical" data-score="70"><span class="button"></span>Physical</label>
+    </fieldset>
+  </div>
 </div>
 <%- include ../commons/footer %>
+<% if (mode === 'development') { %>
+<script src="/js/chart.js" defer="defer"></script>
+<% } else { %>
+<script src="/js/chart.min.js" defer="defer"></script>
+<% } %>
 <%- include ../layouts/footer %>
 

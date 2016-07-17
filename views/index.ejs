@@ -1,58 +1,57 @@
 <%- include layouts/header %>
-<div class="top-slider">
-  <img class="slider-element" src="/images/cherryblossom.jpg" alt="top-slider-image"/>
-</div>
-<%- include commons/root_header %>
+<%- include commons/header %>
 <div id="body-container">
   <%
-    var i = 0;
-    for (; i < posts.length; i++) {
+    var post, categoryName;
+    for (var i = 0, len = posts.length; i < len; i++) {
       post = posts[i];
   %>
-  <div class="post-card">
-    <% if (post.thumbnail) { %>
-    <a class="post-link-image" href="/posts/<%= post.id %>">
-      <img class="card-thumbnail" src="<%- post.thumbnail %>" alt="post thumbnail"/>
+  <article class="post-card">
+    <% if (post.background_image) { %>
+    <a class="post-image-link" href="/posts/<%= post.id %>">
+      <img class="post-image" src="<%- post.background_image %>" alt="post image"/>
     </a>
     <% } %>
-    <div class="card-summary">
-      <table><tbody><tr><td>
-        <%
-          var categoryName = '';
-
-          var j = 0;
-          for (; j < categories.length; j++) {
-            if (categories[j].id === post.category_id) {
-              categoryName = categories[j].name;
-            }
+    <section class="post-information">
+      <%
+        categoryName = '';
+        for (var j = 0, innerLen = categories.length; j < innerLen; j++) {
+          if (categories[j].id === post.category_id) {
+            categoryName = categories[j].name;
           }
+        }
+      %>
+      <i class="fa fa-tags"></i>
+      <a class="post-category-link" href="/posts/categories/<%= post.category_id %>">
+        <span class="post-category-name">
+          <%= categoryName %>
+        </span>
+      </a>
+      &nbsp;&nbsp;
+      <i class="fa fa-calendar"></i>
+      <span class="post-registered">
+        <%
+          var date = post.created_at;
+          var dateStr = '';
+          var monthStrArr = ['JAN', 'FAB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+          dateStr = monthStrArr[date.getMonth()] + ' ' + date.getDate() + '. ' + date.getFullYear();
         %>
-        <a class="post-category-link" href="/posts/categories/<%= post.category_id %>">
-          <span class="card-category-name main-color"><%= categoryName %></span>
-        </a>
-        <a class="post-link-title" href="/posts/<%= post.id %>">
-          <div class="card-title normal-color">
-            <%= post.title %>
-          </div>
-        </a>
-        <div class="card-info normal-color">
-          <%
-            var date = post.created_at;
-            var dateStr = '';
-            var monthStrArr = ['JAN', 'FAB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-            dateStr = monthStrArr[date.getMonth()] + ' ' + date.getDate() + '. ' + date.getFullYear();
-          %>
-          <%= dateStr %>
-        </div>
-      </td></tr></tbody></table>
-    </div>
-  </div>
+        <%= dateStr %>
+      </span>
+      <a class="post-link-title" href="/posts/<%= post.id %>">
+        <h1 class="post-title">
+          <%= post.title %>
+        </h1>
+      </a>
+      <p class="post-content"><%= post.text.length > 200 ? post.text.slice(-200) + '...' : post.text %></p>
+      <a class="" href="/posts/<%= post.id %>">Go to Link →</a>
+    </section>
+  </article>
   <% } %>
   <% if (pages > 1) { %>
   <ul class="list-layout pagination none">
     <%
       var className = '';
-
       var pageCounter = 0;
       for (; pageCounter <= pages; pageCounter++) {
         if ((pageCounter + 1) === page) {

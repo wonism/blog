@@ -59,6 +59,7 @@ import posts from './routes/posts';
 import comments from './routes/comments';
 import photos from './routes/photos';
 import portfolio from './routes/portfolio';
+import resume from './routes/resume';
 import images from './routes/images';
 import join from './routes/join';
 import usersAPI from './routes/api/users';
@@ -77,7 +78,11 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, '../public')));
-app.use(express.static(path.join(__dirname, '../dist')));
+if (process.env.NODE_ENV === 'development') {
+  app.use(express.static(path.join(__dirname, '../src')));
+} else {
+  app.use(express.static(path.join(__dirname, '../dist')));
+}
 
 app.use(logger('dev'));
 
@@ -114,6 +119,7 @@ app.use('/posts', posts);
 app.use('/comments', comments);
 app.use('/photos', photos);
 app.use('/portfolio', portfolio);
+app.use('/resume', resume);
 app.use('/images', images);
 app.use('/join', join);
 // app.use('/api/users', usersAPI);
@@ -136,41 +142,12 @@ if (app.get('env') === 'development') {
   // development error handler
   // will print stacktrace
   app.use((err, req, res, next) => {
-    let url = req.url;
-    let method = req.method;
-    let userAgent = req.headers['user-agent'];
-    let userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    let queryString = JSON.stringify(req.query);
-    let currentTime = new Date();
-
-    let mailOptions = {
-      from: 'jaewon < yocee57@gmail.com >',
-      to: 'yocee57@gmail.com', // ',' 로 받는 사람 구분
-      subject: '[Test-server Error] ' + currentTime,
-      html: '===============================<br />ERROR<br />===============================<br />' +
-          err.message.replace(/\n/g, '<br />') +
-          '<br /><br />===============================<br />ENVIRONMENT<br />===============================<br />' +
-          '* URL : ' + url + '<br />' +
-          '* METHOD : ' + method + '<br />' +
-          '* USER AGENT : ' + userAgent + '<br />' +
-          '* USER IP : ' + userIP + '<br />' +
-          '* QUERY STRING : ' + queryString
-    };
+    console.log(err.message);
 
     res.status(err.status || 500);
-    res.render('error', {
+    return res.render('error', {
       message: err.message,
       error: err
-    });
-
-    return mailer.sendMail(mailOptions, function (err, res) {
-      if (err) {
-        console.log('failed... => ' + err);
-      } else {
-        console.log('succeed... => ' + res);
-      }
-
-      mailer.close();
     });
   });
 } else {

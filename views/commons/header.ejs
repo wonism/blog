@@ -1,12 +1,14 @@
-<div id="header">
+<h1 class="invisible"><%= title %>, Github, Front-end, Back-end, Web Developer, 웹 개발자, 프론트 엔드, 개발자, 백 엔드, Node JS, Express JS, Ruby On Rails</h1>
+<header id="header">
   <a class="left-menu" href="/">
-    <img class="header-logo" src="/images/logo.png" alt="logo"/>
+    <img class="header-logo" src="/images/new_logo_black.png" alt="logo"/>
   </a>
   <ul class="list-layout list-menu">
     <li><a href="/">HOME</a></li>
     <li><a href="/posts">POST</a></li>
     <li><a href="/photos">PHOTO</a></li>
     <li><a href="/portfolio">PORTFOLIO</a></li>
+    <li class="none"><a href="/resume">RESUME</a></li>
     <% if (userId) { %>
     <li><a href="/posts/new">WRITE</a></li>
     <% } %>
@@ -33,6 +35,6 @@
       <div class="hamburger-inner"></div>
     </div>
   </div>
-</div>
+</header>
 <%- include ./navigator %>
 

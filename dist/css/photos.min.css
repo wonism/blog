@@ -1,1 +1,1 @@
-.insta-card{display:inline-block;float:left;padding:8px;width:25%}.insta-card img{width:100%;height:auto}
+.insta-card{display:inline-block;float:left;margin-top:-16px;padding:16px;width:25%}.insta-card img{width:100%;height:auto}@media screen and (max-width:768px){.insta-card{width:100%}}

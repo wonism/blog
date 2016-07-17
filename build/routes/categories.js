@@ -16,6 +16,10 @@ var _collections = require('../../db/collections');
 
 var _collections2 = _interopRequireDefault(_collections);
 
+var _config = require('../../config/config.json');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
@@ -48,8 +52,9 @@ router.get('/', isAuthor, function (req, res, next) {
     qb.orderBy('id', 'DESC');
   }).fetch().then(function (categories) {
     res.render('categories/index', {
-      req: req,
       title: '카테고리 리스트',
+      asset: 'categories',
+      mode: _config2.default.mode,
       url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
       image: req.protocol + '://' + req.headers.host + '/images/logo.png',
       description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -66,8 +71,9 @@ router.get('/', isAuthor, function (req, res, next) {
 // Form to Create Category
 router.get('/new', isAuthor, function (req, res, next) {
   res.render('categories/new', {
-    req: req,
     title: '카테고리 등록',
+    asset: 'categories',
+    mode: _config2.default.mode,
     url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
     image: req.protocol + '://' + req.headers.host + '/images/logo.png',
     description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -93,8 +99,9 @@ router.get('/:id', isAuthor, function (req, res, next) {
       res.render('404', { title: '404: Page Not Found.' });
     } else {
       res.render('categories/show', {
-        req: req,
         title: '카테고리 조회',
+        asset: 'categories',
+        mode: _config2.default.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -116,8 +123,9 @@ router.get('/update/:id', isAuthor, function (req, res, next) {
       res.render('404', { title: '404: Page Not Found.' });
     } else {
       res.render('categories/update', {
-        req: req,
         title: '카테고리 수정',
+        asset: 'categories',
+        mode: _config2.default.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -154,8 +162,9 @@ router.get('/delete/:id', isAuthor, function (req, res, next) {
       res.render('404', { title: '404: Page Not Found.' });
     } else {
       res.render('categories/delete', {
-        req: req,
         title: '카테고리 삭제',
+        asset: 'categories',
+        mode: _config2.default.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),

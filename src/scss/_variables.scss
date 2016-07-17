@@ -1,13 +1,20 @@
-$body-color: #fafafa;
+$body-color: #f3f1f1;
 $header-height: 75px;
-$main-color: #FFB5C6;
-$main-hover-color: #FCDFE5;
-$sub-color: #63714d;
-$sub-hover-color: #e2e9d4;
+$header-height-with-pad: 90px;
+$main-color: #367ABD;
+$main-hover-color: #4CB2D4;
+$bright-main-color: #4CB2D4;
+$sub-color: #30499B;
+$sub-hover-color: #2A385F;
+$dark-sub-color: #2A385F;
+$point-color: #ec4a94;
+$dark-point-color: #cc2a73;
 $black-color: #000;
 $black-hover-color: #777;
 $border-color: #e5e5e5;
-$gray-color: #aaa;
+$bright-gray-color: #f3f1f1;
+$gray-color: #ccc;
+$dark-gray-color: #555;
 $container-width: 720px;
 $footer-color: #f6f6f6;
 
@@ -22,5 +29,40 @@ $footer-color: #f6f6f6;
   -moz-border-radius: $rad;
   -webkit-border-radius: $rad;
   border-radius: $rad;
+}
+
+@mixin transparent($opacity) {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + $opacity * 10 + ")";
+  filter: alpha(opacity=$opacity * 10);
+  -o-opacity: $opacity * 0.1;
+  -mx-opacity: $opacity * 0.1;
+  -moz-opacity: $opacity * 0.1;
+  -khtml-opacity: $opacity * 0.1;
+  -webkit-opacity: $opacity * 0.1;
+  opacity: $opacity * 0.1;
+}
+
+@mixin userselect($select) {
+  -o-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@mixin appearance($appear) {
+  -o-appearance: $appear;
+  -ms-appearance: $appear;
+  -moz-appearance: $appear;
+  -webkit-appearance: $appear;
+  appearance: $appear;
+}
+
+@mixin transform($transform) {
+  -o-transform: $transform;
+  -ms-transform: $transform;
+  -moz-transform: $transform;
+  -webkit-transform: $transform;
+  transform: $transform;
 }
 

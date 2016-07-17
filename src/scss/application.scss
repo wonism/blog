@@ -8,7 +8,7 @@
   box-sizing: border-box;
 }
 
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, section, header, footer, article {
   margin: 0;
   padding: 0;
   border: 0;
@@ -16,11 +16,6 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   font-size: 100%;
   vertical-align: baseline;
   background: transparent;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
 }
 
 html {
@@ -31,7 +26,7 @@ html {
   -webkit-text-size-adjust: 100%;
   body {
     position: relative;
-    background-color: $body-color;
+    background-color: #f8f8f8;
     font-size: 62.5% !important;
   }
 }
@@ -47,6 +42,118 @@ input[type="checkbox"], input[type="radio"], input[type="search"] {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+input[type=checkbox], input[type=radio] {
+  display: none;
+}
+
+label.checkbox, label.radio {
+  position: relative;
+  padding-left: 26px;
+  cursor: pointer;
+  @include userselect(none);
+  .button {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+label.radio .button {
+  @include border-radius(50%);
+}
+
+input[type=checkbox] + label.checkbox, input[type=radio] + label.radio {
+  .button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    border: 2px solid $main-color;
+    &:after {
+      display: none;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      margin: auto;
+      width: 12px;
+      height: 6px;
+      line-height: 1;
+      border-width: 3px;
+      border-style: solid;
+      border-top: none;
+      border-right: none;
+      @include transform(rotate(-45deg));
+      content: "";
+    }
+  }
+}
+
+input[type=radio] + label.radio {
+  .button {
+    &:after {
+      width: 10px;
+      height: 10px;
+      background-color: $main-color;
+      border: none;
+      @include border-radius(50%);
+    }
+  }
+}
+
+input[type=checkbox] + label.checkbox:hover, input[type=radio] + label.radio:hover {
+  .button {
+    border-color: $bright-main-color;
+    &:after {
+      display: inline-block;
+      border-color: $bright-main-color;
+      @include transparent(3);
+    }
+  }
+}
+
+input[type=radio] + label.radio:hover {
+  .button:after {
+    background-color: $bright-main-color;
+  }
+}
+
+input[type=checkbox]:checked + label.checkbox, input[type=radio]:checked + label.radio {
+  .button {
+    border-color: $point-color;
+    &:after {
+      display: inline-block;
+      border-color: $point-color;
+      @include transparent(10);
+    }
+  }
+}
+
+input[type=radio]:checked + label.radio {
+  .button:after {
+    background-color: $point-color;
+  }
+}
+
+input[type=checkbox]:checked + label.checkbox:hover, input[type=radio]:checked + label.radio:hover {
+  .button {
+    border-color: $point-color;
+    &:after {
+      display: inline-block;
+      border-color: $point-color;
+      @include transparent(3);
+    }
+  }
+}
+
+input[type=radio]:checked + label.radio:hover {
+  .button:after {
+    background-color: $point-color;
+  }
 }
 
 button, select {
@@ -66,7 +173,7 @@ button, html input[type=button], input[type=reset], input[type=submit] {
   height: 34px;
   padding: 6px 12px;
   font-size: 14px;
-  line-height: 1.42857143;
+  line-height: 34px;
   background-color: #fff;
   background-image: none;
   border: 1px solid $border-color;
@@ -91,6 +198,17 @@ button, html input[type=button], input[type=reset], input[type=submit] {
 
 .none {
   display: none !important;
+}
+
+.invisible {
+  position: absolute;
+  margin: -1px;
+  padding: 0;
+  width: 1px;
+  height: 1px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
 }
 
 .pull-left {
@@ -129,6 +247,10 @@ button, html input[type=button], input[type=reset], input[type=submit] {
 
 .text-right {
   text-align: right;
+}
+
+.text-left {
+  text-align: left;
 }
 
 .space-top {
@@ -188,15 +310,16 @@ button, html input[type=button], input[type=reset], input[type=submit] {
   z-index: 5;
 }
 
+.transparent {
+  @include transparent(0);
+}
+
 .opacity-3 {
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
-  filter: alpha(opacity=30);
-  -o-opacity: .3;
-  -ms-opacity: .3;
-  -moz-opacity: .3;
-  -khtml-opacity: .3;
-  -webkit-opacity: .3;
-  opacity: .3;
+  @include transparent(3);
+}
+
+.not-transparent {
+  @include transparent(10);
 }
 
 a {
@@ -267,6 +390,11 @@ a {
   }
 }
 
+.clearfix, .clearfix:before, .clearfix:after {
+  display: block;
+  content: '';
+  clear: both;
+}
 
 .hamburger {
   display: inline-block;
@@ -354,6 +482,7 @@ a {
     }
   }
 }
+
 .top-slider {
   width: 100%;
   img {
@@ -364,6 +493,7 @@ a {
 }
 
 #header {
+  display: block;
   position: fixed;
   top: 0;
   left: 0;
@@ -473,10 +603,12 @@ ul.list-menu {
 
 #body-container {
   position: relative;
-  top: $header-height;
+  padding-top: $header-height-with-pad;
   margin-right: auto;
   margin-left: auto;
   padding-bottom: 48px;
+  padding-right: 10px;
+  padding-left: 10px;
   max-width: $container-width;
   min-height: 100vh;
   &.fix-in {
@@ -511,8 +643,8 @@ ul.list-layout.pagination {
 }
 
 #footer {
+  display: block;
   position: relative;
-  top: 75px;
   padding-top: 10px;
   padding-right: 16px;
   padding-bottom: 10px;
@@ -550,50 +682,44 @@ ul.list-layout.pagination {
   -webkit-touch-action: manipulation;
   touch-action: manipulation;
   cursor: pointer;
-  -o-user-select: none;
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
+  @include userselect(none);
   background-image: none;
   border: 1px solid transparent;
-  -o-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-}
-
-.btn.btn-default {
-  color: #333;
-  background-color: #fff;
-  border-color: #ccc;
-}
-
-.btn.btn-primary {
-  color: $main-color;
-  background-color: #fff;
-  border-color: $main-hover-color;
-  &:focus, &:hover, &:active {
-    background-color: $main-hover-color;
+  @include border-radius(4px);
+  &.btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
   }
-}
-
-.btn.btn-primary-reverse {
-  color: #fff;
-  background-color: $main-color;
-  border-color: $main-hover-color;
-  &:focus, &:hover, &:active {
-    background-color: $main-hover-color;
+  &.btn-ghost {
+    color: #333;
+    border-color: #ccc;
+    &:focus, &:hover, &:active {
+      color: #333;
+    }
+    &:hover {
+      color: $border-color;
+    }
   }
-}
-
-.btn.btn-radius {
-  -o-border-radius: 2em;
-  -ms-border-radius: 2em;
-  -moz-border-radius: 2em;
-  -webkit-border-radius: 2em;
-  border-radius: 2em;
+  &.btn-primary {
+    color: $main-color;
+    background-color: #fff;
+    border-color: $main-hover-color;
+    &:focus, &:hover, &:active {
+      background-color: $main-hover-color;
+    }
+  }
+  &.btn-primary-reverse {
+    color: #fff;
+    background-color: $main-color;
+    border-color: $main-hover-color;
+    &:focus, &:hover, &:active {
+      background-color: $main-hover-color;
+    }
+  }
+  &.btn-radius {
+    @include border-radius(2em);
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -617,3 +743,4 @@ ul.list-layout.pagination {
     }
   }
 }
+

@@ -5,6 +5,8 @@ import url from 'url';
 import models from '../../db/models';
 import collections from '../../db/collections';
 
+import config from '../../config/config.json';
+
 const router = express.Router();
 
 let isAuthor;
@@ -43,8 +45,9 @@ router.get('/', isAuthor, (req, res, next) => {
   .then((categories) => {
     res.render('categories/index',
         {
-          req: req,
           title: '카테고리 리스트',
+          asset: 'categories',
+          mode: config.mode,
           url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
           image: req.protocol + '://' + req.headers.host + '/images/logo.png',
           description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -64,8 +67,9 @@ router.get('/', isAuthor, (req, res, next) => {
 router.get('/new', isAuthor, (req, res, next) => {
   res.render('categories/new',
       {
-        req: req,
         title: '카테고리 등록',
+        asset: 'categories',
+        mode: config.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -98,8 +102,9 @@ router.get('/:id', isAuthor, (req, res, next) => {
     } else {
       res.render('categories/show',
           {
-            req: req,
             title: '카테고리 조회',
+            asset: 'categories',
+            mode: config.mode,
             url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -126,8 +131,9 @@ router.get('/update/:id', isAuthor, (req, res, next) => {
     } else {
       res.render('categories/update',
           {
-            req: req,
             title: '카테고리 수정',
+            asset: 'categories',
+            mode: config.mode,
             url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -174,8 +180,9 @@ router.get('/delete/:id', isAuthor, (req, res, next) => {
     } else {
       res.render('categories/delete',
           {
-            req: req,
             title: '카테고리 삭제',
+            asset: 'categories',
+            mode: config.mode,
             url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
             image: req.protocol + '://' + req.headers.host + '/images/logo.png',
             description: 'Jaewonism\'s blog'.substring(0, 255),

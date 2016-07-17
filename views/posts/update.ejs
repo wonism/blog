@@ -34,12 +34,12 @@
       <div class="title">
         <input type="text" name="title" id="title" value="<%= post.title %>"/>
       </div>
-      <div class="html">
+      <section class="html">
         <div id="html-editor"></div>
         <!--textarea name="html" id="html" resizable="false"><%- post.html %></textarea-->
-      </div>
+      </section>
       <div class="tags space-top">
-        <span class="tag">TAGS</span>
+        <span class="tag">TAGS : </span>
         <%
           var tagStr, i;
 
@@ -63,8 +63,8 @@
         %>
       </div>
       <div class="space-top">
-        <input class="btn btn-primary rm-margin" type="submit" value="저장".>
-        <a class="btn btn-primary rm-margin" href="/posts?page=<%= page %>">리스트로 돌아가기</a>
+        <input class="btn btn-ghost rm-style-button rm-margin" type="submit" value="저장".>
+        <a class="btn btn-ghost rm-margin" href="/posts?page=<%= page %>">리스트로 돌아가기</a>
       </div>
     </form>
   </div>

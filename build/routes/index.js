@@ -16,6 +16,10 @@ var _collections = require('../../db/collections');
 
 var _collections2 = _interopRequireDefault(_collections);
 
+var _config = require('../../config/config.json');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
@@ -71,8 +75,9 @@ router.get('/', getCategories, function (req, res, next) {
       });
     } else {
       res.render('index', {
-        req: req,
         title: 'Jaewonism',
+        asset: 'main',
+        mode: _config2.default.mode,
         url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
         image: req.protocol + '://' + req.headers.host + '/images/logo.png',
         description: 'Jaewonism\'s blog'.substring(0, 255),
@@ -111,7 +116,7 @@ router.get('/', (req, res, next) => {
         console.error('err : ' + err);
       }
 
-      res.render('index', { req: req, title: 'test', userId: req.user ? req.user.user_id : null, isRoot: true, rows: rows });
+      res.send(rows);
       conn.release();
     });
   });
