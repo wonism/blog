@@ -1,91 +1,57 @@
-$main-color: #FFB5C6;
-$main-hover-color: #FCDFE5;
-$sub-color: #63714d;
-$sub-hover-color: #e2e9d4;
-$black-color: #000;
-$black-hover-color: #777;
-$gray-color: #aaa;
-$border-color: #e5e5e5;
+@import 'variables';
 
-#body-container {
-  .post:first-child {
-    border-top-width: 0;
+.post {
+  position: relative;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid $border-color;
+}
+
+.post-title {
+  font-size: 36px;
+  color: #333;
+  cursor: pointer;
+  &:active, &:visited, &:focus {
+    color: #333;
+  }
+  &:hover {
+    color: $main-color;
+  }
+  .title {
+    margin-bottom: 4px;
+    font-weight: 400;
   }
 }
 
-.post {
-  display: block;
-  position: relative;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  border-top: 1px solid $border-color;
-  &.no-post {
-    padding-top: 75px;
-    padding-bottom: 75px;
-    font-size: 12px;
-    text-align: center;
-    border: 0;
+.post-summary {
+  color: #777;
+  font-size: 12px;
+  .fa {
+    margin-right: 2px;
   }
-  .post-thumbnail {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 16px;
-    bottom: 0;
-    margin-top: auto;
-    margin-bottom: auto;
-    width: 20%;
-    height: auto;
-    -o-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
-    &:hover, &.active {
-      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
-      filter: alpha(opacity=70);
-      -o-opacity: .7;
-      -ms-opacity: .7;
-      -moz-opacity: .7;
-      -khtml-opacity: .7;
-      -webkit-opacity: .7;
-      opacity: .7;
-    }
-  }
-  .post-summary {
-    padding-left: 30%;
-    padding-right: 16px;
-  }
-  .post-category-name {
-    display: inline-block;
-    margin-bottom: .1em;
-    margin-left: 16px;
-    padding-top: .2em;
-    padding-right: .2em;
-    padding-bottom: .2em;
-    padding-left: .2em;
-    line-height: 1em;
-    font-size: 1.4em;
-    border-bottom: 1px solid transparent;
-    letter-spacing: 2px;
-    &:hover, &:active {
-      border-bottom: 1px solid $sub-hover-color;
-    }
-  }
-  .post-title {
-    padding-left: 16px;
-    font-size: 3em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .post-info {
-    padding-top: 4px;
-    padding-left: 16px;
-    color: $gray-color;
-    font-size: 1.4em;
-    letter-spacing: 2px;
-  }
+}
+
+.content {
+  margin-bottom: 10px;
+  color: #666;
+  font-size: 16px;
+  font-weight: 200;
+}
+
+.category-name {
+  display: inline-block;
+  padding-right: 1px;
+  padding-left: 1px;
+  line-height: 1.1em;
+  color: #777 !important;
+  font-size: 12px;
+  border-bottom: 1px solid #777;
+  // @include border-radius(10px);
+}
+
+.post-writed {
+  line-height: 1.1em;
+  border-bottom: 1px solid transparent;
 }
 
 .post-background-preview {
@@ -147,10 +113,11 @@ $border-color: #e5e5e5;
 
 #post {
   .category {
-    color: $sub-color;
-    font-size: 2em;
+    color: #333;
+    font-size: 16px;
   }
   .title {
+    margin-bottom: 40px;
     font-size: 4em;
     .created-at {
       font-size: .3em;
@@ -160,44 +127,35 @@ $border-color: #e5e5e5;
   .html {
     font-size: 14px;
   }
-  .tags {
-    font-size: 12px;
-    span.tag {
-      display: inline-block;
-      position: relative;
-      margin-right: 5px;
-      padding-top: 2px;
-      padding-right: 5px;
-      padding-bottom: 2px;
-      padding-left: 5px;
-      line-height: 1.5em;
-      color: $sub-color;
-      background-color: #fff;
-      font-size: 12px;
-      border: 1px solid $sub-color;
-      -o-border-radius: 4px;
-      -ms-border-radius: 4px;
-      -moz-border-radius: 4px;
-      -webkit-border-radius: 4px;
-      border-radius: 4px;
-      letter-spacing: 1px;
-    }
-    input {
-      padding-top: 2px;
-      padding-bottom: 2px;
-      height: auto;
-      line-height: 1.5em;
-      font-size: 12px;
-    }
-    a.tag {
-      display: inline-block;
-      padding-top: 4px;
-      padding-right: 8px;
-      padding-bottom: 4px;
-    }
-  }
   .managing-buttons {
     margin-top: 32px;
+  }
+}
+
+.tags {
+  margin-top: 32px;
+  font-size: 12px;
+  span.tag {
+    display: inline-block;
+    position: relative;
+    margin-right: 5px;
+    line-height: 1.5em;
+    color: #333;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  input {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: auto;
+    line-height: 1.5em;
+    font-size: 12px;
+  }
+  a.tag {
+    display: inline-block;
+    padding-top: 4px;
+    padding-right: 8px;
+    padding-bottom: 4px;
   }
 }
 
@@ -328,9 +286,9 @@ form {
 
 .search-wrapper {
   position: relative;
-  padding-top: 32px;
+  margin-bottom: 30px;
+  padding-top: 16px;
   padding-bottom: 16px;
-  height: 84px;
   input[type="text"], select {
     width: 100%;
   }
@@ -351,3 +309,6 @@ form {
   }
 }
 
+#body-container.show-post {
+  padding-top: 75px;
+}

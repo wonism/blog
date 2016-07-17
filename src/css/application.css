@@ -22,7 +22,7 @@ html {
   -webkit-text-size-adjust: 100%; }
   html body {
     position: relative;
-    background-color: #f3f1f1;
+    background-color: #f8f8f8;
     font-size: 62.5% !important; }
 
 table {
@@ -550,6 +550,8 @@ ul.list-menu {
   margin-right: auto;
   margin-left: auto;
   padding-bottom: 48px;
+  padding-right: 10px;
+  padding-left: 10px;
   max-width: 720px;
   min-height: 100vh; }
   #body-container.fix-in {
@@ -626,6 +628,13 @@ ul.list-layout.pagination {
     color: #333;
     background-color: #fff;
     border-color: #ccc; }
+  .btn.btn-ghost {
+    color: #333;
+    border-color: #ccc; }
+    .btn.btn-ghost:focus, .btn.btn-ghost:hover, .btn.btn-ghost:active {
+      color: #333; }
+    .btn.btn-ghost:hover {
+      color: #e5e5e5; }
   .btn.btn-primary {
     color: #367ABD;
     background-color: #fff;

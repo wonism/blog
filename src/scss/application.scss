@@ -26,7 +26,7 @@ html {
   -webkit-text-size-adjust: 100%;
   body {
     position: relative;
-    background-color: $body-color;
+    background-color: #f8f8f8;
     font-size: 62.5% !important;
   }
 }
@@ -607,6 +607,8 @@ ul.list-menu {
   margin-right: auto;
   margin-left: auto;
   padding-bottom: 48px;
+  padding-right: 10px;
+  padding-left: 10px;
   max-width: $container-width;
   min-height: 100vh;
   &.fix-in {
@@ -688,6 +690,16 @@ ul.list-layout.pagination {
     color: #333;
     background-color: #fff;
     border-color: #ccc;
+  }
+  &.btn-ghost {
+    color: #333;
+    border-color: #ccc;
+    &:focus, &:hover, &:active {
+      color: #333;
+    }
+    &:hover {
+      color: $border-color;
+    }
   }
   &.btn-primary {
     color: $main-color;

@@ -25,35 +25,19 @@ div.join-form {
     right: 0;
     color: #E63948; }
 
-.oauth-login {
+a.oauth-login {
   display: block;
   margin-bottom: .6em;
   width: 100%;
   max-width: 260px;
   height: 2.4em;
   line-height: 2.4em;
-  color: #fff;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 300;
   text-align: center;
+  border: 1px solid #333;
   -ms-border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
   clear: both; }
-  .oauth-login.facebook {
-    color: #fff;
-    background-color: #3B5998; }
-  .oauth-login.twitter {
-    background-color: #1da1f2; }
-  .oauth-login.google {
-    background-color: #D73D32; }
-  .oauth-login.kakao {
-    color: #3C1E1E;
-    background-color: #FFEB00; }
-    .oauth-login.kakao:hover {
-      color: #3C1E1E; }
-  .oauth-login.naver {
-    background-color: #23B300; }
-  .oauth-login:hover {
-    color: #fff; }

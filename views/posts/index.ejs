@@ -10,7 +10,7 @@
         <option value="0"<% if (categoryId >> 0 === 0) { %> selected="selected"<% } %>>전체 카테고리</option>
         <%
           var categoryCounter = 0;
-          for(; categoryCounter < categories.length; categoryCounter++) {
+          for (; categoryCounter < categories.length; categoryCounter++) {
             cate = categories[categoryCounter];
         %>
         <option value="<%= cate.id %>"<% if (cate.id >> 0 === categoryId >> 0) { %> selected="selected"<% } %>><%= cate.name %></option>
@@ -27,16 +27,44 @@
   <% } %>
   <%
     var postCounter = 0;
-    for(; postCounter < posts.length; postCounter++) {
+    for (; postCounter < posts.length; postCounter++) {
       post = posts[postCounter];
   %>
-  <div class="post">
-    <% if (post.thumbnail) { %>
-    <a class="pull-left" href="/posts/<%= post.id %>?page=<%= page %>">
-      <img class="post-thumbnail" src="<%- post.thumbnail %>" alt="post thumbnail"/>
-    </a>
-    <% } %>
-    <div class="post-summary">
+  <article class="post clearfix">
+    <section class="post-summary pull-left">
+      <%
+        var categoryName = '';
+
+        categoryCounter = 0;
+        for (; categoryCounter < categories.length; categoryCounter++) {
+          if (categories[categoryCounter].id === post.category_id) {
+            categoryName = categories[categoryCounter].name;
+          }
+        }
+
+        var date = post.created_at;
+        var dateStr = '';
+        var monthStrArr = ['JAN', 'FAB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        dateStr = monthStrArr[date.getMonth()] + ' ' + date.getDate() + '. ' + date.getFullYear();
+      %>
+      <a class="post-title" href="/posts/<%= post.id %>?page=<%= page %>">
+        <h1 class="title">
+          <%= post.title %>
+        </h1>
+      </a>
+      <p class="content"><%= post.text.length > 200 ? post.text.slice(-200) + '...' : post.text %></p>
+      <a class="post-category" href="/posts/categories/<%= post.category_id %>">
+        <span class="category-name">
+          <%= categoryName %>
+        </span>
+      </a>
+      &nbsp;&nbsp;
+      <i class="fa fa-calendar"></i>
+      <span class="post-writed">
+        <%= dateStr %>
+      </span>
+    </section>
+    <div class="post-summary none">
       <%
         var categoryName = '';
 
@@ -65,7 +93,7 @@
         <%= dateStr %>
       </div>
     </div>
-  </div>
+  </article>
   <% } %>
   <% if (false) { %>
   <div class="search-wrapper">
@@ -79,7 +107,7 @@
   <% } %>
   <div class="new-post-wrapper">
     <div class="col-sm-12 text-right">
-      <a class="btn btn-primary rm-margin" href="/posts/new">포스트 등록</a>
+      <a class="btn btn-ghost rm-margin" href="/posts/new">포스트 등록</a>
     </div>
   </div>
   <% if (pages > 1) { %>
