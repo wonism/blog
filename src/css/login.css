@@ -1,0 +1,58 @@
+#login-form {
+  padding-top: 32px;
+  padding-left: 16px; }
+  #login-form .form-control {
+    position: relative;
+    max-width: 260px; }
+
+div.login-form {
+  padding-left: 16px; }
+
+.oauth-login {
+  display: block;
+  margin-bottom: .6em;
+  width: 100%;
+  max-width: 260px;
+  height: 2.4em;
+  line-height: 2.4em;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  -ms-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  clear: both; }
+  .oauth-login.facebook {
+    background-color: #3B5998; }
+  .oauth-login.twitter {
+    background-color: #1da1f2; }
+  .oauth-login.google {
+    background-color: #D73D32; }
+  .oauth-login.kakao {
+    color: #3C1E1E;
+    background-color: #FFEB00; }
+    .oauth-login.kakao:hover {
+      color: #3C1E1E; }
+  .oauth-login.naver {
+    background-color: #23B300; }
+  .oauth-login:hover {
+    color: #fff; }
+
+.default-input {
+  margin-top: 3px;
+  width: 100%;
+  max-width: 260px;
+  line-height: 1.7em;
+  font-size: 13px; }
+
+.form-control {
+  margin-bottom: 10px; }
+  .form-control label {
+    font-size: 13px;
+    letter-spacing: 2px; }
+  .form-control span {
+    position: absolute;
+    right: 0;
+    color: #E63948; }
