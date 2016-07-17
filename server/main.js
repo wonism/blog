@@ -78,7 +78,7 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, '../public')));
-if (process.env.NODE_ENV === 'development') {
+if (false && process.env.NODE_ENV === 'development') {
   app.use(express.static(path.join(__dirname, '../src')));
 } else {
   app.use(express.static(path.join(__dirname, '../dist')));
