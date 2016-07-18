@@ -5,12 +5,14 @@
   margin-bottom: 40px;
   padding-bottom: 40px;
   border-bottom: 1px solid $border-color;
+  overflow: hidden;
 }
 
 .post-title {
   font-size: 36px;
   color: #333;
   cursor: pointer;
+  overflow: hidden;
   &:active, &:visited, &:focus {
     color: #333;
   }
@@ -26,6 +28,7 @@
 .post-summary {
   color: #777;
   font-size: 12px;
+  overflow: hidden;
   .fa {
     margin-right: 2px;
   }
@@ -36,6 +39,7 @@
   color: #666;
   font-size: 16px;
   font-weight: 200;
+  overflow: hidden;
 }
 
 .category-name {

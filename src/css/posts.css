@@ -2,12 +2,14 @@
   position: relative;
   margin-bottom: 40px;
   padding-bottom: 40px;
-  border-bottom: 1px solid #e5e5e5; }
+  border-bottom: 1px solid #e5e5e5;
+  overflow: hidden; }
 
 .post-title {
   font-size: 36px;
   color: #333;
-  cursor: pointer; }
+  cursor: pointer;
+  overflow: hidden; }
   .post-title:active, .post-title:visited, .post-title:focus {
     color: #333; }
   .post-title:hover {
@@ -18,7 +20,8 @@
 
 .post-summary {
   color: #777;
-  font-size: 12px; }
+  font-size: 12px;
+  overflow: hidden; }
   .post-summary .fa {
     margin-right: 2px; }
 
@@ -26,7 +29,8 @@
   margin-bottom: 10px;
   color: #666;
   font-size: 16px;
-  font-weight: 200; }
+  font-weight: 200;
+  overflow: hidden; }
 
 .category-name {
   display: inline-block;

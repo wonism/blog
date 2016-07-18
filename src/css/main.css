@@ -1,5 +1,6 @@
 .post-card {
-  font-size: 16px; }
+  font-size: 16px;
+  overflow: hidden; }
 
 .post-image-link:hover {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
@@ -16,10 +17,13 @@
 
 .post-information {
   margin-top: 16px;
-  margin-bottom: 24px; }
+  margin-bottom: 24px;
+  overflow: hidden; }
 
 .post-title {
-  font-size: 32px; }
+  font-size: 32px;
+  overflow: hidden; }
 
 .post-content {
-  margin-bottom: 4px; }
+  margin-bottom: 4px;
+  overflow: hidden; }
