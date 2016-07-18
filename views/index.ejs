@@ -43,7 +43,7 @@
           <%= post.title %>
         </h1>
       </a>
-      <p class="post-content"><%= post.text.length > 200 ? post.text.slice(-200) + '...' : post.text %></p>
+      <p class="post-content"><%= post.text.replace(/\&\#?\w{2,4}\;/g, '').length > 200 ? post.text.replace(/\&\#?\w{2,4}\;/g, '').slice(0, 200) + '...' : post.text.replace(/\&\#?\w{2,4}\;/g, '') %></p>
       <a class="" href="/posts/<%= post.id %>">Go to Link →</a>
     </section>
   </article>

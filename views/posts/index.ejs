@@ -52,7 +52,7 @@
           <%= post.title %>
         </h1>
       </a>
-      <p class="content"><%= post.text.length > 200 ? post.text.slice(-200) + '...' : post.text %></p>
+      <p class="content"><%= post.text.replace(/\&\#?\w{2,4}\;/g, '').length > 200 ? post.text.replace(/\&\#?\w{2,4}\;/g, '').slice(0, 200) + '...' : post.text %></p>
       <a class="post-category" href="/posts/categories/<%= post.category_id %>">
         <span class="category-name">
           <%= categoryName %>
