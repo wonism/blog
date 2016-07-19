@@ -171,20 +171,22 @@ _passport2.default.use(new FacebookStrategy({
   profileFields: ['id', 'displayName', 'photos', 'email']
 }, function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
-    _models2.default.User.forge({ email: profile._json.email }).fetch().then(function (user) {
+    var profileJson = profile._json;
+
+    _models2.default.User.forge({ email: profileJson.email }).fetch().then(function (user) {
       if (user) {
         return done(null, user);
       } else {
         (function () {
-          var user_id = profile._json.id + '@facebook.com';
-          var email = profile._json.email || profile._json.id + '@facebook.com';
-          var name = profile._json.name;
-          var image = profile._json.picture.data.url;
+          var user_id = profileJson.id + '@facebook.com';
+          var email = profileJson.email || profileJson.id + '@facebook.com';
+          var name = profileJson.name;
+          var image = profileJson.picture.data.url;
           _bcrypt2.default.genSalt(8, function (err, salt) {
             var password = salt;
             _bcrypt2.default.hash(password, salt, function (err, hash) {
               password = hash;
-              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'facebook', image: image }).save().then(function (user) {
+              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'facebook', image: image }).save().then(function (user) {
                 return done(null, user);
               }).catch(function (err) {
                 return done(err, null);
@@ -205,20 +207,22 @@ _passport2.default.use(new TwitterStrategy({
   callbackURL: _config2.default.oauth.twitter.callbackurl
 }, function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
-    _models2.default.User.forge({ email: profile._json.id_str + '@twitter.com' }).fetch().then(function (user) {
+    var profileJson = profile._json;
+
+    _models2.default.User.forge({ email: profileJson.id_str + '@twitter.com' }).fetch().then(function (user) {
       if (user) {
         return done(null, user);
       } else {
         (function () {
-          var user_id = profile._json.id_str + '@twitter.com';
-          var email = profile._json.id_str + '@twitter.com';
-          var name = profile._json.name;
-          var image = profile._json.profile_image_url.replace(/$https?/, '').replace(/normal.jpg$/, '400x400.jpg');
+          var user_id = profileJson.id_str + '@twitter.com';
+          var email = profileJson.id_str + '@twitter.com';
+          var name = profileJson.name;
+          var image = profileJson.profile_image_url.replace(/$https?/, '').replace(/normal.jpg$/, '400x400.jpg');
           _bcrypt2.default.genSalt(8, function (err, salt) {
             var password = salt;
             _bcrypt2.default.hash(password, salt, function (err, hash) {
               password = hash;
-              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'twitter', image: image }).save().then(function (user) {
+              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'twitter', image: image }).save().then(function (user) {
                 return done(null, user);
               }).catch(function (err) {
                 return done(err, null);
@@ -239,20 +243,22 @@ _passport2.default.use(new GoogleStrategy({
   callbackURL: _config2.default.oauth.google.callbackurl
 }, function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
-    _models2.default.User.forge({ email: profile._json.emails.length ? profile._json.emails[0].value : profile._json.id + '@googleplus.com' }).fetch().then(function (user) {
+    var profileJson = profile._json;
+
+    _models2.default.User.forge({ email: profileJson.emails.length ? profileJson.emails[0].value : profileJson.id + '@googleplus.com' }).fetch().then(function (user) {
       if (user) {
         return done(null, user);
       } else {
         (function () {
-          var user_id = profile._json.id + '@googleplus.com';
-          var email = profile._json.emails.length ? profile._json.emails[0].value : profile._json.id + '@googleplus.com';
-          var name = profile._json.displayName;
-          var image = profile._json.image.isDefault ? '' : profile._json.image.url.replace(/$https?/, '').replace(/\?sz=\d{1,}$/, '');
+          var user_id = profileJson.id + '@googleplus.com';
+          var email = profileJson.emails.length ? profileJson.emails[0].value : profileJson.id + '@googleplus.com';
+          var name = profileJson.displayName;
+          var image = profileJson.image.isDefault ? '' : profileJson.image.url.replace(/$https?/, '').replace(/\?sz=\d{1,}$/, '');
           _bcrypt2.default.genSalt(8, function (err, salt) {
             var password = salt;
             _bcrypt2.default.hash(password, salt, function (err, hash) {
               password = hash;
-              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'google', image: image }).save().then(function (user) {
+              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'google', image: image }).save().then(function (user) {
                 return done(null, user);
               }).catch(function (err) {
                 return done(err, null);
@@ -272,20 +278,22 @@ _passport2.default.use(new KakaoStrategy({
   callbackURL: _config2.default.oauth.kakao.callbackurl
 }, function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
-    _models2.default.User.forge({ email: profile._json.id + '@kakao.com' }).fetch().then(function (user) {
+    var profileJson = profile._json;
+
+    _models2.default.User.forge({ email: profileJson.id + '@kakao.com' }).fetch().then(function (user) {
       if (user) {
         return done(null, user);
       } else {
         (function () {
-          var user_id = profile._json.id + '@kakao.com';
-          var email = profile._json.id + '@kakao.com';
-          var name = profile._json.properties.nickname;
-          var image = profile._json.properties.profile_image;
+          var user_id = profileJson.id + '@kakao.com';
+          var email = profileJson.id + '@kakao.com';
+          var name = profileJson.properties.nickname;
+          var image = profileJson.properties.profile_image;
           _bcrypt2.default.genSalt(8, function (err, salt) {
             var password = salt;
             _bcrypt2.default.hash(password, salt, function (err, hash) {
               password = hash;
-              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'kakao', image: image }).save().then(function (user) {
+              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'kakao', image: image }).save().then(function (user) {
                 return done(null, user);
               }).catch(function (err) {
                 return done(err, null);
@@ -306,20 +314,22 @@ _passport2.default.use(new NaverStrategy({
   callbackURL: _config2.default.oauth.naver.callbackurl
 }, function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
-    _models2.default.User.forge({ email: profile._json.id + '@naver.com' }).fetch().then(function (user) {
+    var profileJson = profileJson;
+
+    _models2.default.User.forge({ email: profileJson.id + '@naver.com' }).fetch().then(function (user) {
       if (user) {
         return done(null, user);
       } else {
         (function () {
-          var user_id = profile._json.id + '@naver.com';
-          var email = profile._json.id + '@naver.com';
-          var name = profile._json.properties.nickname;
-          var image = profile._json.properties.profile_image;
+          var user_id = profileJson.id + '@naver.com';
+          var email = profileJson.id + '@naver.com';
+          var name = profileJson.properties.nickname;
+          var image = profileJson.properties.profile_image;
           _bcrypt2.default.genSalt(8, function (err, salt) {
             var password = salt;
             _bcrypt2.default.hash(password, salt, function (err, hash) {
               password = hash;
-              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'naver', image: image }).save().then(function (user) {
+              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'naver', image: image }).save().then(function (user) {
                 return done(null, user);
               }).catch(function (err) {
                 return done(err, null);

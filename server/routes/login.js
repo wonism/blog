@@ -142,21 +142,23 @@ passport.use(new FacebookStrategy({
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(() => {
-      models.User.forge({ email: profile._json.email })
+      let profileJson = profile._json;
+
+      models.User.forge({ email: profileJson.email })
       .fetch()
       .then((user) => {
         if (user) {
           return done(null, user);
         } else {
-          let user_id = profile._json.id + '@facebook.com';
-          let email = profile._json.email || profile._json.id + '@facebook.com';
-          let name = profile._json.name;
-          let image = profile._json.picture.data.url;
+          let user_id = profileJson.id + '@facebook.com';
+          let email = profileJson.email || profileJson.id + '@facebook.com';
+          let name = profileJson.name;
+          let image = profileJson.picture.data.url;
           bcrypt.genSalt(8, (err, salt) => {
             let password = salt;
             bcrypt.hash(password, salt, (err, hash) => {
               password = hash;
-              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'facebook', image: image })
+              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'facebook', image: image })
               .save()
               .then((user) => {
                 return done(null, user);
@@ -182,21 +184,23 @@ passport.use(new TwitterStrategy({
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(() => {
-      models.User.forge({ email: profile._json.id_str + '@twitter.com' })
+      let profileJson = profile._json;
+
+      models.User.forge({ email: profileJson.id_str + '@twitter.com' })
       .fetch()
       .then((user) => {
         if (user) {
           return done(null, user);
         } else {
-          let user_id = profile._json.id_str + '@twitter.com';
-          let email = profile._json.id_str + '@twitter.com';
-          let name = profile._json.name;
-          let image = profile._json.profile_image_url.replace(/$https?/, '').replace(/normal.jpg$/, '400x400.jpg');
+          let user_id = profileJson.id_str + '@twitter.com';
+          let email = profileJson.id_str + '@twitter.com';
+          let name = profileJson.name;
+          let image = profileJson.profile_image_url.replace(/$https?/, '').replace(/normal.jpg$/, '400x400.jpg');
           bcrypt.genSalt(8, (err, salt) => {
             let password = salt;
             bcrypt.hash(password, salt, (err, hash) => {
               password = hash;
-              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'twitter', image: image })
+              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'twitter', image: image })
               .save()
               .then((user) => {
                 return done(null, user);
@@ -222,21 +226,23 @@ passport.use(new GoogleStrategy({
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(() => {
-      models.User.forge({ email: (profile._json.emails.length ? profile._json.emails[0].value : profile._json.id + '@googleplus.com') })
+      let profileJson = profile._json;
+
+      models.User.forge({ email: (profileJson.emails.length ? profileJson.emails[0].value : profileJson.id + '@googleplus.com') })
       .fetch()
       .then((user) => {
         if (user) {
           return done(null, user);
         } else {
-          let user_id = profile._json.id + '@googleplus.com';
-          let email = (profile._json.emails.length ? profile._json.emails[0].value : profile._json.id + '@googleplus.com');
-          let name = profile._json.displayName;
-          let image = (profile._json.image.isDefault ? '' : profile._json.image.url.replace(/$https?/, '').replace(/\?sz=\d{1,}$/, ''));
+          let user_id = profileJson.id + '@googleplus.com';
+          let email = (profileJson.emails.length ? profileJson.emails[0].value : profileJson.id + '@googleplus.com');
+          let name = profileJson.displayName;
+          let image = (profileJson.image.isDefault ? '' : profileJson.image.url.replace(/$https?/, '').replace(/\?sz=\d{1,}$/, ''));
           bcrypt.genSalt(8, (err, salt) => {
             let password = salt;
             bcrypt.hash(password, salt, (err, hash) => {
               password = hash;
-              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'google', image: image })
+              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'google', image: image })
               .save()
               .then((user) => {
                 return done(null, user);
@@ -261,21 +267,23 @@ passport.use(new KakaoStrategy({
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(() => {
-      models.User.forge({ email: profile._json.id + '@kakao.com' })
+      let profileJson = profile._json;
+
+      models.User.forge({ email: profileJson.id + '@kakao.com' })
       .fetch()
       .then((user) => {
         if (user) {
           return done(null, user);
         } else {
-          let user_id = profile._json.id + '@kakao.com';
-          let email = profile._json.id + '@kakao.com';
-          let name = profile._json.properties.nickname;
-          let image = profile._json.properties.profile_image;
+          let user_id = profileJson.id + '@kakao.com';
+          let email = profileJson.id + '@kakao.com';
+          let name = profileJson.properties.nickname;
+          let image = profileJson.properties.profile_image;
           bcrypt.genSalt(8, (err, salt) => {
             let password = salt;
             bcrypt.hash(password, salt, (err, hash) => {
               password = hash;
-              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'kakao', image: image })
+              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'kakao', image: image })
               .save()
               .then((user) => {
                 return done(null, user);
@@ -301,21 +309,23 @@ passport.use(new NaverStrategy({
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(() => {
-      models.User.forge({ email: profile._json.id + '@naver.com' })
+      let profileJson = profileJson;
+
+      models.User.forge({ email: profileJson.id + '@naver.com' })
       .fetch()
       .then((user) => {
         if (user) {
           return done(null, user);
         } else {
-          let user_id = profile._json.id + '@naver.com';
-          let email = profile._json.id + '@naver.com';
-          let name = profile._json.properties.nickname;
-          let image = profile._json.properties.profile_image;
+          let user_id = profileJson.id + '@naver.com';
+          let email = profileJson.id + '@naver.com';
+          let name = profileJson.properties.nickname;
+          let image = profileJson.properties.profile_image;
           bcrypt.genSalt(8, (err, salt) => {
             let password = salt;
             bcrypt.hash(password, salt, (err, hash) => {
               password = hash;
-              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, level: 99, from: 'naver', image: image })
+              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'naver', image: image })
               .save()
               .then((user) => {
                 return done(null, user);
