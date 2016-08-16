@@ -5,7 +5,7 @@ const router = express.Router();
 // Form to Login
 router.get('/', (req, res, next) => {
   req.logout();
-  res.redirect('/');
+  return res.redirect('/');
 });
 
 module.exports = router;

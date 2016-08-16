@@ -2,9 +2,9 @@ import express from 'express';
 
 import url from 'url';
 import bcrypt from 'bcrypt';
+import moment from 'moment-timezone';
 
-import models from '../../db/models';
-import collections from '../../db/collections';
+import models from '../../models';
 
 import passport from 'passport';
 import passportLocal from 'passport-local';
@@ -25,22 +25,19 @@ let GoogleStrategy = passportGoogle.OAuth2Strategy;
 let KakaoStrategy = passportKakao.Strategy;
 let NaverStrategy = passportNaver.Strategy;
 
-let refer = '/';
-
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   } else {
-    res.redirect('/login');
+    return res.redirect('/login');
   }
 }
 
 // Form to Login
 router.get('/', (req, res, next) => {
-  refer = req.headers.referer;
   let flash = req.flash('auth');
   flash = flash.length ? flash : req.flash('error');
-  res.render('login/index',
+  return res.render('login/index',
       {
         title: '로그인',
         asset: 'login',
@@ -56,13 +53,7 @@ router.get('/', (req, res, next) => {
   );
 });
 
-router.post('/', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), (req, res, next) => {
-  if (refer) {
-    return res.redirect(refer);
-  } else {
-    return res.redirect('/');
-  }
-});
+router.post('/', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true }));
 
 router.get('/oauth/facebook', passport.authenticate('facebook', {
   scope: ['public_profile', 'email']
@@ -104,7 +95,7 @@ router.get('/oauth/naver/callback', passport.authenticate('naver', {
 }));
 
 router.get('/failed', ensureAuthenticated, (req, res) => {
-  res.send('failed');
+  return res.send('failed');
 });
 
 passport.use(new LocalStrategy(
@@ -113,24 +104,26 @@ passport.use(new LocalStrategy(
     passwordField: 'password'
   },
   function (user_id, password, done) {
-    models.User.forge({ user_id: user_id })
-    .fetch()
-    .then((user) => {
-      if (user) {
-        bcrypt.compare(password, user.toJSON().password, (err, success) => {
-          if (success) {
-            return done(null, { id: user.id });
-          } else {
-            return done(null, false, { message: 'ID 혹은 비밀번호가 잘못되었습니다.' });
-          }
-        });
-      } else {
-        return done(null, false, { message: 'ID 혹은 비밀번호가 잘못되었습니다.' });
-      }
-    })
-    .catch((err) => {
-      return done(err, null);
-    });
+    models.users
+      .find({
+        where: { user_id: user_id }
+      })
+      .then((user) => {
+        if (user) {
+          bcrypt.compare(password, user.toJSON().password, (err, success) => {
+            if (success) {
+              return done(null, { id: user.id });
+            } else {
+              return done(null, false, { message: 'ID 혹은 비밀번호가 잘못되었습니다.' });
+            }
+          });
+        } else {
+          return done(null, false, { message: 'ID 혹은 비밀번호가 잘못되었습니다.' });
+        }
+      })
+      .catch((err) => {
+        return done(err, null);
+      });
   }
 ));
 
@@ -144,35 +137,52 @@ passport.use(new FacebookStrategy({
     process.nextTick(() => {
       let profileJson = profile._json;
 
-      models.User.forge({ email: profileJson.email })
-      .fetch()
-      .then((user) => {
-        if (user) {
-          return done(null, user);
-        } else {
-          let user_id = profileJson.id + '@facebook.com';
-          let email = profileJson.email || profileJson.id + '@facebook.com';
-          let name = profileJson.name;
-          let image = profileJson.picture.data.url;
-          bcrypt.genSalt(8, (err, salt) => {
-            let password = salt;
-            bcrypt.hash(password, salt, (err, hash) => {
-              password = hash;
-              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'facebook', image: image })
-              .save()
-              .then((user) => {
-                return done(null, user);
-              })
-              .catch((err) => {
-                return done(err, null);
+      models.users
+        .find({
+          where: { email: profileJson.email }
+        })
+        .then((user) => {
+          if (user) {
+            return done(null, user);
+          } else {
+            let user_id = profileJson.id + '@facebook.com';
+            let email = profileJson.email || profileJson.id + '@facebook.com';
+            let name = profileJson.name;
+            let image = profileJson.picture.data.url;
+            bcrypt.genSalt(8, (err, salt) => {
+              let password = salt;
+              bcrypt.hash(password, salt, (err, hash) => {
+                let dateStr = moment.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
+                password = hash;
+
+                models.users
+                  .create({
+                    user_id: user_id,
+                    name: name,
+                    email: email,
+                    password: password,
+                    salt: salt,
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
+                    level: 9,
+                    from: 'facebook',
+                    image: image,
+                    created_at: dateStr,
+                    updated_at: dateStr
+                  })
+                  .then((user) => {
+                    return done(null, user);
+                  })
+                  .catch((err) => {
+                    return done(err, null);
+                  });
               });
             });
-          });
-        }
-      })
-      .catch((err) => {
-        return done(err, null);
-      });
+          }
+        })
+        .catch((err) => {
+          return done(err, null);
+        });
     });
   }
 ));
@@ -186,35 +196,52 @@ passport.use(new TwitterStrategy({
     process.nextTick(() => {
       let profileJson = profile._json;
 
-      models.User.forge({ email: profileJson.id_str + '@twitter.com' })
-      .fetch()
-      .then((user) => {
-        if (user) {
-          return done(null, user);
-        } else {
-          let user_id = profileJson.id_str + '@twitter.com';
-          let email = profileJson.id_str + '@twitter.com';
-          let name = profileJson.name;
-          let image = profileJson.profile_image_url.replace(/$https?/, '').replace(/normal.jpg$/, '400x400.jpg');
-          bcrypt.genSalt(8, (err, salt) => {
-            let password = salt;
-            bcrypt.hash(password, salt, (err, hash) => {
-              password = hash;
-              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'twitter', image: image })
-              .save()
-              .then((user) => {
-                return done(null, user);
-              })
-              .catch((err) => {
-                return done(err, null);
+      models.users
+        .find({
+          where: { email: profileJson.id_str + '@twitter.com' }
+        })
+        .then((user) => {
+          if (user) {
+            return done(null, user);
+          } else {
+            let user_id = profileJson.id_str + '@twitter.com';
+            let email = profileJson.id_str + '@twitter.com';
+            let name = profileJson.name;
+            let image = profileJson.profile_image_url.replace(/$https?/, '').replace(/normal.jpg$/, '400x400.jpg');
+            bcrypt.genSalt(8, (err, salt) => {
+              let password = salt;
+              bcrypt.hash(password, salt, (err, hash) => {
+                let dateStr = moment.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
+                password = hash;
+
+                models.users
+                  .create({
+                    user_id: user_id,
+                    name: name,
+                    email: email,
+                    password: password,
+                    salt: salt,
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
+                    level: 9,
+                    from: 'twitter',
+                    image: image,
+                    created_at: dateStr,
+                    updated_at: dateStr
+                  })
+                  .then((user) => {
+                    return done(null, user);
+                  })
+                  .catch((err) => {
+                    return done(err, null);
+                  });
               });
             });
-          });
-        }
-      })
-      .catch((err) => {
-        return done(err, null);
-      });
+          }
+        })
+        .catch((err) => {
+          return done(err, null);
+        });
     });
   }
 ));
@@ -228,35 +255,51 @@ passport.use(new GoogleStrategy({
     process.nextTick(() => {
       let profileJson = profile._json;
 
-      models.User.forge({ email: (profileJson.emails.length ? profileJson.emails[0].value : profileJson.id + '@googleplus.com') })
-      .fetch()
-      .then((user) => {
-        if (user) {
-          return done(null, user);
-        } else {
-          let user_id = profileJson.id + '@googleplus.com';
-          let email = (profileJson.emails.length ? profileJson.emails[0].value : profileJson.id + '@googleplus.com');
-          let name = profileJson.displayName;
-          let image = (profileJson.image.isDefault ? '' : profileJson.image.url.replace(/$https?/, '').replace(/\?sz=\d{1,}$/, ''));
-          bcrypt.genSalt(8, (err, salt) => {
-            let password = salt;
-            bcrypt.hash(password, salt, (err, hash) => {
-              password = hash;
-              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'google', image: image })
-              .save()
-              .then((user) => {
-                return done(null, user);
-              })
-              .catch((err) => {
-                return done(err, null);
+      models.users
+        .find({
+          where: { email: (profileJson.emails.length ? profileJson.emails[0].value : profileJson.id + '@googleplus.com') }
+        })
+        .then((user) => {
+          if (user) {
+            return done(null, user);
+          } else {
+            let user_id = profileJson.id + '@googleplus.com';
+            let email = (profileJson.emails.length ? profileJson.emails[0].value : profileJson.id + '@googleplus.com');
+            let name = profileJson.displayName;
+            let image = (profileJson.image.isDefault ? '' : profileJson.image.url.replace(/$https?/, '').replace(/\?sz=\d{1,}$/, ''));
+            bcrypt.genSalt(8, (err, salt) => {
+              let password = salt;
+              bcrypt.hash(password, salt, (err, hash) => {
+                let dateStr = moment.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
+                password = hash;
+
+                models.users
+                  .create({
+                    user_id: user_id,
+                    name: name,
+                    email: email,
+                    password: password,
+                    salt: salt,
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
+                    level: 9,
+                    from: 'google',
+                    image: image,
+                    created_at: dateStr,
+                    updated_at: dateStr
+                  })
+                  .then((user) => {
+                    return done(null, user);
+                  })
+                  .catch((err) => {
+                    return done(err, null);
+                  });
               });
             });
-          });
-        }
-      })
-      .catch((err) => {
-        return done(err, null);
-      });
+          }
+        })
+        .catch((err) => {
+        });
     });
   }
 ));
@@ -269,35 +312,52 @@ passport.use(new KakaoStrategy({
     process.nextTick(() => {
       let profileJson = profile._json;
 
-      models.User.forge({ email: profileJson.id + '@kakao.com' })
-      .fetch()
-      .then((user) => {
-        if (user) {
-          return done(null, user);
-        } else {
-          let user_id = profileJson.id + '@kakao.com';
-          let email = profileJson.id + '@kakao.com';
-          let name = profileJson.properties.nickname;
-          let image = profileJson.properties.profile_image;
-          bcrypt.genSalt(8, (err, salt) => {
-            let password = salt;
-            bcrypt.hash(password, salt, (err, hash) => {
-              password = hash;
-              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'kakao', image: image })
-              .save()
-              .then((user) => {
-                return done(null, user);
-              })
-              .catch((err) => {
-                return done(err, null);
+      models.users
+        .find({
+          where: { email: profileJson.id + '@kakao.com' }
+        })
+        .then((user) => {
+          if (user) {
+            return done(null, user);
+          } else {
+            let user_id = profileJson.id + '@kakao.com';
+            let email = profileJson.id + '@kakao.com';
+            let name = profileJson.properties.nickname;
+            let image = profileJson.properties.profile_image;
+            bcrypt.genSalt(8, (err, salt) => {
+              let password = salt;
+              bcrypt.hash(password, salt, (err, hash) => {
+                let dateStr = moment.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
+                password = hash;
+
+                models.users
+                  .create({
+                    user_id: user_id,
+                    name: name,
+                    email: email,
+                    password: password,
+                    salt: salt,
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
+                    level: 9,
+                    from: 'kakao',
+                    image: image,
+                    cteated_at: dateStr,
+                    updated_at: dateStr
+                  })
+                  .then((user) => {
+                    return done(null, user);
+                  })
+                  .catch((err) => {
+                    return done(err, null);
+                  });
               });
             });
-          });
-        }
-      })
-      .catch((err) => {
-        return done(err, null);
-      });
+          }
+        })
+        .catch((err) => {
+          return done(err, null);
+        });
     });
   }
 ));
@@ -311,35 +371,52 @@ passport.use(new NaverStrategy({
     process.nextTick(() => {
       let profileJson = profileJson;
 
-      models.User.forge({ email: profileJson.id + '@naver.com' })
-      .fetch()
-      .then((user) => {
-        if (user) {
-          return done(null, user);
-        } else {
-          let user_id = profileJson.id + '@naver.com';
-          let email = profileJson.id + '@naver.com';
-          let name = profileJson.properties.nickname;
-          let image = profileJson.properties.profile_image;
-          bcrypt.genSalt(8, (err, salt) => {
-            let password = salt;
-            bcrypt.hash(password, salt, (err, hash) => {
-              password = hash;
-              models.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'naver', image: image })
-              .save()
-              .then((user) => {
-                return done(null, user);
-              })
-              .catch((err) => {
-                return done(err, null);
+      models.users
+        .find({
+          where: { email: profileJson.id + '@naver.com' }
+        })
+        .then((user) => {
+          if (user) {
+            return done(null, user);
+          } else {
+            let user_id = profileJson.id + '@naver.com';
+            let email = profileJson.id + '@naver.com';
+            let name = profileJson.properties.nickname;
+            let image = profileJson.properties.profile_image;
+            bcrypt.genSalt(8, (err, salt) => {
+              let password = salt;
+              bcrypt.hash(password, salt, (err, hash) => {
+                let dateStr = moment.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
+                password = hash;
+
+                models.users
+                  .create({
+                    user_id: user_id,
+                    name: name,
+                    email: email,
+                    password: password,
+                    salt: salt,
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
+                    level: 9,
+                    from: 'naver',
+                    image: image,
+                    created_at: dateStr,
+                    updated_at: dateStr
+                  })
+                  .then((user) => {
+                    return done(null, user);
+                  })
+                  .catch((err) => {
+                    return done(err, null);
+                  });
               });
             });
-          });
-        }
-      })
-      .catch((err) => {
-        return done(err, null);
-      });
+          }
+        })
+        .catch((err) => {
+          return done(err, null);
+        });
     });
   }
 ));
@@ -349,14 +426,14 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((user, done) => {
-  models.User.forge({ id: user.id })
-  .fetch()
-  .then((user) => {
-    return done(null, user.toJSON());
-  })
-  .catch((err) => {
-    return done(err);
-  });
+  models.users
+    .findById(user.id)
+    .then((user) => {
+      return done(null, user);
+    })
+    .catch((err) => {
+      return done(err);
+    });
 });
 
 module.exports = router;

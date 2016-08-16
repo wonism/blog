@@ -12,13 +12,13 @@ var _bcrypt = require('bcrypt');
 
 var _bcrypt2 = _interopRequireDefault(_bcrypt);
 
-var _models = require('../../db/models');
+var _momentTimezone = require('moment-timezone');
+
+var _momentTimezone2 = _interopRequireDefault(_momentTimezone);
+
+var _models = require('../../models');
 
 var _models2 = _interopRequireDefault(_models);
-
-var _collections = require('../../db/collections');
-
-var _collections2 = _interopRequireDefault(_collections);
 
 var _passport = require('passport');
 
@@ -63,22 +63,19 @@ var GoogleStrategy = _passportGoogleOauth2.default.OAuth2Strategy;
 var KakaoStrategy = _passportKakao2.default.Strategy;
 var NaverStrategy = _passportNaver2.default.Strategy;
 
-var refer = '/';
-
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   } else {
-    res.redirect('/login');
+    return res.redirect('/login');
   }
 }
 
 // Form to Login
 router.get('/', function (req, res, next) {
-  refer = req.headers.referer;
   var flash = req.flash('auth');
   flash = flash.length ? flash : req.flash('error');
-  res.render('login/index', {
+  return res.render('login/index', {
     title: '로그인',
     asset: 'login',
     mode: _config2.default.mode,
@@ -92,13 +89,7 @@ router.get('/', function (req, res, next) {
   });
 });
 
-router.post('/', _passport2.default.authenticate('local', { failureRedirect: '/login', failureFlash: true }), function (req, res, next) {
-  if (refer) {
-    return res.redirect(refer);
-  } else {
-    return res.redirect('/');
-  }
-});
+router.post('/', _passport2.default.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true }));
 
 router.get('/oauth/facebook', _passport2.default.authenticate('facebook', {
   scope: ['public_profile', 'email']
@@ -140,14 +131,16 @@ router.get('/oauth/naver/callback', _passport2.default.authenticate('naver', {
 }));
 
 router.get('/failed', ensureAuthenticated, function (req, res) {
-  res.send('failed');
+  return res.send('failed');
 });
 
 _passport2.default.use(new LocalStrategy({
   usernameField: 'user_id',
   passwordField: 'password'
 }, function (user_id, password, done) {
-  _models2.default.User.forge({ user_id: user_id }).fetch().then(function (user) {
+  _models2.default.users.find({
+    where: { user_id: user_id }
+  }).then(function (user) {
     if (user) {
       _bcrypt2.default.compare(password, user.toJSON().password, function (err, success) {
         if (success) {
@@ -173,7 +166,9 @@ _passport2.default.use(new FacebookStrategy({
   process.nextTick(function () {
     var profileJson = profile._json;
 
-    _models2.default.User.forge({ email: profileJson.email }).fetch().then(function (user) {
+    _models2.default.users.find({
+      where: { email: profileJson.email }
+    }).then(function (user) {
       if (user) {
         return done(null, user);
       } else {
@@ -185,8 +180,23 @@ _passport2.default.use(new FacebookStrategy({
           _bcrypt2.default.genSalt(8, function (err, salt) {
             var password = salt;
             _bcrypt2.default.hash(password, salt, function (err, hash) {
+              var dateStr = _momentTimezone2.default.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
               password = hash;
-              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'facebook', image: image }).save().then(function (user) {
+
+              _models2.default.users.create({
+                user_id: user_id,
+                name: name,
+                email: email,
+                password: password,
+                salt: salt,
+                access_token: accessToken,
+                refresh_token: refreshToken,
+                level: 9,
+                from: 'facebook',
+                image: image,
+                created_at: dateStr,
+                updated_at: dateStr
+              }).then(function (user) {
                 return done(null, user);
               }).catch(function (err) {
                 return done(err, null);
@@ -209,7 +219,9 @@ _passport2.default.use(new TwitterStrategy({
   process.nextTick(function () {
     var profileJson = profile._json;
 
-    _models2.default.User.forge({ email: profileJson.id_str + '@twitter.com' }).fetch().then(function (user) {
+    _models2.default.users.find({
+      where: { email: profileJson.id_str + '@twitter.com' }
+    }).then(function (user) {
       if (user) {
         return done(null, user);
       } else {
@@ -221,8 +233,23 @@ _passport2.default.use(new TwitterStrategy({
           _bcrypt2.default.genSalt(8, function (err, salt) {
             var password = salt;
             _bcrypt2.default.hash(password, salt, function (err, hash) {
+              var dateStr = _momentTimezone2.default.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
               password = hash;
-              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'twitter', image: image }).save().then(function (user) {
+
+              _models2.default.users.create({
+                user_id: user_id,
+                name: name,
+                email: email,
+                password: password,
+                salt: salt,
+                access_token: accessToken,
+                refresh_token: refreshToken,
+                level: 9,
+                from: 'twitter',
+                image: image,
+                created_at: dateStr,
+                updated_at: dateStr
+              }).then(function (user) {
                 return done(null, user);
               }).catch(function (err) {
                 return done(err, null);
@@ -245,7 +272,9 @@ _passport2.default.use(new GoogleStrategy({
   process.nextTick(function () {
     var profileJson = profile._json;
 
-    _models2.default.User.forge({ email: profileJson.emails.length ? profileJson.emails[0].value : profileJson.id + '@googleplus.com' }).fetch().then(function (user) {
+    _models2.default.users.find({
+      where: { email: profileJson.emails.length ? profileJson.emails[0].value : profileJson.id + '@googleplus.com' }
+    }).then(function (user) {
       if (user) {
         return done(null, user);
       } else {
@@ -257,8 +286,23 @@ _passport2.default.use(new GoogleStrategy({
           _bcrypt2.default.genSalt(8, function (err, salt) {
             var password = salt;
             _bcrypt2.default.hash(password, salt, function (err, hash) {
+              var dateStr = _momentTimezone2.default.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
               password = hash;
-              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'google', image: image }).save().then(function (user) {
+
+              _models2.default.users.create({
+                user_id: user_id,
+                name: name,
+                email: email,
+                password: password,
+                salt: salt,
+                access_token: accessToken,
+                refresh_token: refreshToken,
+                level: 9,
+                from: 'google',
+                image: image,
+                created_at: dateStr,
+                updated_at: dateStr
+              }).then(function (user) {
                 return done(null, user);
               }).catch(function (err) {
                 return done(err, null);
@@ -267,9 +311,7 @@ _passport2.default.use(new GoogleStrategy({
           });
         })();
       }
-    }).catch(function (err) {
-      return done(err, null);
-    });
+    }).catch(function (err) {});
   });
 }));
 
@@ -280,7 +322,9 @@ _passport2.default.use(new KakaoStrategy({
   process.nextTick(function () {
     var profileJson = profile._json;
 
-    _models2.default.User.forge({ email: profileJson.id + '@kakao.com' }).fetch().then(function (user) {
+    _models2.default.users.find({
+      where: { email: profileJson.id + '@kakao.com' }
+    }).then(function (user) {
       if (user) {
         return done(null, user);
       } else {
@@ -292,8 +336,23 @@ _passport2.default.use(new KakaoStrategy({
           _bcrypt2.default.genSalt(8, function (err, salt) {
             var password = salt;
             _bcrypt2.default.hash(password, salt, function (err, hash) {
+              var dateStr = _momentTimezone2.default.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
               password = hash;
-              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'kakao', image: image }).save().then(function (user) {
+
+              _models2.default.users.create({
+                user_id: user_id,
+                name: name,
+                email: email,
+                password: password,
+                salt: salt,
+                access_token: accessToken,
+                refresh_token: refreshToken,
+                level: 9,
+                from: 'kakao',
+                image: image,
+                cteated_at: dateStr,
+                updated_at: dateStr
+              }).then(function (user) {
                 return done(null, user);
               }).catch(function (err) {
                 return done(err, null);
@@ -316,7 +375,9 @@ _passport2.default.use(new NaverStrategy({
   process.nextTick(function () {
     var profileJson = profileJson;
 
-    _models2.default.User.forge({ email: profileJson.id + '@naver.com' }).fetch().then(function (user) {
+    _models2.default.users.find({
+      where: { email: profileJson.id + '@naver.com' }
+    }).then(function (user) {
       if (user) {
         return done(null, user);
       } else {
@@ -328,8 +389,23 @@ _passport2.default.use(new NaverStrategy({
           _bcrypt2.default.genSalt(8, function (err, salt) {
             var password = salt;
             _bcrypt2.default.hash(password, salt, function (err, hash) {
+              var dateStr = _momentTimezone2.default.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
               password = hash;
-              _models2.default.User.forge({ user_id: user_id, name: name, email: email, password: password, salt: salt, accessToken: accessToken, level: 99, from: 'naver', image: image }).save().then(function (user) {
+
+              _models2.default.users.create({
+                user_id: user_id,
+                name: name,
+                email: email,
+                password: password,
+                salt: salt,
+                access_token: accessToken,
+                refresh_token: refreshToken,
+                level: 9,
+                from: 'naver',
+                image: image,
+                created_at: dateStr,
+                updated_at: dateStr
+              }).then(function (user) {
                 return done(null, user);
               }).catch(function (err) {
                 return done(err, null);
@@ -349,8 +425,8 @@ _passport2.default.serializeUser(function (user, done) {
 });
 
 _passport2.default.deserializeUser(function (user, done) {
-  _models2.default.User.forge({ id: user.id }).fetch().then(function (user) {
-    return done(null, user.toJSON());
+  _models2.default.users.findById(user.id).then(function (user) {
+    return done(null, user);
   }).catch(function (err) {
     return done(err);
   });

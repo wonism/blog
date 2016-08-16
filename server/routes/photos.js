@@ -7,7 +7,7 @@ import config from '../../config/config.json';
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-  res.render('photos/index',
+  return res.render('photos/index',
       {
         title: 'Jaewonism',
         asset: 'photos',

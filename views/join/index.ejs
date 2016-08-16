@@ -46,6 +46,7 @@
 </script>
 <div id="body-container">
   <form id="join-form" action="/join" method="post" enctype="multipart/form-data">
+    <h4>개인 공부 용도로 만들었으며, 비밀번호와 같은 데이터는 <a href="https://en.wikipedia.org/wiki/Bcrypt">bcrypt</a> 암호화로 암호화되어 저장됩니다.<br /> 또한, https 통신으로 데이터들이 평문으로 전송되지 않습니다.</h4>
     <div class="form-control">
       <label for="user_id">ID</label><br/>
       <input class="default-input" type="text" name="user_id" id="user_id" placeholder=""/>
@@ -62,11 +63,16 @@
       <label for="password">PASSWORD</label><br/>
       <input class="default-input" type="password" name="password" id="password"/>
     </div>
-    <div class="form-control">
+    <div class="form-control rm-margin">
       <input id='join-submit' class="btn btn-primary" type="submit" value="가입"></button>
     </div>
+    <p class="space-bottom"></p>
   </form>
   <div class="join-form">
+    <hr />
+    <p class="space-top"></p>
+    <h4 class="rm-margin">SNS 계정으로 로그인하기</h4>
+    <p class="space-bottom"></p>
     <a class="oauth-login facebook" href="/login/oauth/facebook">페이스북으로 로그인하기</a>
     <a class="oauth-login twitter" href="/login/oauth/twitter">트위터로 로그인하기</a>
     <a class="oauth-login google" href="/login/oauth/google">구글+로 로그인하기</a>

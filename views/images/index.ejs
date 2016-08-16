@@ -16,7 +16,7 @@
 %>
   <tr>
     <td><%= oneItem.id %></td>
-    <td><a href="/images/<%= oneItem.id %>"><img src="<%= oneItem.thumbnail %>" alt="<%= oneItem.original %>"/></a></td>
+    <td><a href="/images/<%= oneItem.id %>"><img src="<%= oneItem.thumbnail || oneItem.original %>" alt="<%= oneItem.original %>"/></a></td>
   </tr>
 <%
   }

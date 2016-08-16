@@ -8,13 +8,9 @@ var _url = require('url');
 
 var _url2 = _interopRequireDefault(_url);
 
-var _models = require('../../db/models');
+var _models = require('../../models');
 
 var _models2 = _interopRequireDefault(_models);
-
-var _collections = require('../../db/collections');
-
-var _collections2 = _interopRequireDefault(_collections);
 
 var _config = require('../../config/config.json');
 
@@ -32,44 +28,42 @@ var getCategories = void 0,
     getPages = void 0;
 
 getCategories = function getCategories(req, res, next) {
-  _collections2.default.Categories.forge().query('where', 'is_deleted', 0).fetch().then(function (categories) {
-    fetchedCategories = categories.toJSON();
+  _models2.default.categories.findAll({
+    where: { is_deleted: 0 }
+  }).then(function (categories) {
+    fetchedCategories = categories;
     getPages(req, res, next);
   }).catch(function (err) {
-    console.log(err.message);
-    res.render('500', { title: '500: Internal Server Error.' });
+    return next(err, req, res, next);
   });
 };
 
 getPages = function getPages(req, res, next) {
-  _collections2.default.Posts.forge({ id: 1 }).query('where', 'is_deleted', 0).count().then(function (count) {
+  _models2.default.posts.count({
+    where: { is_deleted: 0 }
+  }).then(function (count) {
     pages = Math.ceil(count / pagingSize);
     next();
   }).catch(function (err) {
-    console.log(err.message);
-    res.render('500', { title: '500: Internal Server Error.' });
+    return next(err, req, res, next);
   });
 };
 
 // Fetch all Posts
 router.get('/', getCategories, function (req, res, next) {
-  _collections2.default.Posts.forge().query('where', 'is_deleted', 0).query(function (qb) {
-    var page = _url2.default.parse(req.url, true).query.page >> 0 || 1;
+  var page = +_url2.default.parse(req.url, true).query.page || 1;
+  var offset = (page - 1) * pagingSize;
 
-    if (typeof page === 'number' && page > 0) {
-      var offset = (page - 1) * pagingSize;
-
-      qb.offset(offset).limit(pagingSize);
-    }
-
-    qb.orderBy('id', 'DESC');
-  }).fetch().then(function (posts) {
-    var page = _url2.default.parse(req.url, true).query.page >> 0 || 1;
-
+  _models2.default.posts.findAll({
+    where: { is_deleted: 0 },
+    offset: offset,
+    limit: pagingSize,
+    order: 'id DESC'
+  }).then(function (posts) {
     if (typeof page === 'number' && page > 1) {
       res.json({
         categories: fetchedCategories,
-        posts: posts.toJSON(),
+        posts: posts,
         pages: pages,
         page: page
       });
@@ -84,15 +78,14 @@ router.get('/', getCategories, function (req, res, next) {
         keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
         userId: req.user ? req.user.user_id : null,
         categories: fetchedCategories,
-        posts: posts.toJSON(),
+        posts: posts,
         pages: pages,
         page: page,
         endPoint: 'root'
       });
     }
   }).catch(function (err) {
-    console.log(err.message);
-    res.render('500', { title: '500: Internal Server Error.' });
+    return next(err, req, res, next);
   });
 });
 
