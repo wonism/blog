@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "setting": "nohup redis-server && service nginx start && service mysql start",
     "buildes6": "babel -w server --out-dir build",
     "start": "nodemon ./bin/www"
   },
