@@ -48,10 +48,6 @@ var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _formidable = require('formidable');
-
-var _formidable2 = _interopRequireDefault(_formidable);
-
 var _cookieSession = require('cookie-session');
 
 var _cookieSession2 = _interopRequireDefault(_cookieSession);
@@ -75,14 +71,6 @@ var _methodOverride2 = _interopRequireDefault(_methodOverride);
 var _multer = require('multer');
 
 var _multer2 = _interopRequireDefault(_multer);
-
-var _models = require('../db/models');
-
-var _models2 = _interopRequireDefault(_models);
-
-var _collections = require('../db/collections');
-
-var _collections2 = _interopRequireDefault(_collections);
 
 var _connectFlash = require('connect-flash');
 
@@ -142,20 +130,22 @@ var _users4 = _interopRequireDefault(_users3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* for Session */
+
+
+/* Express JS */
+
+
+var RedisStore = (0, _connectRedis2.default)(_expressSession2.default);
+// import formidable from 'formidable';
+
+
 /* Configuration */
 
 
 /* Basic Modules */
 // process.env.NODE_ENV = 'production';
 // process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'production' ) ? 'production' : 'development';
-
-/* Express JS */
-
-
-var RedisStore = (0, _connectRedis2.default)(_expressSession2.default);
-
-/* for Session */
-
 
 /* Express JS */
 
@@ -172,7 +162,8 @@ var LocalStrategy = _passportLocal2.default.Strategy;
 var upload = (0, _multer2.default)({ dest: '../public/images' });
 
 /* Data Base */
-
+// import models from '../db/models';
+// import collections from '../db/collections';
 
 /* Flash */
 
@@ -310,12 +301,14 @@ if (_config2.default.mode !== 'development') {
 /////////////////////////////////
 // ------- creates Server -------
 
-var server = app.listen(app.get('port'), function () {
+/*
+const server = app.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + server.address().port);
 });
 
-var httpsServer = app.listen(app.get('httpsPort'), function () {
+const httpsServer = app.listen(app.get('httpsPort'), function () {
   console.log('https server listening on port ' + httpsServer.address().port);
 });
+*/
 
 module.exports = app;

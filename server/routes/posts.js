@@ -5,10 +5,7 @@ import url from 'url';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 
-import modelss from '../../models';
-
-import models from '../../db/models';
-import collections from '../../db/collections';
+import models from '../../models';
 
 import config from '../../config/config.json';
 
@@ -24,7 +21,7 @@ let pagingSize = 10;
 
 isAuthor = (req, res, next) => {
   if (req.user) {
-    modelss.users
+    models.users
       .findById(req.user.id)
       .then((user) => {
         if (req.route.path.match(userCheckingReg)) {
@@ -55,7 +52,7 @@ isAuthor = (req, res, next) => {
 };
 
 getCategories = (req, res, next) => {
-  modelss.categories
+  models.categories
     .findAll({
       where: { is_deleted: 0 }
     })
@@ -78,7 +75,7 @@ getCategories = (req, res, next) => {
 };
 
 getPages = (req, res, next) => {
-  modelss.posts
+  models.posts
     .count({
       where: { is_deleted: 0 }
     })
@@ -92,7 +89,7 @@ getPages = (req, res, next) => {
 };
 
 getPagesWithCategory = (req, res, next) => {
-  modelss.posts
+  models.posts
     .count({
       where: { category_id: req.params.id, is_deleted: 0 }
     })
@@ -106,10 +103,10 @@ getPagesWithCategory = (req, res, next) => {
 };
 
 getPagesWithTag = (req, res, next) => {
-  modelss.tags
+  models.tags
     .findAll({
       where: { slug: req.params.slug },
-      include: [ { model: modelss.posts, where: { is_deleted: 0 } } ]
+      include: [ { model: models.posts, where: { is_deleted: 0 } } ]
     })
     .then((tag) => {
       pages = Math.ceil((tag[0] && tag[0].posts ? tag[0].posts.length : 0) / pagingSize);
@@ -121,7 +118,7 @@ getPagesWithTag = (req, res, next) => {
 };
 
 getPagesWithSearch = (req, res, next) => {
-  modelss.posts
+  models.posts
     .count({
       where: {
         is_deleted: 0,
@@ -145,7 +142,7 @@ router.get('/', getCategories, (req, res, next) => {
   let page = +url.parse(req.url, true).query.page || 1;
   let offset = (page - 1) * pagingSize;
 
-  modelss.posts
+  models.posts
     .findAll({
       where: { is_deleted: 0 },
       offset: offset,
@@ -198,7 +195,7 @@ router.get('/', getCategories, (req, res, next) => {
 
 // Form for Create Post
 router.get('/new', isAuthor, (req, res, next) => {
-  modelss.categories
+  models.categories
     .findAll({
       where: { is_deleted: 0 }
     })
@@ -243,7 +240,7 @@ router.post('/new', isAuthor, (req, res, next) => {
 
   async.waterfall([
     (cb) => {
-      modelss.posts
+      models.posts
         .findAll({
           where: { title: postTitle }
         })
@@ -263,7 +260,7 @@ router.post('/new', isAuthor, (req, res, next) => {
         newSlug = newSlug + '-' + numberForSlug;
       }
 
-      modelss.posts
+      models.posts
         .create({
           user_id: userPk,
           category_id: req.body.category_id,
@@ -287,7 +284,7 @@ router.post('/new', isAuthor, (req, res, next) => {
     },
     (post, ids, cb) => {
       ids.forEach((el, i) => {
-        modelss.posts_tags
+        models.posts_tags
           .create({
             post_id: post.id,
             tag_id: el
@@ -313,10 +310,10 @@ router.post('/new', isAuthor, (req, res, next) => {
 
 // Fetch Post
 router.get('/:id', isAuthor, (req, res, next) => {
-  modelss.posts
+  models.posts
     .find({
       where: { id: req.params.id, is_deleted: 0 },
-      include: [ modelss.users, modelss.categories, modelss.tags, { model: modelss.comments, include: [ modelss.users ] } ]
+      include: [ models.users, models.categories, models.tags, { model: models.comments, include: [ models.users ] } ]
     })
     .then((post) => {
       if (!post) {
@@ -373,10 +370,10 @@ router.get('/:id', isAuthor, (req, res, next) => {
 router.get('/update/:id', isAuthor, (req, res, next) => {
   async.waterfall([
     (cb) => {
-      modelss.posts
+      models.posts
         .find({
           where: { id: req.params.id, is_deleted: 0 },
-          include: [ modelss.categories, modelss.tags ]
+          include: [ models.categories, models.tags ]
         })
         .then((post) => {
           if (!post) {
@@ -393,7 +390,7 @@ router.get('/update/:id', isAuthor, (req, res, next) => {
       if (!post) {
         return cb(null, null);
       } else {
-        modelss.categories
+        models.categories
           .findAll({
             where: { is_deleted: 0 }
           })
@@ -463,7 +460,7 @@ router.post('/update/:id', isAuthor, (req, res, next) => {
 
   async.waterfall([
     (cb) => {
-      modelss.posts
+      models.posts
         .findAll({
           where: { title: postTitle }
         })
@@ -483,7 +480,7 @@ router.post('/update/:id', isAuthor, (req, res, next) => {
         newSlug = newSlug.replace(/\s\-\s\d+$/, '') + ' - ' + numberForSlug;
       }
 
-      modelss.posts
+      models.posts
         .update({
           user_id: userPk,
           category_id: req.body.category_id,
@@ -509,7 +506,7 @@ router.post('/update/:id', isAuthor, (req, res, next) => {
     },
     (postId, ids, cb) => {
       ids.forEach((el, i) => {
-        modelss.posts_tags
+        models.posts_tags
           .create({
             post_id: postId,
             tag_id: el
@@ -536,10 +533,10 @@ router.post('/update/:id', isAuthor, (req, res, next) => {
 
 // Form for Delete Post
 router.get('/delete/:id', isAuthor, (req, res, next) => {
-  modelss.posts
+  models.posts
     .find({
       where: { id: req.params.id },
-      include: [ modelss.categories ]
+      include: [ models.categories ]
     })
     .then((post) => {
       if (!post) {
@@ -573,7 +570,7 @@ router.get('/delete/:id', isAuthor, (req, res, next) => {
 router.delete('/delete/:id', isAuthor, (req, res, next) => {
   let dateStr = moment.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
 
-  modelss.posts
+  models.posts
     .update({
       is_deleted: 1,
       updated_at: dateStr
@@ -593,10 +590,10 @@ router.get('/categories/:id', getCategories, (req, res, next) => {
   let page = +url.parse(req.url, true).query.page || 1;
   let offset = (page - 1) * pagingSize;
 
-  modelss.categories
+  models.categories
     .find({
       where: { id: req.params.id },
-      include: [ { model: modelss.posts, where: { is_deleted: 0 }, offset: offset, limit: pagingSize } ]
+      include: [ { model: models.posts, where: { is_deleted: 0 }, offset: offset, limit: pagingSize } ]
     })
     .then((category) => {
       if (!category) {
@@ -654,10 +651,10 @@ router.get('/tags/:slug', getCategories, (req, res, next) => {
   let page = +url.parse(req.url, true).query.page || 1;
   let offset = (page - 1) * pagingSize;
 
-  modelss.tags
+  models.tags
     .find({
       where: { slug: req.params.slug },
-      include: [ { model: modelss.posts, where: { is_deleted: 0 }, offset: offset, limit: pagingSize } ]
+      include: [ { model: models.posts, where: { is_deleted: 0 }, offset: offset, limit: pagingSize } ]
     })
     .then((tag) => {
       if (!category) {
@@ -717,7 +714,7 @@ router.get('/search/:keyword', getCategories, (req, res, next) => {
   let page = +url.parse(req.url, true).query.page || 1;
   let offset = (page - 1) * pagingSize;
 
-  modelss.posts
+  models.posts
     .findAll({
       where: {
         is_deleted: 0,
@@ -783,7 +780,7 @@ saveTags = (tags, afterSave) => {
 
   async.waterfall([
     (cb) => {
-      modelss.tags
+      models.tags
         .findAll({
           where: { slug: { $in: _.map(tagObjects, 'slug') } }
         })
@@ -806,7 +803,7 @@ saveTags = (tags, afterSave) => {
               el.created_at = dateStr;
               el.updated_at = dateStr;
 
-              return modelss.tags
+              return models.tags
                 .create(el)
                 .then((t) => {
                   ids.push(t.id);

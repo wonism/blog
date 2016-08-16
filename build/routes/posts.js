@@ -24,14 +24,6 @@ var _models = require('../../models');
 
 var _models2 = _interopRequireDefault(_models);
 
-var _models3 = require('../../db/models');
-
-var _models4 = _interopRequireDefault(_models3);
-
-var _collections = require('../../db/collections');
-
-var _collections2 = _interopRequireDefault(_collections);
-
 var _config = require('../../config/config.json');
 
 var _config2 = _interopRequireDefault(_config);

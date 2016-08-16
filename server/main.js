@@ -24,7 +24,7 @@ import redis from 'redis';
 import connectRedis from 'connect-redis';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import formidable from 'formidable';
+// import formidable from 'formidable';
 import cookieSession from 'cookie-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
@@ -40,11 +40,11 @@ import methodOverride from 'method-override';
 
 /* Image Upload */
 import multer from 'multer';
-let upload = multer({ dest: '../public/images' });
+const upload = multer({ dest: '../public/images' });
 
 /* Data Base */
-import models from '../db/models';
-import collections from '../db/collections';
+// import models from '../db/models';
+// import collections from '../db/collections';
 
 /* Flash */
 import flash from 'connect-flash';
@@ -89,7 +89,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let client = redis.createClient();
+const client = redis.createClient();
 
 app.use(cookieParser());
 app.use(session({
@@ -132,7 +132,7 @@ app.get('/robots.txt', (req, res) => {
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -201,6 +201,7 @@ if (config.mode !== 'development') {
 /////////////////////////////////
 // ------- creates Server -------
 
+/*
 const server = app.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + server.address().port);
 });
@@ -208,6 +209,7 @@ const server = app.listen(app.get('port'), function () {
 const httpsServer = app.listen(app.get('httpsPort'), function () {
   console.log('https server listening on port ' + httpsServer.address().port);
 });
+*/
 
 module.exports = app;
 
