@@ -142,25 +142,23 @@ var _users4 = _interopRequireDefault(_users3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// process.env.NODE_ENV = 'production';
-process.env.NODE_ENV = process.env.NODE_ENV && process.env.NODE_ENV.trim().toLowerCase() == 'production' ? 'production' : 'development';
-
-/* Express JS */
-
-
-/* Express JS */
+/* Configuration */
 
 
 /* Basic Modules */
+// process.env.NODE_ENV = 'production';
+// process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'production' ) ? 'production' : 'development';
+
+/* Express JS */
 
 
-/* Configuration */
-
+var RedisStore = (0, _connectRedis2.default)(_expressSession2.default);
 
 /* for Session */
 
 
-var RedisStore = (0, _connectRedis2.default)(_expressSession2.default);
+/* Express JS */
+
 var LocalStrategy = _passportLocal2.default.Strategy;
 
 /* Node Mailer */
@@ -196,7 +194,7 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 app.use((0, _serveFavicon2.default)(_path2.default.join(__dirname, '../public', 'favicon.ico')));
 app.use(_express2.default.static(_path2.default.join(__dirname, '../public')));
-if (process.env.NODE_ENV === 'development') {
+if (_config2.default.mode === 'development') {
   app.use(_express2.default.static(_path2.default.join(__dirname, '../src')));
 } else {
   app.use(_express2.default.static(_path2.default.join(__dirname, '../dist')));
@@ -305,7 +303,7 @@ if (app.get('env') === 'development') {
 }
 
 // port setup
-if (process.env.NODE_ENV !== 'development') {
+if (_config2.default.mode !== 'development') {
   app.set('port', process.env.PORT || _config2.default.port);
 }
 

@@ -1,5 +1,5 @@
 // process.env.NODE_ENV = 'production';
-process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'production' ) ? 'production' : 'development';
+// process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'production' ) ? 'production' : 'development';
 
 /* Express JS */
 import express from 'express';
@@ -78,7 +78,7 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, '../public')));
-if (process.env.NODE_ENV === 'development') {
+if (config.mode === 'development') {
   app.use(express.static(path.join(__dirname, '../src')));
 } else {
   app.use(express.static(path.join(__dirname, '../dist')));
@@ -194,7 +194,7 @@ if (app.get('env') === 'development') {
 }
 
 // port setup
-if (process.env.NODE_ENV !== 'development') {
+if (config.mode !== 'development') {
   app.set('port', process.env.PORT || config.port);
 }
 
