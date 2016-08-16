@@ -1,9 +1,9 @@
 import express from 'express';
 
 import url from 'url';
+import moment from 'moment-timezone';
 
-import models from '../../db/models';
-import collections from '../../db/collections';
+import models from '../../models';
 
 const router = express.Router();
 
@@ -15,25 +15,18 @@ let pagingSize = 10;
 
 isAuthor = (req, res, next) => {
   if (req.user) {
-    models.User.forge({ user_id: req.user.user_id })
-    .fetch()
-    .then((user) => {
-      if (user) {
-        userPk = user.toJSON().id;
-        userName = user.toJSON().name;
+    models.users
+      .findById(req.user.id)
+      .then((user) => {
+        userPk = user.id;
+        userName = user.name;
         next();
-      } else {
-        res.type('json');
-        res.json({ result: 0 });
-      }
-    })
-    .catch((err) => {
-      console.log(err.message);
-      res.render('500', { title: '500: Internal Server Error.' });
-    });
+      })
+      .catch((err) => {
+        return next(err, req, res, next);
+      });
   } else {
-    res.type('json');
-    res.json({ result: 0 });
+    return res.send({ result: 0 });
   }
 };
 
@@ -43,26 +36,32 @@ getPages = (req, res, next) => {
   .count()
   .then((count) => {
     pages = Math.ceil(count / pagingSize);
-    next();
+    return next();
   })
   .catch((err) => {
-    console.log(err.message);
-    res.render('500', { title: '500: Internal Server Error.' });
+    return next(err, req, res, next);
   });
 };
 
 // Create Post
 router.post('/new', isAuthor, (req, res, next) => {
-  models.Comment.forge({ post_id: req.body.post_id, user_id: userPk, comment: req.body.comment, parent_id: req.body.parent_id })
-  .save()
-  .then((comment) => {
-    res.type('json');
-    res.json({ comment: comment.toJSON(), commenter: userName });
-  })
-  .catch((err) => {
-    console.log(err.message);
-    res.render('500', { title: '500: Internal Server Error.'});
-  });
+  let dateStr = moment.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
+
+  models.comments
+    .create({
+      post_id: req.body.post_id,
+      user_id: userPk,
+      comment: req.body.comment,
+      parent_id: req.body.parent_id,
+      created_at: dateStr,
+      updated_at: dateStr
+    })
+    .then((comment) => {
+      return res.send({ comment: comment, commenter: userName });
+    })
+    .catch((err) => {
+      return next(err, req, res, next);
+    });
 });
 
 module.exports = router;

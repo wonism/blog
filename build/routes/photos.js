@@ -17,7 +17,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var router = _express2.default.Router();
 
 router.get('/', function (req, res, next) {
-  res.render('photos/index', {
+  return res.render('photos/index', {
     title: 'Jaewonism',
     asset: 'photos',
     mode: _config2.default.mode,

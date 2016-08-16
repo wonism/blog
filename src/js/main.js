@@ -154,7 +154,7 @@ var ready = function () {
               liArr = [];
 
               i = page;
-              for (; i < pages; i++) {
+              for (; i <= pages; i++) {
                 var li = document.createElement('li');
                 var a = document.createElement('a');
                 if (i === page) {

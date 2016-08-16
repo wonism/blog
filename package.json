@@ -30,6 +30,7 @@
     "knex": "^0.10.0",
     "lodash": "^4.5.1",
     "method-override": "^2.3.5",
+    "moment-timezone": "^0.5.5",
     "morgan": "~1.6.1",
     "multer": "^1.1.0",
     "mysql": "^2.10.2",
@@ -46,7 +47,7 @@
     "passport-twitter": "^1.0.4",
     "path": "^0.12.7",
     "redis": "^2.5.3",
-    "sequelize": "^3.20.0",
+    "sequelize": "^3.23.6",
     "serve-favicon": "^2.3.0",
     "when": "^3.7.7"
   },

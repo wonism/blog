@@ -129,7 +129,9 @@
     }
   }
   .html {
+    max-width: 100%;
     font-size: 14px;
+    overflow-x: hidden;
   }
   .managing-buttons {
     margin-top: 32px;
@@ -315,4 +317,10 @@ form {
 
 #body-container.show-post {
   padding-top: 75px;
+}
+
+figure.highlight {
+  margin: 0;
+  max-width: 100%;
+  overflow-x: auto;
 }

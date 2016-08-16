@@ -17,7 +17,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var router = _express2.default.Router();
 
 router.get('/', function (req, res, next) {
-  res.render('portfolio/index', {
+  return res.render('portfolio/index', {
     title: 'Jaewonism',
     asset: 'portfolio',
     mode: _config2.default.mode,
@@ -30,7 +30,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/goodoc', function (req, res, next) {
-  res.render('portfolio/goodoc', {
+  return res.render('portfolio/goodoc', {
     title: 'Jaewonism',
     asset: 'portfolio',
     mode: _config2.default.mode,
@@ -43,7 +43,7 @@ router.get('/goodoc', function (req, res, next) {
 });
 
 router.get('/map', function (req, res, next) {
-  res.render('portfolio/map', {
+  return res.render('portfolio/map', {
     title: 'Jaewonism',
     asset: 'portfolio',
     mode: _config2.default.mode,
@@ -56,7 +56,7 @@ router.get('/map', function (req, res, next) {
 });
 
 router.get('/ciceron', function (req, res, next) {
-  res.render('portfolio/ciceron', {
+  return res.render('portfolio/ciceron', {
     title: 'Jaewonism',
     asset: 'portfolio',
     mode: _config2.default.mode,
@@ -69,7 +69,7 @@ router.get('/ciceron', function (req, res, next) {
 });
 
 router.get('/preview', function (req, res, next) {
-  res.render('portfolio/preview', {
+  return res.render('portfolio/preview', {
     title: 'Jaewonism',
     asset: 'portfolio',
     mode: _config2.default.mode,

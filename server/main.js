@@ -145,7 +145,7 @@ if (app.get('env') === 'development') {
     console.log(err.message);
 
     res.status(err.status || 500);
-    return res.render('error', {
+    return res.render('500', {
       message: err.message,
       error: err
     });
@@ -176,7 +176,7 @@ if (app.get('env') === 'development') {
     };
 
     res.status(err.status || 500);
-    res.render('error', {
+    res.render('500', {
       message: err.message,
       error: {}
     });

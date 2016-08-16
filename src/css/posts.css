@@ -109,7 +109,9 @@
     letter-spacing: 1px; }
 
 #post .html {
-  font-size: 14px; }
+  max-width: 100%;
+  font-size: 14px;
+  overflow-x: hidden; }
 
 #post .managing-buttons {
   margin-top: 32px; }
@@ -262,3 +264,8 @@ form textarea {
 
 #body-container.show-post {
   padding-top: 75px; }
+
+figure.highlight {
+  margin: 0;
+  max-width: 100%;
+  overflow-x: auto; }

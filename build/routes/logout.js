@@ -11,7 +11,7 @@ var router = _express2.default.Router();
 // Form to Login
 router.get('/', function (req, res, next) {
   req.logout();
-  res.redirect('/');
+  return res.redirect('/');
 });
 
 module.exports = router;

@@ -16,13 +16,13 @@ var _bcrypt = require('bcrypt');
 
 var _bcrypt2 = _interopRequireDefault(_bcrypt);
 
-var _models = require('../../db/models');
+var _momentTimezone = require('moment-timezone');
+
+var _momentTimezone2 = _interopRequireDefault(_momentTimezone);
+
+var _models = require('../../models');
 
 var _models2 = _interopRequireDefault(_models);
-
-var _collections = require('../../db/collections');
-
-var _collections2 = _interopRequireDefault(_collections);
 
 var _config = require('../../config/config.json');
 
@@ -55,11 +55,13 @@ router.post('/', function (req, res, next) {
   var fields = [];
 
   form.parse(req, function (err, fields, files) {
-    _models2.default.User.forge().query(function (qb) {
-      qb.where('user_id', fields.user_id).orWhere('email', fields.email);
-    }).fetch().then(function (user) {
+    _models2.default.users.find({
+      where: {
+        $or: [{ user_id: fields.user_id }, { email: fields.email }]
+      }
+    }).then(function (user) {
       if (user) {
-        if (user.toJSON().user_id === fields.user_id) {
+        if (user.user_id === fields.user_id) {
           req.flash('errType', 'duplicateId');
           res.render('join/index', {
             title: '회원가입',
@@ -72,7 +74,7 @@ router.post('/', function (req, res, next) {
             userId: req.user ? req.user.user_id : null,
             errType: req.flash('errType')
           });
-        } else if (user.toJSON().email === fields.email) {
+        } else if (user.email === fields.email) {
           req.flash('errType', 'duplicateEmail');
           res.render('join/index', {
             title: '회원가입',
@@ -90,20 +92,29 @@ router.post('/', function (req, res, next) {
         if (isSafe(fields.user_id, fields.email, fields.password)) {
           _bcrypt2.default.genSalt(8, function (err, salt) {
             _bcrypt2.default.hash(fields.password, salt, function (err, hash) {
-              fields.password = hash;
-              _models2.default.User.forge({ user_id: fields.user_id, name: fields.name, email: fields.email, password: fields.password, salt: salt, access_token: 9, level: 9 }).save().then(function (user) {
-                // req.user.user_id = user.toJSON().user_id;
-                // res.redirect('/');
-                res.redirect('/login');
+              var dateStr = _momentTimezone2.default.tz(new Date(), 'Asia/Seoul').format().replace(/\+.+/, '');
+
+              _models2.default.users.create({
+                user_id: fields.user_id,
+                name: fields.name,
+                email: fields.email,
+                password: hash,
+                salt: salt,
+                access_token: 9,
+                refresh_token: 9,
+                level: 9,
+                created_at: dateStr,
+                updated_at: dateStr
+              }).then(function (user) {
+                return res.redirect('/login');
               }).catch(function (err) {
-                console.log(err.message);
-                res.render('500', { title: '500: Internal Server Error.' });
+                return next(err, req, res, next);
               });
             });
           });
         } else {
           req.flash('errType', errType);
-          res.render('join/index', {
+          return res.render('join/index', {
             title: '회원가입',
             asset: 'join',
             mode: _config2.default.mode,
@@ -117,64 +128,52 @@ router.post('/', function (req, res, next) {
         }
       }
     }).catch(function (err) {
-      console.log(err.message);
-      res.render('500', { title: '500: Internal Server Error.' });
+      return next(err, req, res, next);
     });
   });
 });
 
 router.post('/check_id', function (req, res, next) {
   if (isSafe(req.body.user_id, null, null)) {
-    _models2.default.User.forge().query(function (qb) {
-      qb.where('user_id', req.body.user_id);
-    }).fetch().then(function (user) {
+    _models2.default.users.find({
+      where: { user_id: req.body.user_id }
+    }).then(function (user) {
       if (user) {
-        res.type('json');
-        res.json({ success: false, checkTarget: 'id', errType: 'duplicateId' });
+        res.send({ success: false, checkTarget: 'id', errType: 'duplicateId' });
       } else {
-        res.type('json');
-        res.json({ success: true, checkTarget: 'id' });
+        res.send({ success: true, checkTarget: 'id' });
       }
     }).catch(function (err) {
-      res.type('json');
-      res.json({ success: false, err: err.message });
+      return next(err, req, res, next);
     });
   } else {
-    res.type('json');
-    res.json({ success: false, checkTarget: 'id', errType: errType });
+    res.send({ success: false, checkTarget: 'id', errType: errType });
   }
 });
 
 router.post('/check_em', function (req, res, next) {
-  console.log(req.body.email);
   if (isSafe(null, req.body.email, null)) {
-    _models2.default.User.forge().query(function (qb) {
-      qb.where('email', req.body.email);
-    }).fetch().then(function (user) {
+    _models2.default.users.find({
+      where: { email: req.body.email }
+    }).then(function (user) {
       if (user) {
-        res.type('json');
-        res.json({ success: false, checkTarget: 'email', errType: 'duplicateEmail' });
+        res.send({ success: false, checkTarget: 'email', errType: 'duplicateEmail' });
       } else {
-        res.type('json');
-        res.json({ success: true, checkTarget: 'email' });
+        res.send({ success: true, checkTarget: 'email' });
       }
     }).catch(function (err) {
-      res.type('json');
-      res.json({ success: false, err: err.message });
+      return next(err, req, res, next);
     });
   } else {
-    res.type('json');
-    res.json({ success: false, checkTarget: 'email', errType: errType });
+    res.send({ success: false, checkTarget: 'email', errType: errType });
   }
 });
 
 router.post('/check_pw', function (req, res, next) {
   if (isSafe(req.body.user_id, null, req.body.password)) {
-    res.type('json');
-    res.json({ success: true, checkTarget: 'password' });
+    res.send({ success: true, checkTarget: 'password' });
   } else {
-    res.type('json');
-    res.json({ success: false, checkTarget: 'password', errType: errType });
+    res.send({ success: false, checkTarget: 'password', errType: errType });
   }
 });
 

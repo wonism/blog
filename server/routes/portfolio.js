@@ -7,7 +7,7 @@ import config from '../../config/config.json';
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-  res.render('portfolio/index',
+  return res.render('portfolio/index',
       {
         title: 'Jaewonism',
         asset: 'portfolio',
@@ -22,7 +22,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/goodoc', (req, res, next) => {
-  res.render('portfolio/goodoc',
+  return res.render('portfolio/goodoc',
       {
         title: 'Jaewonism',
         asset: 'portfolio',
@@ -37,7 +37,7 @@ router.get('/goodoc', (req, res, next) => {
 });
 
 router.get('/map', (req, res, next) => {
-  res.render('portfolio/map',
+  return res.render('portfolio/map',
       {
         title: 'Jaewonism',
         asset: 'portfolio',
@@ -52,7 +52,7 @@ router.get('/map', (req, res, next) => {
 });
 
 router.get('/ciceron', (req, res, next) => {
-  res.render('portfolio/ciceron',
+  return res.render('portfolio/ciceron',
       {
         title: 'Jaewonism',
         asset: 'portfolio',
@@ -67,7 +67,7 @@ router.get('/ciceron', (req, res, next) => {
 });
 
 router.get('/preview', (req, res, next) => {
-  res.render('portfolio/preview',
+  return res.render('portfolio/preview',
       {
         title: 'Jaewonism',
         asset: 'portfolio',
