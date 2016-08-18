@@ -134,7 +134,11 @@ var ready = function () {
                         date.match(/(\d{4})(?:-\d{2}-\d{2})/)[1];
                     template = template.replace(/(?:\{{2})(\w{1,})+(?:\}{2})/, dateStr);
                   } else {
-                    template = template.replace(/(?:\{{2})(\w{1,})+(?:\}{2})/, post[key]);
+                    if (post[key].length > 200) {
+                      template = template.replace(/(?:\{{2})(\w{1,})+(?:\}{2})/, post[key].substring(0, 200) + '...');
+                    } else {
+                      template = template.replace(/(?:\{{2})(\w{1,})+(?:\}{2})/, post[key]);
+                    }
                   }
                 }
 

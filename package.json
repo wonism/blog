@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "setting": "nohup redis-server && service nginx start && service mysql start",
+    "dbmigrate": "NODE_ENV=production sequelize db:migrate",
+    "dbunmigrate": "NODE_ENV=production sequelize db:migrate:undo",
+    "pm2start": "NODE_ENV=production pm2 start ./bin/www --name blog",
+    "setting": "service nginx start && service mysql start && nohup redis-server &",
     "buildes6": "babel -w server --out-dir build",
     "start": "nodemon ./bin/www"
   },
