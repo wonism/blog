@@ -20,8 +20,8 @@ var cardTemplate = '' +
     '{{title}}' +
     '</h1>' +
     '</a>' +
-    '<p class="post-content">333</p>' +
-    '<a class="" href="/posts/39">Go to Link →</a>' +
+    '<p class="post-content">{{text}}</p>' +
+    '<a class="" href="/posts/{{id}}">Go to Link →</a>' +
     '</section>' +
     '</article>';
 
