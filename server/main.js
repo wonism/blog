@@ -78,11 +78,7 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, '../public')));
-if (config.mode === 'development') {
-  app.use(express.static(path.join(__dirname, '../src')));
-} else {
-  app.use(express.static(path.join(__dirname, '../dist')));
-}
+app.use(express.static(path.join(__dirname, '../dist')));
 
 app.use(logger('dev'));
 
@@ -138,7 +134,8 @@ app.use((req, res, next) => {
 });
 
 // error handlers
-if (app.get('env') === 'development') {
+// if (app.get('env') === 'development') {
+if (config.mode !== 'development') {
   // development error handler
   // will print stacktrace
   app.use((err, req, res, next) => {

@@ -1,3 +1,22 @@
+var debounce = function (cb, interval, immediate) {
+  var timeout;
+
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) cb.apply(context, args);
+    };
+
+    var callNow = immediate && !timeout;
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, interval);
+
+    if (callNow) cb.apply(context, args);
+  };
+};
+
 var serializing = function (target) {
   var data = '';
 
@@ -221,16 +240,16 @@ var ready = function () {
     document.getElementById('join-form').submit();
   });
 
-  addEvent(document.getElementById('user_id'), 'blur', function (e) {
+  document.getElementById('user_id').onkeypress = debounce(function () {
     serializing('check_id');
-  });
+  }, 400);
 
-  addEvent(document.getElementById('email'), 'blur', function (e) {
+  document.getElementById('email').onkeypress = debounce(function () {
     serializing('check_em');
-  });
+  }, 400);
 
-  addEvent(document.getElementById('password'), 'blur', function (e) {
+  document.getElementById('password').onkeypress = debounce(function () {
     serializing('check_pw');
-  });
+  }, 400);
 };
 

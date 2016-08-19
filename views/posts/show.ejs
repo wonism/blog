@@ -46,37 +46,58 @@
     </div>
   </div>
   <div id="comments">
-    <div id="comments-title">Comments&nbsp;<span id="comments-count"><%= comments.length %></span></div>
-    <% if (userPk >> 0 > 0) { %>
-      <form id="comment-area-wrapper" action="/comments/new" method="post" data-remote="true">
-        <input id="post-id" name="post_id" type="hidden" value="<%= post.id %>"/>
-        <textarea id="comment-area" name="comment"></textarea>
-        <button class="rm-style-button btn btn-ghost rm-margin" id="comment-submit" type="button" role="button">등록</button>
-      </form>
-    <% } else { %>
-      <a id="comment-area-wrapper" href="/login">
-        <textarea id="comment-area" disabled="disabled">댓글을 작성하려면 로그인을 하셔야 합니다.</textarea>
-        <button class="rm-style-button btn btn-ghost rm-margin" id="comment-submit" type="button" role="button" disabled="disabled">등록</button>
-      </a>
-    <% } %>
-    <div id="comments-list">
-      <%
-        var i = 0;
-        for (; i < comments.length; i++) {
-          var comment = comments[i];
-      %>
-      <div class="comment-infos">
-        <%
-          var date = comment.created_at;
-          var dateStr = '';
-          var monthStrArr = ['JAN', 'FAB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-          dateStr = monthStrArr[date.getMonth()] + ' ' + date.getDate() + '. ' + date.getFullYear();
-        %>
-        <div class="comment-user"><%= comment.user.name %></div>
-        <div class="comment-date sub-color"><%= dateStr %></div>
-        <div class="comment-text"><%= comment.comment %></div>
-      </div>
+    <div id="disqus_thread"></div>
+    <script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//https-wonism-github-io.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <div class="none">
+      <div id="comments-title">Comments&nbsp;<span id="comments-count"><%= comments.length %></span></div>
+      <% if (userPk >> 0 > 0) { %>
+        <form id="comment-area-wrapper" action="/comments/new" method="post" data-remote="true">
+          <input id="post-id" name="post_id" type="hidden" value="<%= post.id %>"/>
+          <textarea id="comment-area" name="comment"></textarea>
+          <button class="rm-style-button btn btn-ghost rm-margin" id="comment-submit" type="button" role="button">등록</button>
+        </form>
+      <% } else { %>
+        <a id="comment-area-wrapper" href="/login">
+          <textarea id="comment-area" disabled="disabled">댓글을 작성하려면 로그인을 하셔야 합니다.</textarea>
+          <button class="rm-style-button btn btn-ghost rm-margin" id="comment-submit" type="button" role="button" disabled="disabled">등록</button>
+        </a>
       <% } %>
+      <div id="comments-list">
+        <%
+          var i = 0;
+          for (; i < comments.length; i++) {
+            var comment = comments[i];
+        %>
+        <div class="comment-infos">
+          <%
+            var date = comment.created_at;
+            var dateStr = '';
+            var monthStrArr = ['JAN', 'FAB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            dateStr = monthStrArr[date.getMonth()] + ' ' + date.getDate() + '. ' + date.getFullYear();
+          %>
+          <div class="comment-user"><%= comment.user.name %></div>
+          <div class="comment-date sub-color"><%= dateStr %></div>
+          <div class="comment-text"><%= comment.comment %></div>
+        </div>
+        <% } %>
+      </div>
     </div>
   </div>
 </div>

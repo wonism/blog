@@ -185,11 +185,7 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 app.use((0, _serveFavicon2.default)(_path2.default.join(__dirname, '../public', 'favicon.ico')));
 app.use(_express2.default.static(_path2.default.join(__dirname, '../public')));
-if (_config2.default.mode === 'development') {
-  app.use(_express2.default.static(_path2.default.join(__dirname, '../src')));
-} else {
-  app.use(_express2.default.static(_path2.default.join(__dirname, '../dist')));
-}
+app.use(_express2.default.static(_path2.default.join(__dirname, '../dist')));
 
 app.use((0, _morgan2.default)('dev'));
 
@@ -245,7 +241,8 @@ app.use(function (req, res, next) {
 });
 
 // error handlers
-if (app.get('env') === 'development') {
+// if (app.get('env') === 'development') {
+if (_config2.default.mode !== 'development') {
   // development error handler
   // will print stacktrace
   app.use(function (err, req, res, next) {

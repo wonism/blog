@@ -4,6 +4,7 @@ const sass = require('gulp-sass');
 const cleanCSS = require('gulp-clean-css');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
+const sourcemaps = require('gulp-sourcemaps');
 const babel = require('gulp-babel');
 const imagemin = require('gulp-imagemin');
 const pngquant = require('imagemin-pngquant');
@@ -30,6 +31,7 @@ gulp.task('hint', () => {
 // minify js
 gulp.task('js', () => {
   return gulp.src(paths.js)
+    .pipe(sourcemaps.init())
     .pipe(rename({ suffix: '.min' }))
     /*
     .pipe(babel({
@@ -37,15 +39,18 @@ gulp.task('js', () => {
     }))
     */
     .pipe(uglify())
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest(paths.dist + 'js'));
 });
 
 // compile scss
 gulp.task('sass', () => {
   return gulp.src(paths.sass)
+    .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(gulp.dest(paths.sassDevelop))
     .pipe(cleanCSS({ compatibility: 'ie8' }))
+    .pipe(sourcemaps.write())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest(paths.dist + 'css'));
 });
