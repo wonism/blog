@@ -8,6 +8,7 @@
     "pm2start": "NODE_ENV=production pm2 start ./bin/www --name blog",
     "setting": "service nginx start && service mysql start && nohup redis-server &",
     "buildes6": "babel -w server --out-dir build",
+    "dev": "NODE_ENV=development nodemon ./bin/www",
     "start": "NODE_ENV=production nodemon ./bin/www"
   },
   "dependencies": {

@@ -112,6 +112,10 @@ var _portfolio = require('./routes/portfolio');
 
 var _portfolio2 = _interopRequireDefault(_portfolio);
 
+var _works = require('./routes/works');
+
+var _works2 = _interopRequireDefault(_works);
+
 var _resume = require('./routes/resume');
 
 var _resume2 = _interopRequireDefault(_resume);
@@ -222,6 +226,7 @@ app.use('/posts', _posts2.default);
 app.use('/comments', _comments2.default);
 app.use('/photos', _photos2.default);
 app.use('/portfolio', _portfolio2.default);
+app.use('/works', _works2.default);
 app.use('/resume', _resume2.default);
 app.use('/images', _images2.default);
 app.use('/join', _join2.default);

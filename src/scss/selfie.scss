@@ -1,0 +1,9 @@
+@import 'variables';
+
+#user-video, #selfie {
+  float: left;
+  width: 50%;
+}
+
+#selfie[src=""] {
+}

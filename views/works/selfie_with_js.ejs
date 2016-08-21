@@ -1,0 +1,23 @@
+<%- include ../layouts/header %>
+<%- include ../commons/header %>
+<div id="body-container">
+  <div class="clearfix" id="playground">
+    <h1>Selfie with Java Script</h1>
+    <video class="" id="user-video"></video>
+    <img class="" id="selfie" src="" />
+  </div>
+  <div>
+    <button class="rm-style-button btn btn-primary" id="start-camera">실행</button>
+  </div>
+  <div class="" id="controller">
+    <button class="rm-style-button btn btn-primary" id="shutter">촬영</button>
+    <a class="rm-style-button btn btn-primary none" id="download-selfie" download="selfie.png">다운로드</a>
+    <button class="rm-style-button btn btn-primary none" id="remove-selfie">삭제</button>
+  </div>
+  <hr />
+  <span>reference : <a href="https://www.viget.com/articles/instagram-style-filters-in-html5-canvas">https://www.viget.com/articles/instagram-style-filters-in-html5-canvas</a></span>
+  <canvas class="none" id="selfie-store"></canvas>
+</div>
+<%- include ../commons/footer %>
+<%- include ../layouts/footer %>
+
