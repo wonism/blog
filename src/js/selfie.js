@@ -163,8 +163,6 @@ var ready = function () {
 
   var getVideo = function () {
     hideButtons();
-    video.setAttribute('class', video.getAttribute('class').replace(/\s?none/g, ''));
-    controller.setAttribute('class', controller.getAttribute('class').replace(/\s?none/g, ''));
   };
 
   var takePhoto = function () {
@@ -200,8 +198,6 @@ var ready = function () {
   var hideButtons = function () {
     controller.setAttribute('class', controller.getAttribute('class').replace(/\s?none/g, '') + ' none');
     startCamera.setAttribute('class', startCamera.getAttribute('class').replace(/\s?none/g, '') + ' none');
-    video.setAttribute('class', video.getAttribute('class').replace(/\s?none/g, '') + ' none');
-    selfie.setAttribute('class', selfie.getAttribute('class').replace(/\s?none/g, '') + ' none');
   };
 
   if (!getUserMedia) {
@@ -238,23 +234,15 @@ var ready = function () {
     var snap = takePhoto();
 
     selfie.setAttribute('src', snap);
-    selfie.setAttribute('class', selfie.getAttribute('class').replace(/\s?none/g, ''));
-
-    removeSelfie.setAttribute('class', removeSelfie.getAttribute('class').replace(/\s?none/g, ''));
-    downloadSelfie.setAttribute('class', downloadSelfie.getAttribute('class').replace(/\s?none/g, ''));
-
     downloadSelfie.setAttribute('href', snap);
-
+    controller.setAttribute('class', controller.getAttribute('class').replace(/\s?none/g, ''));
     // video.pause();
   });
 
   addEvent(removeSelfie, 'click', function (e) {
     selfie.setAttribute('src', '');
-    selfie.setAttribute('class', selfie.getAttribute('class').replace(/\s?none/g, '') + ' none');
-
-    removeSelfie.setAttribute('class', removeSelfie.getAttribute('class').replace(/\s?none/g, '') + ' none');
-    downloadSelfie.setAttribute('class', downloadSelfie.getAttribute('class').replace(/\s?none/g, '') + ' none');
-
+    controller.setAttribute('class', controller.getAttribute('class').replace(/\s?none/g, '') + ' none');
     // video.play();
   });
 };
+
