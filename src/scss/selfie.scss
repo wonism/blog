@@ -1,9 +1,32 @@
 @import 'variables';
 
+#playground {
+  position: relative;
+}
+
 #user-video, #selfie {
   float: left;
   width: 50%;
 }
 
+#selfie {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+}
+
 #selfie[src=""] {
 }
+
+@media screen and (max-width: 768px) {
+  #user-video, #selfie {
+    display: block;
+    margin: auto;
+    width: 100%;
+  }
+  #selfie {
+    position: relative;
+  }
+}
+
