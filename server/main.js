@@ -29,8 +29,8 @@ import cookieSession from 'cookie-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
 
-let RedisStore = connectRedis(session);
-let LocalStrategy = passportLocal.Strategy;
+const RedisStore = connectRedis(session);
+const LocalStrategy = passportLocal.Strategy;
 
 /* Node Mailer */
 import mailer from './mailer';
@@ -64,11 +64,6 @@ import resume from './routes/resume';
 import images from './routes/images';
 import join from './routes/join';
 import usersAPI from './routes/api/users';
-
-const options = {
-  key: fs.readFileSync(path.join(__dirname, '../config/privkey1.pem')),
-  cert: fs.readFileSync(path.join(__dirname, '../config/cert1.pem'))
-};
 
 const app = express();
 
@@ -152,7 +147,7 @@ app.get('/robots.txt', (req, res) => {
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  let err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -175,14 +170,14 @@ if (config.mode !== 'development') {
   // production error handler
   // no stacktraces leaked to user
   app.use((err, req, res, next) => {
-    let url = req.url;
-    let method = req.method;
-    let userAgent = req.headers['user-agent'];
-    let userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    let queryString = JSON.stringify(req.query);
-    let currentTime = new Date();
+    const url = req.url;
+    const method = req.method;
+    const userAgent = req.headers['user-agent'];
+    const userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const queryString = JSON.stringify(req.query);
+    const currentTime = new Date();
 
-    let mailOptions = {
+    const mailOptions = {
       from: 'jaewon < yocee57@gmail.com >',
       to: 'yocee57@gmail.com', // ',' 로 받는 사람 구분
       subject: '[Server Error] ' + currentTime,
@@ -202,7 +197,7 @@ if (config.mode !== 'development') {
       error: {}
     });
 
-    return mailer.sendMail(mailOptions, function (err, res) {
+    return mailer.sendMail(mailOptions, (err, res) => {
       if (err) {
         console.log('failed... => ' + err);
       } else {
@@ -215,9 +210,11 @@ if (config.mode !== 'development') {
 }
 
 // port setup
+/*
 if (config.mode !== 'development') {
   app.set('port', process.env.PORT || config.port);
 }
+*/
 
 /////////////////////////////////
 // ------- creates Server -------

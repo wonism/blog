@@ -175,11 +175,6 @@ var upload = (0, _multer2.default)({ dest: '../public/images' });
 /* Routes */
 
 
-var options = {
-  key: _fs2.default.readFileSync(_path2.default.join(__dirname, '../config/privkey1.pem')),
-  cert: _fs2.default.readFileSync(_path2.default.join(__dirname, '../config/cert1.pem'))
-};
-
 var app = (0, _express2.default)();
 
 /*
@@ -318,9 +313,11 @@ if (_config2.default.mode !== 'development') {
 }
 
 // port setup
-if (_config2.default.mode !== 'development') {
-  app.set('port', process.env.PORT || _config2.default.port);
+/*
+if (config.mode !== 'development') {
+  app.set('port', process.env.PORT || config.port);
 }
+*/
 
 /////////////////////////////////
 // ------- creates Server -------

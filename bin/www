@@ -21,8 +21,8 @@ var config = require('../config/config.json');
  */
 
 var options = {
-  key: fs.readFileSync(path.join(__dirname, '../config/privkey1.pem')),
-  cert: fs.readFileSync(path.join(__dirname, '../config/cert1.pem'))
+  key: fs.readFileSync(path.join(__dirname, '../config/privkey.pem')),
+  cert: fs.readFileSync(path.join(__dirname, '../config/cert.pem'))
 };
 
 /**
