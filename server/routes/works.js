@@ -39,5 +39,19 @@ router.get('/selfie', (req, res, next) => {
   });
 });
 
+router.get('/test', (req, res, next) => {
+  return res.render('works/test', {
+      title: 'Jaewonism',
+      asset: 'test',
+      mode: config.mode,
+      url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+      image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
+      description: 'Jaewonism\'s blog'.substring(0, 255),
+      keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+      userId: req.user ? req.user.user_id : null,
+      endPoint: 'root'
+  });
+});
+
 module.exports = router;
 
