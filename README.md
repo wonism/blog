@@ -1,2 +1,2 @@
 # Jaewonism's BLOG
-- [jaewonism.cf](http://jaewonism.cf/)
+- [jaewonism.com](https://jaewonism.com/)
