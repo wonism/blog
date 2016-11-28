@@ -4,6 +4,10 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _async = require('async');
 
 var _async2 = _interopRequireDefault(_async);
@@ -39,6 +43,9 @@ var _config2 = _interopRequireDefault(_config);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var NODE_ENV = process.env.NODE_ENV && process.env.NODE_ENV.trim().toLowerCase() === 'production' ? 'production' : 'development';
+var isDev = NODE_ENV.match(/development/i) ? true : false;
 
 var router = _express2.default.Router();
 
@@ -100,16 +107,21 @@ router.get('/new', isAuthor, function (req, res, next) {
 // Create Image
 router.post('/new', isAuthor, function (req, res, next) {
   var form = new _formidable2.default.IncomingForm();
-  var files = [];
-  var fields = [];
 
   form.keepExtensions = true;
-  form.uploadDir = __dirname + '/public/upload';
-  form.uploadDir = form.uploadDir.replace(/routes\//, '').replace(/build\//, '');
+  form.uploadDir = _path2.default.resolve(__dirname, '../../', 'public', 'upload');
   form.maxFieldsSize = 10 * 1024 * 1024;
 
-  form.on('fileBegin', function (name, file) {}).on('progress', function (bytesReceived, bytesExpected) {}).on('aborted', function () {}).on('error', function (e) {
-    console.log('error!!', e);
+  form.on('progress', function (bytesReceived, bytesExpected) {
+    isDev && console.log('progress', bytesReceived, bytesExpected);
+  }).on('field', function (name, value) {
+    isDev && console.log('field', name, value);
+  }).on('fileBegin', function (name, file) {
+    isDev && console.log('fileBegin', name, file);
+  }).on('file', function (name, file) {
+    isDev && console.log('file', name, file);
+  }).on('aborted', function () {}).on('error', function (e) {
+    isDev && console.log('error', e);
   }).on('end', function () {});
 
   form.parse(req, function (err, fields, files) {
@@ -118,14 +130,14 @@ router.post('/new', isAuthor, function (req, res, next) {
 
     _async2.default.waterfall([function (cb) {
       if (+_url2.default.parse(req.url, true).query.processing_type) {
-        imageFile = files.file;
+        imageFile = files.original;
         cb(null, imageFile);
       } else {
         throw new Error('Invalid Processing Type');
       }
     }, function (imageFile, cb) {
       var name = imageFile.name || '' + +new Date();
-      var path = imageFile.path;
+      var filePath = imageFile.path;
       var type = imageFile.type;
       var format = void 0;
 
@@ -140,7 +152,7 @@ router.post('/new', isAuthor, function (req, res, next) {
           var outputPath = __dirname + '/public/upload/' + 'images_' + timestamp + format;
           outputPath = outputPath.replace(/routes\/|build\//g, '');
 
-          _fs2.default.rename(path, outputPath, function (err) {
+          _fs2.default.rename(filePath, outputPath, function (err) {
             if (err) {
               return next(err, req, res, next);
             } else {
@@ -237,7 +249,7 @@ router.post('/new', isAuthor, function (req, res, next) {
           });
         })();
       } else {
-        _fs2.default.unlink(path, function (err) {
+        _fs2.default.unlink(filePath, function (err) {
           if (err) {
             return cb(err);
           } else {
@@ -267,17 +279,6 @@ router.post('/new', isAuthor, function (req, res, next) {
       }
     });
   });
-
-  /*
-    models.Image.forge({ original: req.body.original, thumbnail: req.body.original })
-    .save()
-    .then(function (image) {
-      return res.redirect('/images');
-    })
-    .catch(function (err) {
-      return next(err, req, res, next);
-    });
-  */
 });
 
 // Fetch Image

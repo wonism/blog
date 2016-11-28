@@ -1,5 +1,4 @@
-// process.env.NODE_ENV = 'production';
-// process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'production' ) ? 'production' : 'development';
+const NODE_ENV = ((process.env.NODE_ENV && (process.env.NODE_ENV).trim().toLowerCase() === 'production')) ? 'production' : 'development';
 
 /* Express JS */
 import express from 'express';
@@ -137,7 +136,6 @@ app.use('/works', works);
 app.use('/resume', resume);
 app.use('/images', images);
 app.use('/join', join);
-// app.use('/api/users', usersAPI);
 
 /***** robots.txt *****/
 app.get('/robots.txt', (req, res) => {
@@ -153,8 +151,7 @@ app.use((req, res, next) => {
 });
 
 // error handlers
-// if (app.get('env') === 'development') {
-if (config.mode !== 'development') {
+if (NODE_ENV === 'development') {
   // development error handler
   // will print stacktrace
   app.use((err, req, res, next) => {

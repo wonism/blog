@@ -77,9 +77,11 @@ var submitComment = function (data) {
 var submitImage = function (data, processingType) {
   var xhr = new XMLHttpRequest();
   var fileType = data.name.match(/\.\w{1,5}/g)[data.name.match(/\.\w{1,5}/g).length - 1];
+  var formData = new FormData();
+  formData.append('original', data);
 
   xhr.open('POST', '/images/new?processing_type=' + processingType + '&file_type=' + fileType, true);
-  xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+  // xhr.setRequestHeader('Content-Type', 'application/octet-stream');
   xhr.addEventListener('error', onError, false);
   xhr.addEventListener('progress', onProgress, false);
   xhr.onreadystatechange = function () {
@@ -103,7 +105,7 @@ var submitImage = function (data, processingType) {
     }
   };
 
-  xhr.send(data);
+  xhr.send(formData);
 };
 
 var onProgress = function (e) {

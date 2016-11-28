@@ -1,5 +1,9 @@
+const NODE_ENV = ((process.env.NODE_ENV && (process.env.NODE_ENV).trim().toLowerCase() === 'production')) ? 'production' : 'development';
+const isDev = NODE_ENV.match(/development/i) ? true : false;
+
 import express from 'express';
 
+import path from 'path';
 import async from 'async';
 import url from 'url';
 import formidable from 'formidable';
@@ -80,17 +84,32 @@ router.get('/new', isAuthor, (req, res, next) => {
 
 // Create Image
 router.post('/new', isAuthor, (req, res, next) => {
-  let form = new formidable.IncomingForm();
-  let files = [];
-  let fields = [];
+  const form = new formidable.IncomingForm();
 
   form.keepExtensions = true;
-  form.uploadDir = __dirname + '/public/upload';
-  form.uploadDir = form.uploadDir.replace(/routes\//, '').replace(/build\//, '');
+  form.uploadDir = path.resolve(__dirname, '../../', 'public', 'upload');
   form.maxFieldsSize = 10 * 1024 * 1024;
 
-  form.on('fileBegin', (name,file) => { }).on('progress', (bytesReceived, bytesExpected) => { })
-  .on('aborted', () => { }).on('error', (e) => { console.log('error!!', e); }).on('end', () => { });
+  form
+    .on('progress', (bytesReceived, bytesExpected) => {
+      isDev && console.log('progress', bytesReceived, bytesExpected);
+    })
+    .on('field', (name, value) => {
+      isDev && console.log('field', name, value);
+    })
+    .on('fileBegin', (name, file) => {
+      isDev && console.log('fileBegin', name, file);
+    })
+    .on('file', (name, file) => {
+      isDev && console.log('file', name, file);
+    })
+    .on('aborted', () => {
+    })
+    .on('error', (e) => {
+      isDev && console.log('error', e);
+    })
+    .on('end', () => {
+    });
 
   form.parse(req, (err, fields, files) => {
     let timestamp = Date.now();
@@ -99,14 +118,14 @@ router.post('/new', isAuthor, (req, res, next) => {
     async.waterfall([
       (cb) => {
         if (+url.parse(req.url, true).query.processing_type) {
-          imageFile = files.file;
+          imageFile = files.original;
           cb(null, imageFile);
         } else {
           throw new Error('Invalid Processing Type');
         }
       }, (imageFile, cb) => {
         let name = imageFile.name || '' + +new Date();
-        let path = imageFile.path;
+        let filePath = imageFile.path;
         let type = imageFile.type;
         let format;
 
@@ -120,7 +139,7 @@ router.post('/new', isAuthor, (req, res, next) => {
           let outputPath = __dirname + '/public/upload/' + 'images_' + timestamp + format;
           outputPath = outputPath.replace(/routes\/|build\//g, '');
 
-          fs.rename(path, outputPath, (err) => {
+          fs.rename(filePath, outputPath, (err) => {
             if (err) {
               return next(err, req, res, next);
             } else {
@@ -216,7 +235,7 @@ router.post('/new', isAuthor, (req, res, next) => {
             }
           });
         } else {
-          fs.unlink(path, (err) => {
+          fs.unlink(filePath, (err) => {
             if (err) {
               return cb(err);
             } else {
@@ -250,17 +269,6 @@ router.post('/new', isAuthor, (req, res, next) => {
       }
     });
   });
-
-/*
-  models.Image.forge({ original: req.body.original, thumbnail: req.body.original })
-  .save()
-  .then(function (image) {
-    return res.redirect('/images');
-  })
-  .catch(function (err) {
-    return next(err, req, res, next);
-  });
-*/
 });
 
 // Fetch Image

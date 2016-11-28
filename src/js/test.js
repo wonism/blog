@@ -1,4 +1,6 @@
-navigator.getUserMedia(
+var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+getUserMedia(
   {
     video: {
       facingMode: { exact: "environment" }
@@ -10,7 +12,6 @@ navigator.getUserMedia(
   function () {
     alert('FAIL');
   });
-
 
 if (false) {
   if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {

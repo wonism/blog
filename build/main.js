@@ -134,25 +134,26 @@ var _users4 = _interopRequireDefault(_users3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* for Session */
+var NODE_ENV = process.env.NODE_ENV && process.env.NODE_ENV.trim().toLowerCase() === 'production' ? 'production' : 'development';
+
+/* Express JS */
 
 
 /* Express JS */
 
 
-var RedisStore = (0, _connectRedis2.default)(_expressSession2.default);
-// import formidable from 'formidable';
+/* Basic Modules */
 
 
 /* Configuration */
 
 
-/* Basic Modules */
-// process.env.NODE_ENV = 'production';
-// process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'production' ) ? 'production' : 'development';
+/* for Session */
 
-/* Express JS */
+// import formidable from 'formidable';
 
+
+var RedisStore = (0, _connectRedis2.default)(_expressSession2.default);
 var LocalStrategy = _passportLocal2.default.Strategy;
 
 /* Node Mailer */
@@ -247,7 +248,6 @@ app.use('/works', _works2.default);
 app.use('/resume', _resume2.default);
 app.use('/images', _images2.default);
 app.use('/join', _join2.default);
-// app.use('/api/users', usersAPI);
 
 /***** robots.txt *****/
 app.get('/robots.txt', function (req, res) {
@@ -263,8 +263,7 @@ app.use(function (req, res, next) {
 });
 
 // error handlers
-// if (app.get('env') === 'development') {
-if (_config2.default.mode !== 'development') {
+if (NODE_ENV === 'development') {
   // development error handler
   // will print stacktrace
   app.use(function (err, req, res, next) {
