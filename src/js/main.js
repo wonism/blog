@@ -64,10 +64,40 @@ var ready = function () {
         posts = {};
 
         if (nextUrl) {
+          var newPlaceholder = document.createElement('div');
+          var placeholderText = '' +
+              '<article class="post-card">' +
+              '<div class="post-image empty"></div>' +
+              '<section class="post-information">' +
+              '<div class="placeholder">' +
+              '<i class="fa fa-tags"></i>' +
+              '<span class="post-category-name">' +
+              '{{category_id}}' +
+              '</span>' +
+              '&nbsp;&nbsp;' +
+              '<i class="fa fa-calendar"></i>' +
+              '<span class="post-registered">' +
+              '{{created_at}}' +
+              '</span>' +
+              '</div>' +
+              '<h1 class="post-title placeholder">' +
+              '{{title}}' +
+              '</h1>' +
+              '<p class="post-content placeholder">{{text}}</p>' +
+              '<span class="placeholder">Go to Link →</span>' +
+              '</section>' +
+              '</article>';
+
+          newPlaceholder.setAttribute('id', 'post-placeholder');
+          newPlaceholder.insertAdjacentHTML('beforeend', placeholderText);
+
+          jj('#body-container').appendChild(newPlaceholder);
+
           xhr = new XMLHttpRequest();
           xhr.open("GET", nextUrl);
           xhr.onreadystatechange = function () {
             var DONE, OK;
+            var placeholder = jj('#post-placeholder');
 
             DONE = 4;
             OK = 200;
@@ -88,6 +118,10 @@ var ready = function () {
             for (; categoryCounter < categories.length; categoryCounter++) {
               var idStr = categories[categoryCounter].id;
               categoryIdName[idStr] = categories[categoryCounter].name;
+            }
+
+            if (placeholder) {
+              placeholder.remove();
             }
 
             if (posts) {

@@ -1,6 +1,9 @@
 .post-card {
   font-size: 16px;
   overflow: hidden; }
+  .post-card .placeholder {
+    color: #ddd;
+    background-color: #ddd; }
 
 .post-image-link:hover {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
@@ -14,6 +17,10 @@
 
 .post-image {
   width: 100%; }
+  .post-image.empty {
+    padding-top: 42%;
+    height: 0;
+    background-color: #ddd; }
 
 .post-information {
   margin-top: 16px;

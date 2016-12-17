@@ -1,8 +1,13 @@
 @import 'variables';
+$empty-color: #ddd;
 
 .post-card {
   font-size: 16px;
   overflow: hidden;
+  .placeholder {
+    color: $empty-color;
+    background-color: $empty-color;
+  }
 }
 
 .post-image-link:hover {
@@ -11,6 +16,11 @@
 
 .post-image {
   width: 100%;
+  &.empty {
+    padding-top: 42%;
+    height: 0;
+    background-color: $empty-color;
+  }
 }
 
 .post-information {
