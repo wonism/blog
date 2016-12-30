@@ -308,7 +308,7 @@ router.get('/:id', isAuthor, function (req, res, next) {
       return res.status(404).render('404', { title: '404: Page Not Found.' });
     } else {
       var author = void 0,
-          _category = void 0,
+          category = void 0,
           tags = void 0,
           page = void 0,
           comments = void 0,
@@ -316,7 +316,7 @@ router.get('/:id', isAuthor, function (req, res, next) {
           keyword = '';
 
       author = post.users;
-      _category = post.category;
+      category = post.category;
       tags = post.tags;
       page = +_url2.default.parse(req.url, true).query.page || 1;
       comments = post.comments;
@@ -347,7 +347,7 @@ router.get('/:id', isAuthor, function (req, res, next) {
         post: post,
         comments: comments || null,
         categories: fetchedCategories,
-        category: _category,
+        category: category,
         tags: tags,
         page: page
       });
@@ -394,11 +394,11 @@ router.get('/update/:id', isAuthor, function (req, res, next) {
       return next(err, req, res, next);
     } else {
       if (result) {
-        var _category2 = void 0,
+        var category = void 0,
             tags = void 0,
             page = void 0;
 
-        _category2 = result.post.category;
+        category = result.post.category;
         tags = result.post.tags;
         page = +_url2.default.parse(req.url, true).query.page || 1;
 
@@ -413,7 +413,7 @@ router.get('/update/:id', isAuthor, function (req, res, next) {
           userId: req.user ? req.user.user_id : null,
           post: result.post,
           categories: result.categories,
-          category: _category2,
+          category: category,
           tags: tags,
           page: page
         });
@@ -456,7 +456,7 @@ router.post('/update/:id', isAuthor, function (req, res, next) {
     if (posts) {
       var numberForSlug = posts.length + 1;
 
-      newSlug = newSlug.replace(/\s\-\s\d+$/, '') + ' - ' + numberForSlug;
+      newSlug = (newSlug.replace(/\s\-\s\d+$/, '') + ' - ' + numberForSlug).replace(/\s?\-\s?1^/, '');
     }
 
     _models2.default.posts.update({
@@ -481,10 +481,16 @@ router.post('/update/:id', isAuthor, function (req, res, next) {
     });
   }, function (postId, ids, cb) {
     ids.forEach(function (el, i) {
-      _models2.default.posts_tags.create({
-        post_id: postId,
-        tag_id: el
-      }).then(function (p_t) {
+      _models2.default.posts_tags.findOrCreate({
+        where: {
+          post_id: postId,
+          tag_id: el
+        },
+        defaults: {
+          post_id: postId,
+          tag_id: el
+        }
+      }).then(function () {
         if (ids.length - 1 === i) {
           return cb(null, true);
         }
@@ -612,55 +618,69 @@ router.get('/tags/:slug', getCategories, function (req, res, next) {
   var offset = (page - 1) * pagingSize;
 
   _models2.default.tags.find({
-    where: { slug: req.params.slug },
-    include: [{ model: _models2.default.posts, where: { is_deleted: 0 }, offset: offset, limit: pagingSize }]
+    where: { name: req.params.slug }
   }).then(function (tag) {
-    if (!category) {
-      return res.status(404).render('404', { title: '404: Page Not Found.' });
-    } else {
-      var posts = void 0,
-          description = '',
-          keyword = '';
-
-      posts = tag.posts;
-
-      for (var i = 0, len = posts.length; i < len; i++) {
-        description += posts[i].title;
-
-        if (i !== posts.length - 1) {
-          description += ', ';
-        }
+    _models2.default.posts_tags.findAll({
+      where: {
+        tag_id: tag.id
       }
+    }).then(function (postsTags) {
+      var tempArr = [];
+      var postIds = void 0;
 
-      for (var _i3 = 0, _len3 = fetchedCategories.length; _i3 < _len3; _i3++) {
-        keyword += fetchedCategories[_i3].name;
-
-        if (_i3 !== fetchedCategories.length - 1) {
-          keyword += ', ';
-        }
-      }
-
-      return res.render('posts/index', {
-        title: 'Jaewonism - POST',
-        asset: 'posts',
-        mode: _config2.default.mode,
-        url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
-        image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
-        description: description.substring(0, 255),
-        keyword: keyword,
-        userId: req.user ? req.user.user_id : null,
-        authFlash: req.flash('auth'),
-        infoFlash: req.flash('info'),
-        categories: fetchedCategories,
-        categoryId: 0,
-        posts: posts,
-        tag: tag,
-        tagSlug: req.params.slug,
-        pages: pages,
-        page: page,
-        endPoint: 'tags'
+      postsTags.map(function (el, i, arr) {
+        tempArr.push(el.post_id);
       });
-    }
+
+      postIds = Array.from(new Set(tempArr));
+
+      _models2.default.posts.findAll({
+        where: {
+          id: { $in: postIds }
+        }
+      }).then(function (posts) {
+        var description = '',
+            keyword = '';
+
+        for (var i = 0, len = posts.length; i < len; i++) {
+          description += posts[i].title;
+          if (i !== posts.length - 1) {
+            description += ', ';
+          }
+        }
+
+        for (var _i3 = 0, _len3 = fetchedCategories.length; _i3 < _len3; _i3++) {
+          keyword += fetchedCategories[_i3].name;
+
+          if (_i3 !== fetchedCategories.length - 1) {
+            keyword += ', ';
+          }
+        }
+
+        return res.render('posts/index', {
+          title: 'Jaewonism - POST',
+          asset: 'posts',
+          mode: _config2.default.mode,
+          url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+          image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
+          description: description.substring(0, 255),
+          keyword: keyword,
+          userId: req.user ? req.user.user_id : null,
+          authFlash: req.flash('auth'),
+          infoFlash: req.flash('info'),
+          categories: fetchedCategories,
+          categoryId: req.params.id,
+          posts: posts,
+          pages: pages,
+          page: page,
+          endPoint: 'categories'
+        });
+      }).catch(function (err) {
+        return next(err, req, res, next);
+      });
+    }).catch(function (err) {
+      return next(err, req, res, next);
+    });
   }).catch(function (err) {
     return next(err, req, res, next);
   });

@@ -167,25 +167,24 @@ router.get('/', getCategories, (req, res, next) => {
         }
       }
 
-      return res.render('posts/index',
-          {
-            title: 'Jaewonism - POST',
-            asset: 'posts',
-            mode: config.mode,
-            url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
-            image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
-            description: description.substring(0, 255),
-            keyword: keyword,
-            userId: req.user ? req.user.user_id : null,
-            authFlash: req.flash('auth'),
-            infoFlash: req.flash('info'),
-            categories: fetchedCategories,
-            categoryId: 0,
-            posts: posts,
-            pages: pages,
-            page: page,
-            endPoint: 'root'
-          }
+      return res.render('posts/index', {
+          title: 'Jaewonism - POST',
+          asset: 'posts',
+          mode: config.mode,
+          url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+          image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
+          description: description.substring(0, 255),
+          keyword: keyword,
+          userId: req.user ? req.user.user_id : null,
+          authFlash: req.flash('auth'),
+          infoFlash: req.flash('info'),
+          categories: fetchedCategories,
+          categoryId: 0,
+          posts: posts,
+          pages: pages,
+          page: page,
+          endPoint: 'root'
+        }
       );
     })
     .catch((err) => {
@@ -202,19 +201,18 @@ router.get('/new', isAuthor, (req, res, next) => {
     .then((categories) => {
       let page = +url.parse(req.url, true).query.page || 1;
 
-      return res.render('posts/new',
-          {
-            title: 'Jaewonism - NEW POST',
-            asset: 'posts',
-            mode: config.mode,
-            url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
-            image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
-            description: 'Jaewonism\'s blog'.substring(0, 255),
-            keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
-            userId: req.user ? req.user.user_id : null,
-            categories: categories,
-            page: page
-          }
+      return res.render('posts/new', {
+          title: 'Jaewonism - NEW POST',
+          asset: 'posts',
+          mode: config.mode,
+          url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+          image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
+          description: 'Jaewonism\'s blog'.substring(0, 255),
+          keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+          userId: req.user ? req.user.user_id : null,
+          categories: categories,
+          page: page
+        }
       );
     })
     .catch((err) => {
@@ -337,27 +335,26 @@ router.get('/:id', isAuthor, (req, res, next) => {
           }
         }
 
-        return res.render('posts/show',
-            {
-              title: 'Jaewonism - POST : ' + post.title,
-              asset: 'posts',
-              mode: config.mode,
-              url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
-              image: req.protocol + '://' + req.headers.host + post.background_image,
-              description: description.substring(0, 255),
-              keyword: keyword,
-              author: author,
-              userId: req.user ? req.user.user_id : null,
-              userPk: userPk || 0,
-              authFlash: req.flash('auth'),
-              infoFlash: req.flash('info'),
-              post: post,
-              comments: comments || null,
-              categories: fetchedCategories,
-              category: category,
-              tags: tags,
-              page: page
-            }
+        return res.render('posts/show', {
+            title: 'Jaewonism - POST : ' + post.title,
+            asset: 'posts',
+            mode: config.mode,
+            url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+            image: req.protocol + '://' + req.headers.host + post.background_image,
+            description: description.substring(0, 255),
+            keyword: keyword,
+            author: author,
+            userId: req.user ? req.user.user_id : null,
+            userPk: userPk || 0,
+            authFlash: req.flash('auth'),
+            infoFlash: req.flash('info'),
+            post: post,
+            comments: comments || null,
+            categories: fetchedCategories,
+            category: category,
+            tags: tags,
+            page: page
+          }
         );
       }
     })
@@ -418,22 +415,21 @@ router.get('/update/:id', isAuthor, (req, res, next) => {
         tags = result.post.tags;
         page = +url.parse(req.url, true).query.page || 1;
 
-        return res.render('posts/update',
-            {
-              title: 'Jaewonism - MODIFY POST',
-              asset: 'posts',
-              mode: config.mode,
-              url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
-              image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
-              description: 'Jaewonism\'s blog'.substring(0, 255),
-              keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
-              userId: req.user ? req.user.user_id : null,
-              post: result.post,
-              categories: result.categories,
-              category: category,
-              tags: tags,
-              page: page
-            }
+        return res.render('posts/update', {
+            title: 'Jaewonism - MODIFY POST',
+            asset: 'posts',
+            mode: config.mode,
+            url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+            image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
+            description: 'Jaewonism\'s blog'.substring(0, 255),
+            keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+            userId: req.user ? req.user.user_id : null,
+            post: result.post,
+            categories: result.categories,
+            category: category,
+            tags: tags,
+            page: page
+          }
         );
       } else {
         return res.status(404).render('404', { title: '404: Page Not Found.'});
@@ -477,7 +473,7 @@ router.post('/update/:id', isAuthor, (req, res, next) => {
       if (posts) {
         let numberForSlug = posts.length + 1;
 
-        newSlug = newSlug.replace(/\s\-\s\d+$/, '') + ' - ' + numberForSlug;
+        newSlug = (newSlug.replace(/\s\-\s\d+$/, '') + ' - ' + numberForSlug).replace(/\s?\-\s?1^/, '');
       }
 
       models.posts
@@ -507,11 +503,17 @@ router.post('/update/:id', isAuthor, (req, res, next) => {
     (postId, ids, cb) => {
       ids.forEach((el, i) => {
         models.posts_tags
-          .create({
-            post_id: postId,
-            tag_id: el
+          .findOrCreate({
+            where: {
+              post_id: postId,
+              tag_id: el
+            },
+            defaults: {
+              post_id: postId,
+              tag_id: el
+            },
           })
-          .then((p_t) => {
+          .then(() => {
             if (ids.length - 1 === i) {
               return cb(null, true);
             }
@@ -544,20 +546,19 @@ router.get('/delete/:id', isAuthor, (req, res, next) => {
       } else {
         let page = url.parse(req.url, true).query.page >> 0 || 1;
 
-        return res.render('posts/delete',
-            {
-              title: 'Jaewonism - DELETE POST',
-              asset: 'posts',
-              mode: config.mode,
-              url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
-              image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
-              description: 'Jaewonism\'s blog'.substring(0, 255),
-              keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
-              userId: req.user ? req.user.user_id : null,
-              categories: post.categories,
-              post: post,
-              page: page
-            }
+        return res.render('posts/delete', {
+            title: 'Jaewonism - DELETE POST',
+            asset: 'posts',
+            mode: config.mode,
+            url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+            image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
+            description: 'Jaewonism\'s blog'.substring(0, 255),
+            keyword: 'portfolio, Front End, 포트폴리오, 웹개발자, 프론트엔드, Java Script, Node JS, Ruby on Rails',
+            userId: req.user ? req.user.user_id : null,
+            categories: post.categories,
+            post: post,
+            page: page
+          }
         );
       }
     })
@@ -618,26 +619,25 @@ router.get('/categories/:id', getCategories, (req, res, next) => {
           }
         }
 
-        return res.render('posts/index',
-            {
-              title: 'Jaewonism - POST',
-              asset: 'posts',
-              mode: config.mode,
-              url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
-              image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
-              description: description.substring(0, 255),
-              keyword: keyword,
-              userId: req.user ? req.user.user_id : null,
-              authFlash: req.flash('auth'),
-              infoFlash: req.flash('info'),
-              categories: fetchedCategories,
-              categoryId: req.params.id,
-              category: category,
-              posts: posts,
-              pages: pages,
-              page: page,
-              endPoint: 'categories'
-            }
+        return res.render('posts/index', {
+            title: 'Jaewonism - POST',
+            asset: 'posts',
+            mode: config.mode,
+            url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+            image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
+            description: description.substring(0, 255),
+            keyword: keyword,
+            userId: req.user ? req.user.user_id : null,
+            authFlash: req.flash('auth'),
+            infoFlash: req.flash('info'),
+            categories: fetchedCategories,
+            categoryId: req.params.id,
+            category: category,
+            posts: posts,
+            pages: pages,
+            page: page,
+            endPoint: 'categories'
+          }
         );
       }
     })
@@ -653,56 +653,76 @@ router.get('/tags/:slug', getCategories, (req, res, next) => {
 
   models.tags
     .find({
-      where: { slug: req.params.slug },
-      include: [ { model: models.posts, where: { is_deleted: 0 }, offset: offset, limit: pagingSize } ]
+      where: { name: req.params.slug },
     })
     .then((tag) => {
-      if (!category) {
-        return res.status(404).render('404', { title: '404: Page Not Found.'});
-      } else {
-        let posts, description = '', keyword = '';
+      models.posts_tags
+        .findAll({
+          where: {
+            tag_id: tag.id,
+          },
+        })
+        .then((postsTags) => {
+          const tempArr = [];
+          let postIds;
 
-        posts = tag.posts;
+          postsTags.map((el, i, arr) => {
+            tempArr.push(el.post_id);
+          });
 
-        for (let i = 0, len = posts.length; i < len; i++) {
-          description += posts[i].title;
+          postIds = Array.from(new Set(tempArr));
 
-          if (i !== posts.length - 1) {
-            description += ', ';
-          }
-        }
+          models.posts
+            .findAll({
+              where: {
+                id: { $in: postIds }
+              },
+            })
+            .then((posts) => {
+              let description = '', keyword = '';
 
-        for (let i = 0, len = fetchedCategories.length; i < len; i++) {
-          keyword += fetchedCategories[i].name;
+              for (let i = 0, len = posts.length; i < len; i++) {
+                description += posts[i].title;
+                if (i !== posts.length - 1) {
+                  description += ', ';
+                }
+              }
 
-          if (i !== fetchedCategories.length - 1) {
-            keyword += ', ';
-          }
-        }
+              for (let i = 0, len = fetchedCategories.length; i < len; i++) {
+                keyword += fetchedCategories[i].name;
 
-        return res.render('posts/index',
-            {
-              title: 'Jaewonism - POST',
-              asset: 'posts',
-              mode: config.mode,
-              url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
-              image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
-              description: description.substring(0, 255),
-              keyword: keyword,
-              userId: req.user ? req.user.user_id : null,
-              authFlash: req.flash('auth'),
-              infoFlash: req.flash('info'),
-              categories: fetchedCategories,
-              categoryId: 0,
-              posts: posts,
-              tag: tag,
-              tagSlug: req.params.slug,
-              pages: pages,
-              page: page,
-              endPoint: 'tags'
-            }
-        );
-      }
+                if (i !== fetchedCategories.length - 1) {
+                  keyword += ', ';
+                }
+              }
+
+              return res.render('posts/index', {
+                  title: 'Jaewonism - POST',
+                  asset: 'posts',
+                  mode: config.mode,
+                  url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+                  image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
+                  description: description.substring(0, 255),
+                  keyword: keyword,
+                  userId: req.user ? req.user.user_id : null,
+                  authFlash: req.flash('auth'),
+                  infoFlash: req.flash('info'),
+                  categories: fetchedCategories,
+                  categoryId: req.params.id,
+                  posts: posts,
+                  pages: pages,
+                  page: page,
+                  endPoint: 'categories'
+                }
+              );
+            })
+            .catch((err) => {
+              return next(err, req, res, next);
+            });
+        })
+        .catch((err) => {
+          return next(err, req, res, next);
+        });
     })
     .catch((err) => {
       return next(err, req, res, next);
@@ -742,25 +762,24 @@ router.get('/search/:keyword', getCategories, (req, res, next) => {
         }
       }
 
-      return res.render('posts/index',
-          {
-            title: 'Jaewonism - POST',
-            asset: 'posts',
-            mode: config.mode,
-            url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
-            image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
-            description: description.substring(0, 255),
-            keyword: keyword,
-            userId: req.user ? req.user.user_id : null,
-            authFlash: req.flash('auth'),
-            infoFlash: req.flash('info'),
-            categories: fetchedCategories,
-            categoryId: 0,
-            posts: posts,
-            pages: pages,
-            page: page,
-            endPoint: 'search'
-          }
+      return res.render('posts/index', {
+          title: 'Jaewonism - POST',
+          asset: 'posts',
+          mode: config.mode,
+          url: req.protocol + '://' + req.headers.host + req.baseUrl + req.url,
+          image: req.protocol + '://' + req.headers.host + '/images/new_logo_black.png',
+          description: description.substring(0, 255),
+          keyword: keyword,
+          userId: req.user ? req.user.user_id : null,
+          authFlash: req.flash('auth'),
+          infoFlash: req.flash('info'),
+          categories: fetchedCategories,
+          categoryId: 0,
+          posts: posts,
+          pages: pages,
+          page: page,
+          endPoint: 'search'
+        }
       );
 
     })
