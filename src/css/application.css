@@ -696,6 +696,7 @@ ul.list-layout.pagination {
 .adsbygoogle {
   display: block;
   margin: auto;
+  margin-bottom: 15px;
   width: 320px;
   height: 100px; }
 
